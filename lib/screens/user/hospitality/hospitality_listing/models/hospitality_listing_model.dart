@@ -1,120 +1,154 @@
 // To parse this JSON data, do
 //
-//     final getTraningListingResponse = getTraningListingResponseFromJson(jsonString);
+//     final getHospitalityListingResponse = getHospitalityListingResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-GetTraningListingResponse getTraningListingResponseFromJson(String str) =>
-    GetTraningListingResponse.fromJson(json.decode(str));
+GetHospitalityListingResponse getHospitalityListingResponseFromJson(
+        String str) =>
+    GetHospitalityListingResponse.fromJson(json.decode(str));
 
-String getTraningListingResponseToJson(GetTraningListingResponse data) =>
+String getHospitalityListingResponseToJson(
+        GetHospitalityListingResponse data) =>
     json.encode(data.toJson());
 
-class GetTraningListingResponse {
+class GetHospitalityListingResponse {
   bool? success;
   String? message;
-  Data? data;
+  List<Datum>? data;
 
-  GetTraningListingResponse({
+  GetHospitalityListingResponse({
     this.success,
     this.message,
     this.data,
   });
 
-  factory GetTraningListingResponse.fromJson(Map<String, dynamic> json) =>
-      GetTraningListingResponse(
+  factory GetHospitalityListingResponse.fromJson(Map<String, dynamic> json) =>
+      GetHospitalityListingResponse(
         success: json["success"],
         message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null
+            ? []
+            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
         "message": message,
-        "data": data?.toJson(),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
-class Data {
+class Datum {
   int? id;
-  String? image;
+  String? price;
   String? trainerUserId;
   String? regionId;
-  dynamic rating;
+  String? featuredImage;
   DateTime? createdAt;
   DateTime? updatedAt;
-  List<TrainingImage>? trainingImages;
+  List<HospitalityImage>? hospitalityImages;
   Trainer? trainer;
-  Region? region;
+  HospitalityRegion? hospitalityRegion;
 
-  Data({
+  Datum({
     this.id,
-    this.image,
+    this.price,
     this.trainerUserId,
     this.regionId,
-    this.rating,
+    this.featuredImage,
     this.createdAt,
     this.updatedAt,
-    this.trainingImages,
+    this.hospitalityImages,
     this.trainer,
-    this.region,
+    this.hospitalityRegion,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
-        image: json["image"],
+        price: json["price"],
         trainerUserId: json["trainer_user_id"],
         regionId: json["region_id"],
-        rating: json["rating"],
+        featuredImage: json["featured_image"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
-        trainingImages: json["training_images"] == null
+        hospitalityImages: json["hospitality_images"] == null
             ? []
-            : List<TrainingImage>.from(
-                json["training_images"]!.map((x) => TrainingImage.fromJson(x))),
+            : List<HospitalityImage>.from(json["hospitality_images"]!
+                .map((x) => HospitalityImage.fromJson(x))),
         trainer:
             json["trainer"] == null ? null : Trainer.fromJson(json["trainer"]),
-        region: json["region"] == null ? null : Region.fromJson(json["region"]),
+        hospitalityRegion: json["hospitality_region"] == null
+            ? null
+            : HospitalityRegion.fromJson(json["hospitality_region"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "image": image,
+        "price": price,
         "trainer_user_id": trainerUserId,
         "region_id": regionId,
-        "rating": rating,
+        "featured_image": featuredImage,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
-        "training_images": trainingImages == null
+        "hospitality_images": hospitalityImages == null
             ? []
-            : List<dynamic>.from(trainingImages!.map((x) => x.toJson())),
+            : List<dynamic>.from(hospitalityImages!.map((x) => x.toJson())),
         "trainer": trainer?.toJson(),
-        "region": region?.toJson(),
+        "hospitality_region": hospitalityRegion?.toJson(),
       };
 }
 
-class Region {
+class HospitalityImage {
+  int? id;
+  String? hospitalityId;
+  String? imagePath;
+
+  HospitalityImage({
+    this.id,
+    this.hospitalityId,
+    this.imagePath,
+  });
+
+  factory HospitalityImage.fromJson(Map<String, dynamic> json) =>
+      HospitalityImage(
+        id: json["id"],
+        hospitalityId: json["hospitality_id"],
+        imagePath: json["image_path"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "hospitality_id": hospitalityId,
+        "image_path": imagePath,
+      };
+}
+
+class HospitalityRegion {
   int? id;
   String? name;
   String? status;
   DateTime? createdAt;
   DateTime? updatedAt;
-  List<Service>? services;
+  List<HospitalityService>? hospitalityServices;
 
-  Region({
+  HospitalityRegion({
     this.id,
     this.name,
     this.status,
     this.createdAt,
     this.updatedAt,
-    this.services,
+    this.hospitalityServices,
   });
 
-  factory Region.fromJson(Map<String, dynamic> json) => Region(
+  factory HospitalityRegion.fromJson(Map<String, dynamic> json) =>
+      HospitalityRegion(
         id: json["id"],
         name: json["name"],
         status: json["status"],
@@ -124,10 +158,10 @@ class Region {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
-        services: json["services"] == null
+        hospitalityServices: json["hospitality_services"] == null
             ? []
-            : List<Service>.from(
-                json["services"]!.map((x) => Service.fromJson(x))),
+            : List<HospitalityService>.from(json["hospitality_services"]!
+                .map((x) => HospitalityService.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -136,20 +170,20 @@ class Region {
         "status": status,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
-        "services": services == null
+        "hospitality_services": hospitalityServices == null
             ? []
-            : List<dynamic>.from(services!.map((x) => x.toJson())),
+            : List<dynamic>.from(hospitalityServices!.map((x) => x.toJson())),
       };
 }
 
-class Service {
+class HospitalityService {
   int? id;
   String? name;
   DateTime? createdAt;
   DateTime? updatedAt;
   Pivot? pivot;
 
-  Service({
+  HospitalityService({
     this.id,
     this.name,
     this.createdAt,
@@ -157,7 +191,8 @@ class Service {
     this.pivot,
   });
 
-  factory Service.fromJson(Map<String, dynamic> json) => Service(
+  factory HospitalityService.fromJson(Map<String, dynamic> json) =>
+      HospitalityService(
         id: json["id"],
         name: json["name"],
         createdAt: json["created_at"] == null
@@ -179,36 +214,24 @@ class Service {
 }
 
 class Pivot {
-  String? traningRegionId;
-  String? traningServiceId;
+  String? hospitalityRegionId;
+  String? hospitalityServiceId;
   String? enabled;
-  String? startTime;
-  String? endTime;
-  String? price;
-  dynamic days;
   DateTime? createdAt;
   DateTime? updatedAt;
 
   Pivot({
-    this.traningRegionId,
-    this.traningServiceId,
+    this.hospitalityRegionId,
+    this.hospitalityServiceId,
     this.enabled,
-    this.startTime,
-    this.endTime,
-    this.price,
-    this.days,
     this.createdAt,
     this.updatedAt,
   });
 
   factory Pivot.fromJson(Map<String, dynamic> json) => Pivot(
-        traningRegionId: json["traning_region_id"],
-        traningServiceId: json["traning_service_id"],
+        hospitalityRegionId: json["hospitality_region_id"],
+        hospitalityServiceId: json["hospitality_service_id"],
         enabled: json["enabled"],
-        startTime: json["start_time"],
-        endTime: json["end_time"],
-        price: json["price"],
-        days: json["days"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -218,13 +241,9 @@ class Pivot {
       );
 
   Map<String, dynamic> toJson() => {
-        "traning_region_id": traningRegionId,
-        "traning_service_id": traningServiceId,
+        "hospitality_region_id": hospitalityRegionId,
+        "hospitality_service_id": hospitalityServiceId,
         "enabled": enabled,
-        "start_time": startTime,
-        "end_time": endTime,
-        "price": price,
-        "days": days,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
@@ -247,29 +266,5 @@ class Trainer {
   Map<String, dynamic> toJson() => {
         "id": id,
         "fullname": fullname,
-      };
-}
-
-class TrainingImage {
-  int? id;
-  String? traningId;
-  String? imagePath;
-
-  TrainingImage({
-    this.id,
-    this.traningId,
-    this.imagePath,
-  });
-
-  factory TrainingImage.fromJson(Map<String, dynamic> json) => TrainingImage(
-        id: json["id"],
-        traningId: json["traning_id"],
-        imagePath: json["image_path"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "traning_id": traningId,
-        "image_path": imagePath,
       };
 }
