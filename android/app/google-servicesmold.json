@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "333799114774",
+    "project_id": "obeiah",
+    "storage_bucket": "obeiah.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333799114774:android:37c1df546a92e327774d37",
+        "android_client_info": {
+          "package_name": "com.MechPlan.obaiah_mobile_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333799114774-122ldbiqekqu0ma9s6r282ar6bbjrcub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.MechPlan.obaiah_mobile_app",
+            "certificate_hash": "3ea618693eaef855b394d274f8648b81d2e59a36"
+          }
+        },
+        {
+          "client_id": "333799114774-bs8k5d13qv40ga2sg86el9sdolpc1p66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgYc6R6bGW0EK_ADXjQPYbgdldyhN9CWA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333799114774-97pcd4o385b8tjf9e00080e6glqc3tko.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

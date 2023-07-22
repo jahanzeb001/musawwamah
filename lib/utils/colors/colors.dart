@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+
+const Color cPrimaryColor = Color(0xFFCEB386);
+Color cPrimaryColor24Opacity = const Color(0xFFCEB386).withOpacity(0.24);
+const Color cScaffoldBackground = Color(0xFFE5E5E5);
+const Color cCheckBackground = Color(0xFFF1F1F1);
+const Color cOnyxColor = Color(0xFF404044);
+Color cOnyxColor5Opacity = const Color(0xFF404044).withOpacity(0.50);
+Color cOnyxColor24Opacity = const Color(0xFF404044).withOpacity(0.24);
+const Color cRomanSilverColor = Color(0xFF818493);
+const Color cWhiteGrey = Color(0xFFD9D9D9);
+Color cRomanSilverColorOpacity5 = const Color(0xFF818493).withOpacity(0.5);
+const Color cGreenAccentColor = Color(0xFF879381);
+Color cGreenAccentColorOpacity5 = const Color(0xFF879381).withOpacity(0.7);
+Color cRomanSilverColorOpacity = const Color(0xFF818493).withOpacity(0.1);
+const Color cGhostWhiteColor = Color(0xFFE8E9EF);
+const Color cCulturedWhiteColor = Color(0xFFF9F9FB);
+const Color cBlackColor = Color(0xFF000000);
+const Color cWhiteColor = Color(0xFFFFFFFF);
+const Color cRedColor = Color(0xFFA72A2A);
+const Color cGreenAccentTwoColor = Color(0xFF99CE86);
