@@ -254,6 +254,7 @@ class _DeliveryConfirmPickupScreenState
   Widget build(BuildContext context) {
     var deliveryAccountId = GetStorage().read("delPerId");
     log(deliveryAccountId.toString());
+
     final deliveryConfirmPickUpController =
         Get.find<DeliveryConfirmPickUpController>();
     return Scaffold(
@@ -790,7 +791,11 @@ class _DeliveryConfirmPickupScreenState
                             child: MediaButton(
                                 text: "pictures for notes",
                                 onPressFunction: () {
-                                  _getHorseNotesImage(ImageSource.gallery);
+                                  deliveryConfirmPickUpController
+                                          .isNotesImagePlaceShowed.value =
+                                      !deliveryConfirmPickUpController
+                                          .isNotesImagePlaceShowed.value;
+                                  //  _getHorseNotesImage(ImageSource.gallery);
                                 }),
                           ),
                           gapW40,
@@ -798,7 +803,11 @@ class _DeliveryConfirmPickupScreenState
                             child: MediaButton(
                                 text: "video from all sides",
                                 onPressFunction: () {
-                                  _pickVideo(ImageSource.camera);
+                                  deliveryConfirmPickUpController
+                                          .isVideoPlaceShowed.value =
+                                      !deliveryConfirmPickUpController
+                                          .isVideoPlaceShowed.value;
+                                  //  _pickVideo(ImageSource.camera);
                                 }),
                           ),
                           gapW30,
@@ -809,6 +818,109 @@ class _DeliveryConfirmPickupScreenState
                 ),
                 gapH20,
                 //Component 7
+                Obx(
+                  () => deliveryConfirmPickUpController.isVideoPlaceShowed.value
+                      ? Container(
+                          height: 200,
+                          padding: padA10,
+                          decoration: BoxDecoration(
+                            color: cCulturedWhiteColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 300,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: _pickedVideo != null
+                                    ? AspectRatio(
+                                        aspectRatio: _videoPlayerController!
+                                            .value.aspectRatio,
+                                        child: VideoPlayer(
+                                          _videoPlayerController!,
+                                        ),
+                                      )
+                                    : Center(
+                                        child: IconButton(
+                                            onPressed: () {
+                                              _pickVideo(ImageSource.camera);
+                                            },
+                                            icon: Icon(Icons.add)),
+                                      ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: MediaButton(
+                                    text: "Done",
+                                    onPressFunction: () {
+                                      deliveryConfirmPickUpController
+                                          .isVideoPlaceShowed.value = false;
+                                      //  _pickVideo(ImageSource.camera);
+                                    }),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              )
+                            ],
+                          ),
+                        )
+                      : deliveryConfirmPickUpController
+                              .isNotesImagePlaceShowed.value
+                          ? Container(
+                              height: 200,
+                              padding: padA10,
+                              decoration: BoxDecoration(
+                                color: cCulturedWhiteColor,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 300,
+                                    width: 200,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: horseNotesView != null
+                                        ? Image.file(horseNotesView!)
+                                        : Center(
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  _getHorseNotesImage(
+                                                      ImageSource.gallery);
+                                                  //_pickVideo(ImageSource.camera);
+                                                },
+                                                icon: Icon(Icons.add)),
+                                          ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: MediaButton(
+                                        text: "Done",
+                                        onPressFunction: () {
+                                          deliveryConfirmPickUpController
+                                              .isNotesImagePlaceShowed
+                                              .value = false;
+                                          //  _pickVideo(ImageSource.camera);
+                                        }),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  )
+                                ],
+                              ),
+                            )
+                          : SizedBox(),
+                ),
+                gapH20,
                 Container(
                   padding: padA10,
                   decoration: BoxDecoration(
@@ -930,21 +1042,40 @@ class _DeliveryConfirmPickupScreenState
                 ),
                 gapH20,
                 //Component 8
-                OutlinedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      shadowColor: cPrimaryColor,
-                      foregroundColor: cPrimaryColor,
-                      fixedSize: Size(context.width * 0.7, 50),
-                      side: const BorderSide(color: cBlackColor),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                Obx(
+                  () => OutlinedButton(
+                      onPressed: () {
+                        deliveryConfirmPickUpController.confirmDeliveryPickup(
+                          hid: widget.homeModel?.data?.id,
+                          horseImageFromRight: horseRightView,
+                          horseImageFromLeft: horseLeftView,
+                          horseFrontView: horseFrontView,
+                          horseBackView: horseBackView,
+                          notesImage: horseNotesView,
+                          horseVideo: _pickedVideo,
+                          notesText: deliveryConfirmPickUpController
+                              .compulsoryNotesController.text,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shadowColor: cPrimaryColor,
+                        foregroundColor: cPrimaryColor,
+                        fixedSize: Size(context.width * 0.7, 50),
+                        side: const BorderSide(color: cBlackColor),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        elevation: 0.0,
                       ),
-                      elevation: 0.0,
-                    ),
-                    child: FittedBox(
-                      child: Text("confirm receipt".tr, style: black720),
-                    )),
+                      child: FittedBox(
+                        child: deliveryConfirmPickUpController
+                                .deliveryConfirmPickupLoading.value
+                            ? CircularProgressIndicator(
+                                color: cBlackColor,
+                              )
+                            : Text("confirm receipt".tr, style: black720),
+                      )),
+                ),
                 gapH20,
                 OutlinedButton(
                     onPressed: () {

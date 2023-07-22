@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:obaiah_mobile_app/screens/delivery/delivery_confirm_pickup/models/delivery_confirm_pickup_model.dart';
 import 'package:otp_text_field/otp_field.dart';
 
 import '../models/horse_didnot_match_model.dart';
@@ -13,6 +16,9 @@ class DeliveryConfirmPickUpController extends GetxController {
   var error = "".obs;
   var loading = false.obs;
   int? deliveryAccountId = 0;
+
+  RxBool isVideoPlaceShowed = false.obs;
+  RxBool isNotesImagePlaceShowed = false.obs;
   //var myCoonectionsModel = GetMyConnectionResponse();
 
   @override
@@ -71,4 +77,69 @@ class DeliveryConfirmPickUpController extends GetxController {
   //   log('disposing controllers');
   //   super.onClose();
   // }
+
+  var deliveryConfirmPickupModel = DeliveryConfirmPickupResponse();
+  RxBool deliveryConfirmPickupLoading = false.obs;
+  RxString error1 = "".obs;
+
+  void confirmDeliveryPickup(
+      {File? horseImageFromRight,
+      File? horseImageFromLeft,
+      File? horseFrontView,
+      File? notesImage,
+      File? horseBackView,
+      File? horseVideo,
+      String? notesText,
+      int? hid}) async {
+    deliveryConfirmPickupLoading.value = true;
+    error1.value = "";
+
+    var res = await DeliverConformPivkupService.deliveryConfirmPickup(
+        horseImageFromRight: horseImageFromRight,
+        horseImageFromLeft: horseImageFromLeft,
+        horseBackView: horseBackView,
+        horseFrontView: horseFrontView,
+        notesImage: notesImage,
+        horseVideo: horseVideo);
+    deliveryConfirmPickupLoading.value = false;
+    if (res is DeliveryConfirmPickupResponse) {
+      deliveryConfirmPickupModel = res;
+
+      confirmPickup(notesText ?? "", hid ?? 0);
+
+      print(deliveryConfirmPickupModel.horseBackView);
+    } else {
+      deliveryConfirmPickupLoading.value = false;
+      error1.value = res.toString();
+      Get.snackbar("notification", error1.value);
+    }
+  }
+
+  ////////////////////////////////////
+  var confirmPickupModel1 = ConfirmPickupResponse();
+
+  void confirmPickup(String notes, int horseId) async {
+    deliveryConfirmPickupLoading.value = true;
+    error1.value = "";
+
+    var res = await DeliverConformPivkupService.confirmPickup(
+        horseId: horseId,
+        horseImageFromRight: deliveryConfirmPickupModel.horseImageFromRight,
+        horseImageFromLeft: deliveryConfirmPickupModel.horseImageFromLeft,
+        horseBackView: deliveryConfirmPickupModel.horseBackView,
+        horseFrontView: deliveryConfirmPickupModel.horseFrontView,
+        notesImage: deliveryConfirmPickupModel.notesImage,
+        horseVideo: deliveryConfirmPickupModel.horseVideo,
+        notes: notes);
+    deliveryConfirmPickupLoading.value = false;
+    if (res is ConfirmPickupResponse) {
+      confirmPickupModel1 = res;
+      Get.snackbar("notification", "Saved Successfully");
+      Get.back();
+    } else {
+      deliveryConfirmPickupLoading.value = false;
+      error1.value = res.toString();
+      Get.snackbar("notification", error1.value);
+    }
+  }
 }

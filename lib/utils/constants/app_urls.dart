@@ -78,4 +78,6 @@ class AppUrls {
   static const String confirmdelivery = "confirm-delivery";
   //////////////////Traning
   static const String gettraning = "training";
+  static const String uploadImagesPickup = "upload-images";
+  static const String confirmPickup = "confirm-pickup";
 }
