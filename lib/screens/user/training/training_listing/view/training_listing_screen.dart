@@ -20,11 +20,11 @@ import '../controller/training_listing_controller.dart';
 
 class TrainingListingScreen extends StatefulWidget {
   final int id;
+  final ownername;
 
-  const TrainingListingScreen({
-    Key? key,
-    required this.id,
-  }) : super(key: key);
+  const TrainingListingScreen(
+      {Key? key, required this.id, required this.ownername})
+      : super(key: key);
 
   @override
   State<TrainingListingScreen> createState() => _TrainingListingScreenState();
@@ -69,7 +69,7 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
     final trainingListingController = Get.find<TrainingListingController>();
     return Scaffold(
       appBar: ReusableAppBar(
-          titleText: widget.id.toString(),
+          titleText: widget.ownername.toString(),
           textStyle: primary820,
           onPressFunction: () {
             Navigator.pop(context);
@@ -89,9 +89,7 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                         },
                         error: trainingListingController.error.value),
                   )
-                : trainingListingController
-                            .myTraningListingModel.data?.length ==
-                        0
+                : trainingListingController.myTraningListingModel.data == null
                     ? Center(
                         child: NoDataMessage(
                         message: "No Data Found",
@@ -140,7 +138,7 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                                   ),
                                                 ),
                                                 child: Image.network(
-                                                    '${AppUrls.ImagebaseUrl}${trainingListingController.myTraningListingModel.data![0].trainingImages![index].imagePath}',
+                                                    '${AppUrls.ImagebaseUrl}${trainingListingController.myTraningListingModel.data!.trainingImages![index].imagePath}',
                                                     fit: BoxFit.cover),
                                               ),
                                             );
@@ -194,9 +192,10 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Text('', style: onyx717),
+                                          Text('${widget.ownername}',
+                                              style: onyx717),
                                           Text(
-                                            '',
+                                            '${trainingListingController.myTraningListingModel.data!.region!.name}',
                                             style: onyx717,
                                           )
                                         ],
@@ -219,14 +218,12 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                               gapH20,
                               //Component 3
                               SizedBox(
-                                height: 179,
                                 width: context.width * 1,
                                 child: Stack(children: [
                                   Align(
                                     alignment: Alignment.bottomCenter,
                                     child: Container(
                                       padding: padA20,
-                                      height: 170,
                                       width: context.width * 1,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
@@ -239,61 +236,51 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text("horseback riding".tr,
-                                                  style: onyx717),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.min,
+                                          ListView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: trainingListingController
+                                                .myTraningListingModel
+                                                .data!
+                                                .region!
+                                                .services!
+                                                .length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    '',
-                                                    // "الاثنين - الثلاثاء - الاربعاء",
-                                                    style: onyx711,
+                                                    "${trainingListingController.myTraningListingModel.data!.region!.services![index].name}"
+                                                        .tr,
+                                                    style: onyx717,
                                                   ),
-                                                  gapH7,
-                                                  Text(
-                                                    '',
-                                                    // "${widget.hoeseridingtime}م - 8:00م",
-                                                    style: onyx711,
-                                                  ),
+                                                  Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                        '${trainingListingController.myTraningListingModel.data!.region!.services![index].pivot!.days}',
+                                                        // "الأحد - الثلاثاء - الأربعاء",
+                                                        style: onyx711,
+                                                      ),
+                                                      gapH7,
+                                                      Text(
+                                                        '${trainingListingController.myTraningListingModel.data!.region!.services![index].pivot!.startTime}م - ${trainingListingController.myTraningListingModel.data!.region!.services![1].pivot!.endTime}م ',
+                                                        // "${widget.jumptime}م - 5:30م",
+                                                        style: onyx711,
+                                                      ),
+                                                    ],
+                                                  )
                                                 ],
-                                              ),
-                                            ],
+                                              );
+                                            },
                                           ),
-                                          gapH25,
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "jump obstacles".tr,
-                                                style: onyx717,
-                                              ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    '',
-                                                    // "الأحد - الثلاثاء - الأربعاء",
-                                                    style: onyx711,
-                                                  ),
-                                                  gapH7,
-                                                  Text(
-                                                    '',
-                                                    // "${widget.jumptime}م - 5:30م",
-                                                    style: onyx711,
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          )
                                         ],
                                       ),
                                     ),
@@ -336,18 +323,6 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                     child: Column(
                                       children: [
                                         TrainingListingComponent(
-                                          numberOfShares: "12",
-                                          price: "100",
-                                          onPressFunction: () {},
-                                        ),
-                                        gapH10,
-                                        TrainingListingComponent(
-                                          numberOfShares: "12",
-                                          price: "100",
-                                          onPressFunction: () {},
-                                        ),
-                                        gapH10,
-                                        TrainingListingComponent(
                                           numberOfShares: "100",
                                           price: "12",
                                           onPressFunction: () {},
@@ -380,18 +355,6 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                     ),
                                     child: Column(
                                       children: [
-                                        TrainingListingComponent(
-                                          numberOfShares: "12",
-                                          price: "12",
-                                          onPressFunction: () {},
-                                        ),
-                                        gapH10,
-                                        TrainingListingComponent(
-                                          numberOfShares: "12",
-                                          price: "100",
-                                          onPressFunction: () {},
-                                        ),
-                                        gapH10,
                                         TrainingListingComponent(
                                           numberOfShares: "12",
                                           price: "100",

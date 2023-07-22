@@ -78,6 +78,9 @@ class AppUrls {
   static const String confirmdelivery = "confirm-delivery";
   //////////////////Traning
   static const String gettraning = "training";
+  //////////////////Hospitality
+  static const String gethospitalities = "hospitalities";
+  static const String purchasehospitalitie = "hospitality-payment";
   static const String uploadImagesPickup = "upload-images";
   static const String confirmPickup = "confirm-pickup";
 }

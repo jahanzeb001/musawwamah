@@ -48,7 +48,9 @@ class _TrainingHomeScreenState extends State<TrainingHomeScreen> {
             : trainingHomeController.error.value != ""
                 ? Center(
                     child: Custom_Error(
-                        onpressed: () {},
+                        onpressed: () {
+                          traningController.getMyTraning();
+                        },
                         error: trainingHomeController.error.value),
                   )
                 // : walletPortfolioController.myWalletModel.data?.length == 0

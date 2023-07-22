@@ -3,20 +3,31 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:obaiah_mobile_app/screens/user/hospitality/hospitality_home/models/hospitality_model.dart';
 
 import '../../../../../models/home_model.dart';
 import '../../../../../utils/colors/colors.dart';
+import '../../../../../utils/constants/app_urls.dart';
 import '../../../../../utils/constants/constants.dart';
 import '../../../../../utils/spacing/gaps.dart';
 import '../../../../../utils/spacing/padding.dart';
 import '../../../../../utils/text_styles/textstyles.dart';
 
-class HospitalityGridViewInfoCard extends StatelessWidget {
-  final HomeModel homePageModel;
+class HospitalityGridViewInfoCard extends StatefulWidget {
+  final List<Datum>? homePageModel;
+  final index;
 
-  const HospitalityGridViewInfoCard({Key? key, required this.homePageModel})
+  const HospitalityGridViewInfoCard(
+      {Key? key, required this.homePageModel, required this.index})
       : super(key: key);
 
+  @override
+  State<HospitalityGridViewInfoCard> createState() =>
+      _HospitalityGridViewInfoCardState();
+}
+
+class _HospitalityGridViewInfoCardState
+    extends State<HospitalityGridViewInfoCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +50,8 @@ class HospitalityGridViewInfoCard extends StatelessWidget {
               ),
               gapW4,
               Text(
-                homePageModel.city.tr,
+                '${widget.homePageModel![widget.index].hospitalityRegion!.name}'
+                    .tr,
                 style: black510,
               ),
             ],
@@ -57,7 +69,9 @@ class HospitalityGridViewInfoCard extends StatelessWidget {
                     bottom: BorderSide(width: 3.0, color: cPrimaryColor),
                   ),
                 ),
-                child: Image.asset(homePageModel.horseImage, fit: BoxFit.cover),
+                child: Image.network(
+                    '${AppUrls.ImagebaseUrl}${widget.homePageModel![widget.index].featuredImage}',
+                    fit: BoxFit.cover),
               ),
             ),
           ),
@@ -95,7 +109,7 @@ class HospitalityGridViewInfoCard extends StatelessWidget {
           ),
           gapH10,
           Text(
-            homePageModel.owner,
+            '${widget.homePageModel![widget.index].trainer!.fullname}',
             style: onyx814,
           ),
           gapH10,
@@ -104,7 +118,7 @@ class HospitalityGridViewInfoCard extends StatelessWidget {
               style: primary810,
               children: <TextSpan>[
                 TextSpan(
-                  text: "${homePageModel.price} ",
+                  text: "${widget.homePageModel![widget.index].price} ",
                 ),
                 TextSpan(
                   text: "riyal".tr,
@@ -117,7 +131,14 @@ class HospitalityGridViewInfoCard extends StatelessWidget {
           OutlinedButton(
             onPressed: () {
               Navigator.pushNamed(context, hospitalityListingScreen,
-                  arguments: {"homePageModel": homePageModel});
+                  arguments: {
+                    "id": widget.homePageModel![widget.index].id,
+                    "ownername":
+                        widget.homePageModel![widget.index].trainer!.fullname
+                  });
+
+              // Navigator.pushNamed(context, hospitalityListingScreen,
+              //     arguments: {"homePageModel": widget.homePageModel});
             },
             style: ElevatedButton.styleFrom(
               shadowColor: cPrimaryColor,

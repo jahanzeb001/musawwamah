@@ -116,7 +116,8 @@ class AppRoutes {
             settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (context) => HospitalityListingScreen(
-                  homeModel: arguments['homePageModel'],
+                  id: arguments['id'],
+                  ownername: arguments['ownername'],
                 ));
       case trainingHomeScreen:
         return MaterialPageRoute(
@@ -127,6 +128,7 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (context) => TrainingListingScreen(
                   id: arguments['id'],
+                  ownername: arguments['ownername'],
                 ));
 
       case deliveryAccountScreen:

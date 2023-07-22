@@ -108,7 +108,7 @@ class _TrainingGridViewInfoCardState extends State<TrainingGridViewInfoCard> {
           ),
           gapH10,
           Text(
-            '${widget.homePageModel![widget.index].user!.fullname}'.tr,
+            '${widget.homePageModel![widget.index].trainer!.fullname}'.tr,
             style: onyx814,
           ),
           gapH10,
@@ -177,8 +177,11 @@ class _TrainingGridViewInfoCardState extends State<TrainingGridViewInfoCard> {
           gapH10,
           OutlinedButton(
             onPressed: () {
-              Navigator.pushNamed(context, trainingListingScreen,
-                  arguments: {"id": widget.homePageModel![widget.index].id});
+              Navigator.pushNamed(context, trainingListingScreen, arguments: {
+                "id": widget.homePageModel![widget.index].id,
+                "ownername":
+                    widget.homePageModel![widget.index].trainer!.fullname
+              });
             },
             style: ElevatedButton.styleFrom(
               shadowColor: cPrimaryColor,
