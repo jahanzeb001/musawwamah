@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,6 +13,7 @@ import 'package:obaiah_mobile_app/screens/user/home/home/models/get_approved_hor
 import 'package:obaiah_mobile_app/screens/user/settings/account/controller/account_controller.dart';
 import 'package:obaiah_mobile_app/utils/colors/colors.dart';
 import 'package:obaiah_mobile_app/utils/constants/app_urls.dart';
+import 'package:obaiah_mobile_app/utils/constants/lists.dart';
 import 'package:obaiah_mobile_app/utils/spacing/gaps.dart';
 import 'package:obaiah_mobile_app/utils/spacing/padding.dart';
 
@@ -526,242 +529,138 @@ class FilterDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: 330,
-            height: context.height * 0.57,
-            child: Obx(() => Column(
+          // Flexible(child: MyListView()),
+          Flexible(
+              child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: filterNamesList.length,
+            separatorBuilder: (BuildContext context, int index) => gapH10,
+            itemBuilder: (BuildContext context, int index) {
+              return Obx(() {
+                return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ListTile(
-                      leading: const Icon(
-                        Icons.menu_rounded,
-                        color: cBlackColor,
-                        size: 17,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      title: Center(
-                          child: Text(
-                        "type",
-                        style: onyx514,
-                      )),
-                      onTap: () {
-                        homeController.typeSelected.value =
-                            !homeController.typeSelected.value;
-                      },
+                    ListTileComponent(
+                      index: index,
+                      filterClass: filterNamesList.elementAt(index),
+                      isSelected: selectedValueList.elementAt(index),
                     ),
-                    homeController.typeSelected.value
-                        ? Container(
-                            height: 80,
-                            width: double.infinity,
-                            //   color: Colors.red,
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 8.0,
-                                mainAxisSpacing: 8.0,
-                              ),
-                              itemCount: homeController.type!.length,
-                              itemBuilder: (context, index) {
-                                String value = homeController.type![index];
-                                return CheckboxListTile(
-                                  title: Text(homeController.type![index]),
-                                  value: false,
-                                  onChanged: (checked) {
-                                    if (checked!) {
-                                      homeController.selectedtype?.add(value);
-
-                                      print(
-                                          homeController.selectedtype!.length);
-                                    }
-                                    // setState(() {
-                                    //   if (checked!) {
-                                    //     selectedValues.add(value);
-                                    //   } else {
-                                    //     selectedValues.remove(value);
-                                    //   }
-                                    // }
-
-                                    // );
-                                  },
-                                );
-                              },
-                            ))
-                        : SizedBox(),
-
                     gapH10,
-
-                    ListTile(
-                      leading: const Icon(
-                        Icons.menu_rounded,
-                        color: cBlackColor,
-                        size: 17,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      title: Center(
-                          child: Text(
-                        "region",
-                        style: onyx514,
-                      )),
-                      onTap: () {
-                        homeController.regionSelected.value =
-                            !homeController.regionSelected.value;
-                      },
-                    ),
-                    homeController.regionSelected.value
-                        ? Container(
-                            height: 60,
-                            width: double.infinity,
-                            color: Colors.red,
-                          )
-                        : SizedBox(),
-                    // Flexible(child: MyListView()),
-                    // Flexible(
-                    //     child: ListView.separated(
-                    //   shrinkWrap: true,
-                    //   itemCount: filterNamesList.length,
-                    //   separatorBuilder: (BuildContext context, int index) => gapH10,
-                    //   itemBuilder: (BuildContext context, int index) {
-                    //     return Obx(() {
-                    //       return Column(
-                    //         mainAxisSize: MainAxisSize.min,
-                    //         children: [
-                    //           ListTileComponent(
-                    //             index: index,
-                    //             filterClass: filterNamesList.elementAt(index),
-                    //             isSelected: selectedValueList.elementAt(index),
-                    //           ),
-                    //           gapH10,
-                    //           Visibility(
-                    //               visible: selectedValueList.elementAt(index),
-                    //               child: Container(
-                    //                 height: 50,
-                    //                 width: context.width * 1,
-                    //                 decoration: BoxDecoration(
-                    //                     color: cPrimaryColor24Opacity,
-                    //                     borderRadius: BorderRadius.circular(10)),
-                    //                 child: Row(
-                    //                   crossAxisAlignment: CrossAxisAlignment.center,
-                    //                   mainAxisAlignment:
-                    //                       MainAxisAlignment.spaceEvenly,
-                    //                   children: [
-                    //                     Row(
-                    //                       mainAxisSize: MainAxisSize.min,
-                    //                       children: [
-                    //                         RichText(
-                    //                           text: TextSpan(
-                    //                             children: <TextSpan>[
-                    //                               TextSpan(
-                    //                                   text: "option".tr,
-                    //                                   style: onyx712),
-                    //                               const TextSpan(text: " "),
-                    //                               TextSpan(
-                    //                                   text: "1".tr, style: onyx712),
-                    //                             ],
-                    //                           ),
-                    //                         ),
-                    //                         gapW20,
-                    //                         Obx(() {
-                    //                           return ListTileCheckBox(
-                    //                               checkBxValue:
-                    //                                   filterCheckBoxValueList[
-                    //                                       index],
-                    //                               onChangeFunction: (val) {
-                    //                                 log(val.toString());
-                    //                                 log("${filterCheckBoxValueList[index]}");
-                    //                                 Get.find<HomeScreenController>()
-                    //                                     .changeFilterCheckBoxValue(
-                    //                                         index: index,
-                    //                                         value: val!);
-                    //                               });
-                    //                         }),
-                    //                       ],
-                    //                     ),
-                    //                     Row(
-                    //                       mainAxisSize: MainAxisSize.min,
-                    //                       children: [
-                    //                         RichText(
-                    //                           text: TextSpan(
-                    //                             children: <TextSpan>[
-                    //                               TextSpan(
-                    //                                   text: "option".tr,
-                    //                                   style: onyx712),
-                    //                               const TextSpan(text: " "),
-                    //                               TextSpan(
-                    //                                   text: "2".tr, style: onyx712),
-                    //                             ],
-                    //                           ),
-                    //                         ),
-                    //                         gapW20,
-                    //                         Obx(() {
-                    //                           return ListTileCheckBox(
-                    //                               checkBxValue:
-                    //                                   filterCheckBoxValueList[
-                    //                                       index + 1],
-                    //                               onChangeFunction: (val) {
-                    //                                 Get.find<HomeScreenController>()
-                    //                                     .changeFilterCheckBoxValue(
-                    //                                         index: index + 1,
-                    //                                         value:
-                    //                                             !filterCheckBoxValueList[
-                    //                                                 index + 1]);
-                    //                               });
-                    //                         }),
-                    //                       ],
-                    //                     ),
-                    //                     // AddHorseRadioButton()
-                    //                   ],
-                    //                 ),
-                    //               )),
-                    //         ],
-                    //       );
-                    //     });
-                    //   },
-                    // )),
-
-                    gapH20,
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Spacer(),
-                        Expanded(
-                          flex: 3,
-                          child: HomeFilterAlertDialogButtonComponent(
-                            text: "implementation",
-                            backGroundColor: cPrimaryColor,
-                            onPressedFunction: () {
-                              Navigator.pop(context);
-                            },
+                    Visibility(
+                        visible: selectedValueList.elementAt(index),
+                        child: Container(
+                          height: 50,
+                          width: context.width * 1,
+                          decoration: BoxDecoration(
+                              color: cPrimaryColor24Opacity,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: "option".tr, style: onyx712),
+                                        const TextSpan(text: " "),
+                                        TextSpan(text: "1".tr, style: onyx712),
+                                      ],
+                                    ),
+                                  ),
+                                  gapW20,
+                                  Obx(() {
+                                    return ListTileCheckBox(
+                                        checkBxValue:
+                                            filterCheckBoxValueList[index],
+                                        onChangeFunction: (val) {
+                                          log(val.toString());
+                                          log("${filterCheckBoxValueList[index]}");
+                                          Get.find<HomeScreenController>()
+                                              .changeFilterCheckBoxValue(
+                                                  index: index, value: val!);
+                                        });
+                                  }),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: "option".tr, style: onyx712),
+                                        const TextSpan(text: " "),
+                                        TextSpan(text: "2".tr, style: onyx712),
+                                      ],
+                                    ),
+                                  ),
+                                  gapW20,
+                                  Obx(() {
+                                    return ListTileCheckBox(
+                                        checkBxValue:
+                                            filterCheckBoxValueList[index + 1],
+                                        onChangeFunction: (val) {
+                                          Get.find<HomeScreenController>()
+                                              .changeFilterCheckBoxValue(
+                                                  index: index + 1,
+                                                  value:
+                                                      !filterCheckBoxValueList[
+                                                          index + 1]);
+                                        });
+                                  }),
+                                ],
+                              ),
+                              // AddHorseRadioButton()
+                            ],
                           ),
-                        ),
-                        gapW10,
-                        Expanded(
-                          flex: 2,
-                          child: HomeFilterAlertDialogButtonComponent(
-                            text: "survey",
-                            backGroundColor: cRomanSilverColor,
-                            onPressedFunction: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        const Spacer()
-                      ],
-                    ),
-                    HomeFilterAlertDialogButtonComponent(
-                      text: "cancel",
-                      backGroundColor: cRomanSilverColor,
-                      onPressedFunction: () {
-                        Navigator.pop(context);
-                      },
-                    ),
+                        )),
                   ],
-                )),
+                );
+              });
+            },
+          )),
+
+          //////////here end
+          gapH20,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Spacer(),
+              Expanded(
+                flex: 3,
+                child: HomeFilterAlertDialogButtonComponent(
+                  text: "implementation",
+                  backGroundColor: cPrimaryColor,
+                  onPressedFunction: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              gapW10,
+              Expanded(
+                flex: 2,
+                child: HomeFilterAlertDialogButtonComponent(
+                  text: "survey",
+                  backGroundColor: cRomanSilverColor,
+                  onPressedFunction: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              const Spacer()
+            ],
+          ),
+          HomeFilterAlertDialogButtonComponent(
+            text: "cancel",
+            backGroundColor: cRomanSilverColor,
+            onPressedFunction: () {
+              Navigator.pop(context);
+            },
           ),
         ],
       ),

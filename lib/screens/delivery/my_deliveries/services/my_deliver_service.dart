@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:obaiah_mobile_app/screens/delivery/my_deliveries/models/accept_connection_res.dart';
 import 'package:obaiah_mobile_app/screens/delivery/my_deliveries/models/my_deliver_model.dart';
 import 'package:obaiah_mobile_app/screens/delivery/my_deliveries/models/reject_connection_model.dart';
 import 'package:obaiah_mobile_app/utils/constants/app_urls.dart';
@@ -49,7 +48,7 @@ class MyDeliverService {
       var res = await BaseClientClass.post(url, data);
 
       if (res is http.Response) {
-        return jsonEncode(res.body);
+        return acceptConnectionResponseFromJson(res.body);
       } else {
         return res;
       }

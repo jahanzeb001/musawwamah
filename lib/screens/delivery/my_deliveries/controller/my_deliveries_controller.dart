@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:obaiah_mobile_app/screens/delivery/my_deliveries/models/accept_connection_res.dart';
 import 'package:obaiah_mobile_app/screens/delivery/my_deliveries/models/my_deliver_model.dart';
 import 'package:obaiah_mobile_app/screens/delivery/my_deliveries/models/reject_connection_model.dart';
 import 'package:obaiah_mobile_app/screens/delivery/my_deliveries/services/my_deliver_service.dart';
@@ -67,7 +68,7 @@ class MyDeliveriesController extends GetxController {
 
   RxBool loading3 = false.obs;
   RxString error3 = "".obs;
-  //var rejectConnectionModel = RejectonnectionResponse();
+  var acceptConnectionModel = AcceptConnectionResponse();
 
   void acceptConnection(int deliveryPersonId, int horseId, int index) async {
     print("methos id running on index :$index");
@@ -77,8 +78,10 @@ class MyDeliveriesController extends GetxController {
     var res =
         await MyDeliverService.acceptConnections(deliveryPersonId, horseId);
     loading2.value = false;
-    if (res == 200) {
-      Get.snackbar("notifications".tr, "Horse Accepted Successfully");
+    if (res is AcceptConnectionResponse) {
+      acceptConnectionModel = res;
+      Get.snackbar(
+          "notifications".tr, acceptConnectionModel.message.toString());
 
       loadData();
     } else {

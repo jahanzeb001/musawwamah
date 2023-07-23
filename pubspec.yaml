@@ -11,8 +11,10 @@ environment:
 dependencies:
   alt_sms_autofill: ^1.0.0
   app_settings: ^4.2.0
+  path_provider: ^2.0.7 
   cupertino_icons: ^1.0.5
   sms_autofill: ^2.3.0
+  flutter_screenutil: ^5.0.0
   firebase_auth: ^4.4.2
   firebase_core: ^2.10.0
   flutter:

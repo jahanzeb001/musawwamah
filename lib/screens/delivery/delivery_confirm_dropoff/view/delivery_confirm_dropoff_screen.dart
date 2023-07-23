@@ -1,4 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,14 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:obaiah_mobile_app/reusable_widgets/reusable_appbar.dart';
 import 'package:obaiah_mobile_app/utils/colors/colors.dart';
 import 'package:obaiah_mobile_app/utils/constants/app_urls.dart';
 import 'package:obaiah_mobile_app/utils/spacing/gaps.dart';
 import 'package:obaiah_mobile_app/utils/spacing/padding.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pinput.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
-
+import 'package:video_player/video_player.dart';
+import 'dart:ui' as ui;
 import '../../../../reusable_widgets/reusable_alertDialog.dart';
 import '../../../../reusable_widgets/reusable_button.dart';
 import '../../../../utils/text_styles/textstyles.dart';
@@ -45,6 +51,117 @@ class DeliveryConfirmDropOffScreen extends StatefulWidget {
 
 class _DeliveryConfirmDropOffScreenState
     extends State<DeliveryConfirmDropOffScreen> {
+  final deliveryConfirmDropOffController =
+      Get.find<DeliveryConfirmDropOffController>();
+////////////////////////////////////////////////////
+
+  File? _pickedVideo;
+  File? horseBackView;
+  File? horseFrontView;
+  File? horseLeftView;
+  File? horseRightView;
+  File? horseNotesView;
+  bool isLoading = false;
+
+  //////////////////horse back view
+  VideoPlayerController? _videoPlayerController;
+
+  Future<void> _getHorseBackImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    setState(() {
+      horseBackView = File(pickedFile!.path);
+    });
+  }
+
+  //////////////////horse front view
+  Future<void> _getHorseFrontImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    setState(() {
+      horseFrontView = File(pickedFile!.path);
+    });
+  }
+
+  //////////////////horse left view
+  Future<void> _getHorseLeftImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    setState(() {
+      horseLeftView = File(pickedFile!.path);
+    });
+  }
+
+  //////////////////horse right view
+  Future<void> _getHorseRightImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    setState(() {
+      horseRightView = File(pickedFile!.path);
+    });
+  }
+
+///////////////////pic notes
+  Future<void> _getHorseNotesImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    setState(() {
+      horseNotesView = File(pickedFile!.path);
+    });
+  }
+
+//////////////////pick video
+  Future<void> _pickVideo(ImageSource source) async {
+    final ImagePicker _picker = ImagePicker();
+
+    final pickedFile = await _picker.getVideo(source: source);
+    setState(() {
+      _pickedVideo = File(pickedFile!.path);
+    });
+    _videoPlayerController = VideoPlayerController.file(_pickedVideo!)
+      ..initialize().then((_) {
+        setState(() {});
+
+        _videoPlayerController!.play();
+      });
+  }
+
+  /////////////////////take signature image
+  ///
+  File? signature;
+
+  Future<File?> captureSignatureAsFile(
+      GlobalKey<SfSignaturePadState> signaturePadKey) async {
+    try {
+      final signaturePadState = signaturePadKey.currentState;
+      if (signaturePadState == null) {
+        print("Signature pad key's state is null");
+        return null;
+      }
+
+      // Capture the signature as an image (ByteData)
+      final signatureData = await signaturePadState.toImage(pixelRatio: 3.0);
+      final byteData =
+          await signatureData.toByteData(format: ui.ImageByteFormat.png);
+
+      if (byteData == null) {
+        print("Error converting image to ByteData");
+        return null;
+      }
+
+      // Get the temporary directory path
+      Directory tempDir = await getTemporaryDirectory();
+      String tempPath = tempDir.path;
+
+      // Create a new temporary file
+      File tempFile = File('$tempPath/signature.png');
+
+      // Write the signature data to the file
+      await tempFile.writeAsBytes(byteData.buffer.asUint8List());
+
+      return tempFile;
+    } catch (e) {
+      print("Error capturing signature as file: $e");
+      return null;
+    }
+  }
+
+////////////////////////////////////////////////////
   VeriffyOtp verifyotpcontroller = VeriffyOtp();
   String userId = '';
   var verId = '';
@@ -178,8 +295,6 @@ class _DeliveryConfirmDropOffScreenState
 
   @override
   Widget build(BuildContext context) {
-    final deliveryConfirmDropOffController =
-        Get.find<DeliveryConfirmDropOffController>();
     return Scaffold(
       appBar: ReusableAppBar(
           titleText: "my connections",
@@ -669,13 +784,20 @@ class _DeliveryConfirmDropOffScreenState
                           gapW30,
                           Expanded(
                               child: CustomContainerComponent(
-                                  onTapFunction: () {},
-                                  text: "horse back view")),
+                            onTapFunction: () {
+                              _getHorseBackImage(ImageSource.camera);
+                            },
+                            text: "horse back view",
+                            image: horseBackView,
+                          )),
                           gapW40,
                           Expanded(
                             child: CustomContainerComponent(
-                                onTapFunction: () {},
-                                text: "horse image from front"),
+                                onTapFunction: () {
+                                  _getHorseFrontImage(ImageSource.camera);
+                                },
+                                text: "horse image from front",
+                                image: horseFrontView),
                           ),
                           gapW30,
                         ],
@@ -687,13 +809,19 @@ class _DeliveryConfirmDropOffScreenState
                           gapW30,
                           Expanded(
                               child: CustomContainerComponent(
-                                  onTapFunction: () {},
-                                  text: "horse image from left")),
+                                  onTapFunction: () {
+                                    _getHorseLeftImage(ImageSource.camera);
+                                  },
+                                  text: "horse image from left",
+                                  image: horseLeftView)),
                           gapW40,
                           Expanded(
                             child: CustomContainerComponent(
-                                onTapFunction: () {},
-                                text: "picture of the horse from the right"),
+                                onTapFunction: () {
+                                  _getHorseRightImage(ImageSource.camera);
+                                },
+                                text: "picture of the horse from the right",
+                                image: horseRightView),
                           ),
                           gapW30,
                         ],
@@ -706,13 +834,25 @@ class _DeliveryConfirmDropOffScreenState
                           Expanded(
                             child: MediaButton(
                                 text: "pictures for notes",
-                                onPressFunction: () {}),
+                                onPressFunction: () {
+                                  deliveryConfirmDropOffController
+                                          .isNotesImagePlaceShowed.value =
+                                      !deliveryConfirmDropOffController
+                                          .isNotesImagePlaceShowed.value;
+                                  //  _getHorseNotesImage(ImageSource.gallery);
+                                }),
                           ),
                           gapW40,
                           Expanded(
                             child: MediaButton(
                                 text: "video from all sides",
-                                onPressFunction: () {}),
+                                onPressFunction: () {
+                                  deliveryConfirmDropOffController
+                                          .isVideoPlaceShowed.value =
+                                      !deliveryConfirmDropOffController
+                                          .isVideoPlaceShowed.value;
+                                  //  _pickVideo(ImageSource.camera);
+                                }),
                           ),
                           gapW30,
                         ],
@@ -720,6 +860,114 @@ class _DeliveryConfirmDropOffScreenState
                     ],
                   ),
                 ),
+
+                gapH20,
+
+                Obx(
+                  () => deliveryConfirmDropOffController
+                          .isVideoPlaceShowed.value
+                      ? Container(
+                          height: 200,
+                          padding: padA10,
+                          decoration: BoxDecoration(
+                            color: cCulturedWhiteColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 300,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: _pickedVideo != null
+                                    ? AspectRatio(
+                                        aspectRatio: _videoPlayerController!
+                                            .value.aspectRatio,
+                                        child: VideoPlayer(
+                                          _videoPlayerController!,
+                                        ),
+                                      )
+                                    : Center(
+                                        child: IconButton(
+                                            onPressed: () {
+                                              _pickVideo(ImageSource.camera);
+                                            },
+                                            icon: Icon(Icons.add)),
+                                      ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: MediaButton(
+                                    text: "Done",
+                                    onPressFunction: () {
+                                      deliveryConfirmDropOffController
+                                          .isVideoPlaceShowed.value = false;
+                                      //  _pickVideo(ImageSource.camera);
+                                    }),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              )
+                            ],
+                          ),
+                        )
+                      : deliveryConfirmDropOffController
+                              .isNotesImagePlaceShowed.value
+                          ? Container(
+                              height: 200,
+                              padding: padA10,
+                              decoration: BoxDecoration(
+                                color: cCulturedWhiteColor,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 300,
+                                    width: 200,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: horseNotesView != null
+                                        ? Image.file(horseNotesView!)
+                                        : Center(
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  _getHorseNotesImage(
+                                                      ImageSource.gallery);
+                                                  _pickVideo(
+                                                      ImageSource.camera);
+                                                },
+                                                icon: Icon(Icons.add)),
+                                          ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: MediaButton(
+                                        text: "Done",
+                                        onPressFunction: () {
+                                          deliveryConfirmDropOffController
+                                              .isNotesImagePlaceShowed
+                                              .value = false;
+                                          _pickVideo(ImageSource.camera);
+                                        }),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  )
+                                ],
+                              ),
+                            )
+                          : SizedBox(),
+                ),
+
                 gapH20,
                 //Component 7
                 Container(
@@ -907,15 +1155,55 @@ class _DeliveryConfirmDropOffScreenState
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     content: SizedBox(
-                                      height: context.height * 0.8,
+                                      height: context.height * 0.45,
                                       width: context.width * 0.8,
-                                      child: SfSignaturePad(
-                                        key: deliveryConfirmDropOffController
-                                            .signaturePadKey,
-                                        minimumStrokeWidth: 5,
-                                        maximumStrokeWidth: 5,
-                                        strokeColor: cBlackColor,
-                                        backgroundColor: cWhiteColor,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SfSignaturePad(
+                                            key:
+                                                deliveryConfirmDropOffController
+                                                    .signaturePadKey,
+                                            minimumStrokeWidth: 5,
+                                            maximumStrokeWidth: 5,
+                                            strokeColor: cBlackColor,
+                                            backgroundColor: cWhiteColor,
+                                          ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Expanded(
+                                                child: MediaButton(
+                                                    text: "Done",
+                                                    onPressFunction: () async {
+                                                      signature = await captureSignatureAsFile(
+                                                          deliveryConfirmDropOffController
+                                                              .signaturePadKey);
+
+                                                      print(
+                                                          " signature is $signature");
+
+                                                      if (signature != null) {
+                                                        Navigator.pop(context);
+                                                      }
+                                                      //  _pickVideo(ImageSource.camera);
+                                                    }),
+                                              ),
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                              Expanded(
+                                                child: MediaButton(
+                                                    text: "Cancel",
+                                                    onPressFunction: () {
+                                                      Navigator.pop(context);
+                                                      //  _pickVideo(ImageSource.camera);
+                                                    }),
+                                              ),
+                                            ],
+                                          )
+                                        ],
                                       ),
                                     ),
                                   ));
@@ -931,21 +1219,41 @@ class _DeliveryConfirmDropOffScreenState
                 ),
                 gapH20,
                 //Component 10
-                OutlinedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      shadowColor: cPrimaryColor,
-                      foregroundColor: cPrimaryColor,
-                      fixedSize: Size(context.width * 0.7, 50),
-                      side: const BorderSide(color: cBlackColor),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                Obx(
+                  () => OutlinedButton(
+                      onPressed: () {
+                        deliveryConfirmDropOffController.confirmDeliveryDropOff(
+                            hid: widget.homePageModel.data?.id,
+                            horseImageFromLeft: horseLeftView,
+                            horseImageFromRight: horseRightView,
+                            horseBackView: horseBackView,
+                            horseFrontView: horseFrontView,
+                            horseVideo: _pickedVideo,
+                            notesImage: horseNotesView,
+                            notesText: deliveryConfirmDropOffController
+                                .compulsoryNotesController.text,
+                            signature: signature);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shadowColor: cPrimaryColor,
+                        foregroundColor: cPrimaryColor,
+                        fixedSize: Size(context.width * 0.7, 50),
+                        side: const BorderSide(color: cBlackColor),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        elevation: 0.0,
                       ),
-                      elevation: 0.0,
-                    ),
-                    child: FittedBox(
-                      child: Text("delivery confirmation".tr, style: black720),
-                    )),
+                      child: deliveryConfirmDropOffController
+                              .deliveryConfirmDropOffLoading.value
+                          ? CircularProgressIndicator(
+                              color: cBlackColor,
+                            )
+                          : FittedBox(
+                              child: Text("delivery confirmation".tr,
+                                  style: black720),
+                            )),
+                ),
                 gapH20,
                 OutlinedButton(
                     onPressed: () {

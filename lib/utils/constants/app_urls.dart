@@ -83,4 +83,6 @@ class AppUrls {
   static const String purchasehospitalitie = "hospitality-payment";
   static const String uploadImagesPickup = "upload-images";
   static const String confirmPickup = "confirm-pickup";
+
+  static const String confirmDropOff = "confirm-delivery";
 }
