@@ -395,22 +395,30 @@ class _HospitalityListingScreenState extends State<HospitalityListingScreen> {
                                                 '${hospitalityListingController.myHospitalityListingModel.data![0].price}');
                                             var totalPaid = month * price;
                                             int userId = int.parse(
-                                                '${hospitalityListingController.myHospitalityListingModel.data![0].trainerUserId}');
+                                                '${hospitalityListingController.myHospitalityListingModel.data![0].id}');
                                             var hospitilityId =
                                                 hospitalityListingController
                                                     .myHospitalityListingModel
                                                     .data![0]
-                                                    .regionId;
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) =>
-                                                    AddAmountDialog(
-                                                      price: totalPaid,
-                                                      userid: userId,
-                                                      hospitilityid:
-                                                          hospitilityId,
-                                                      month: month,
-                                                    ));
+                                                    .id;
+                                            if (month == 0) {
+                                              Get.snackbar(
+                                                "notification".tr,
+                                                "no services selected to be purchased"
+                                                    .tr,
+                                              );
+                                            } else {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AddAmountDialog(
+                                                        price: totalPaid,
+                                                        userid: userId,
+                                                        hospitilityid:
+                                                            hospitilityId,
+                                                        month: month,
+                                                      ));
+                                            }
                                             // if (hospitalityListingController
                                             //         .noOfMonths.value ==
                                             //     0) {

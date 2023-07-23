@@ -355,10 +355,52 @@ class _FatoorahCustomState extends State<FatoorahCustom> {
           var dddd = 'sub';
           var bal = int.parse(widget.totalprice).toDouble();
           setBalance(bal, dddd);
+        } else if (widget.role == 'traning') {
+          var useridd = GetStorage().read("userId");
+          AddPaymentRecord.addTraning(
+            userId: useridd,
+            service_id: '$horseid',
+            training_id: '$userId',
+            months: widget.sellerid,
+            invoceid: invoceid,
+            invicestatus: invicestatus,
+            invcereference: invcereference,
+            customerreference: customerreference,
+            createdate: createdate,
+            expirydate: expirydate,
+            invocevalue: invocevalue,
+            customername: customername,
+            mobiele: mobile,
+            invoicedisplayvalue: invoicedisplayvalue,
+            invoiceitem: invoiceitem,
+            transactiondate: transactiondate,
+            paymentgateway: paymentgateway,
+            referrenceid: referrenceid,
+            trackid: trackid,
+            transationid: transationid,
+            paymentid: paymentid,
+            authorizationid: authorizationid,
+            transactionstatus: transactionstatus,
+            transactionvalue: transactionvalue,
+            customerservicecharge: customerservicecharge,
+            duevalue: duevalue,
+            paidcurency: paidcurency,
+            paidcurencyvalue: paidcurencyvalue,
+            curency: curency,
+            error: error,
+            cardnumber: cardnumber,
+            errorcode: errorcode,
+            suplier: suplier,
+          );
+          var dddd = 'sub';
+          var bal = int.parse(widget.totalprice).toDouble();
+          setBalance(bal, dddd);
         } else if (widget.role == 'hospitality') {
+          var useridd = GetStorage().read("userId");
+          log('userid ----- $useridd');
           AddPaymentRecord.addHospitality(
-            userId: userId,
-            hospitality_id: horseid,
+            userId: useridd,
+            hospitality_id: '$horseid',
             months: widget.sellerid,
             invoceid: invoceid,
             invicestatus: invicestatus,
