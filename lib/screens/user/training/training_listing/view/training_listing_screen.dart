@@ -33,7 +33,10 @@ class TrainingListingScreen extends StatefulWidget {
 class _TrainingListingScreenState extends State<TrainingListingScreen> {
   TrainingListingController trainingListingController =
       Get.put(TrainingListingController());
+
+  TextEditingController hoesebackController = TextEditingController();
   TextEditingController numberofShareController = TextEditingController();
+
   CarouselSliderController sliderController = CarouselSliderController();
   List sliderimg = [];
   var horseRidingsTime;
@@ -46,6 +49,8 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
   @override
   void initState() {
     trainingListingController.getMyTraningListing(widget.id);
+    hoesebackController.text = '1';
+    numberofShareController.text = '1';
     super.initState();
   }
 
@@ -322,11 +327,124 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                     ),
                                     child: Column(
                                       children: [
-                                        TrainingListingComponent(
-                                          numberOfShares: "100",
-                                          price: "12",
-                                          onPressFunction: () {},
-                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            IntrinsicWidth(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    "number of shares".tr,
+                                                    style: primary709,
+                                                  ),
+                                                  Container(
+                                                    height: 50,
+                                                    padding: padA5,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                        color: cWhiteColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5)),
+                                                    child: TextFormField(
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      cursorColor:
+                                                          cPrimaryColor,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
+                                                      ),
+                                                      controller:
+                                                          hoesebackController,
+                                                      style: black732,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                        text:
+                                                            '${trainingListingController.myTraningListingModel.data!.region!.services![0].pivot!.price}',
+                                                        style: black732),
+                                                    const TextSpan(text: " "),
+                                                    TextSpan(
+                                                        text: "riyal".tr,
+                                                        style: primary712),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Flexible(
+                                                child: ElevatedButton(
+                                                    onPressed: () {
+                                                      int month = int.parse(
+                                                          hoesebackController
+                                                              .value.text);
+                                                      int price = int.parse(
+                                                          '${trainingListingController.myTraningListingModel.data!.region!.services![0].pivot!.price}');
+                                                      ;
+                                                      var totalPaid =
+                                                          month * price;
+                                                      int userId = int.parse(
+                                                          '${trainingListingController.myTraningListingModel.data!.trainerUserId}');
+                                                      int hospitilityId = int.parse(
+                                                          '${trainingListingController.myTraningListingModel.data!.region!.services![0].id}');
+                                                      if (month == 0) {
+                                                        Get.snackbar(
+                                                          "notification".tr,
+                                                          "no services selected to be purchased"
+                                                              .tr,
+                                                        );
+                                                      } else {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder: (context) =>
+                                                                AddAmountDialog(
+                                                                  price:
+                                                                      totalPaid,
+                                                                  userid:
+                                                                      userId,
+                                                                  hospitilityid:
+                                                                      hospitilityId,
+                                                                  month: month,
+                                                                ));
+                                                      }
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          cPrimaryColor,
+                                                      fixedSize: Size(
+                                                          context.width, 40),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(7),
+                                                      ),
+                                                      elevation: 0.0,
+                                                    ),
+                                                    child: FittedBox(
+                                                        child: Text(
+                                                            "participation".tr,
+                                                            style: black714)))),
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),
@@ -355,11 +473,122 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                     ),
                                     child: Column(
                                       children: [
-                                        TrainingListingComponent(
-                                          numberOfShares: "12",
-                                          price: "100",
-                                          onPressFunction: () {},
-                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            IntrinsicWidth(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    "number of shares".tr,
+                                                    style: primary709,
+                                                  ),
+                                                  Container(
+                                                    height: 50,
+                                                    padding: padA5,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                        color: cWhiteColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5)),
+                                                    child: TextFormField(
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      cursorColor:
+                                                          cPrimaryColor,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      decoration:
+                                                          InputDecoration(
+                                                              border:
+                                                                  InputBorder
+                                                                      .none),
+                                                      controller:
+                                                          numberofShareController,
+                                                      style: black732,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                        text:
+                                                            '${trainingListingController.myTraningListingModel.data!.region!.services![1].pivot!.price}',
+                                                        style: black732),
+                                                    const TextSpan(text: " "),
+                                                    TextSpan(
+                                                        text: "riyal".tr,
+                                                        style: primary712),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Flexible(
+                                                child: ElevatedButton(
+                                                    onPressed: () {
+                                                      int month = int.parse(
+                                                          numberofShareController
+                                                              .value.text);
+                                                      int price = int.parse(
+                                                          '${trainingListingController.myTraningListingModel.data!.region!.services![1].pivot!.price}');
+                                                      var totalPaid =
+                                                          month * price;
+                                                      int userId = int.parse(
+                                                          '${trainingListingController.myTraningListingModel.data!.id}');
+                                                      int hospitilityId = int.parse(
+                                                          '${trainingListingController.myTraningListingModel.data!.region!.services![0].id}');
+                                                      if (month == 0) {
+                                                        Get.snackbar(
+                                                          "notification".tr,
+                                                          "no services selected to be purchased"
+                                                              .tr,
+                                                        );
+                                                      } else {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (context) =>
+                                                              AddAmountDialog(
+                                                            price: totalPaid,
+                                                            userid: userId,
+                                                            hospitilityid:
+                                                                '$hospitilityId',
+                                                            month: month,
+                                                          ),
+                                                        );
+                                                      }
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          cPrimaryColor,
+                                                      fixedSize: Size(
+                                                          context.width, 40),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(7),
+                                                      ),
+                                                      elevation: 0.0,
+                                                    ),
+                                                    child: FittedBox(
+                                                        child: Text(
+                                                            "participation".tr,
+                                                            style: black714)))),
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),
