@@ -81,4 +81,8 @@ class AppUrls {
   //////////////////Hospitality
   static const String gethospitalities = "hospitalities";
   static const String purchasehospitalitie = "hospitality-payment";
+  //////////////////Hospitality
+
+  static const String uploadImagesPickup = "upload-images";
+  static const String confirmPickup = "confirm-pickup";
 }
