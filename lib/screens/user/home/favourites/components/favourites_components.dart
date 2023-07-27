@@ -197,7 +197,7 @@ class FavoritesViewInfoCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          homePageModel.price.toString(),
+                          homePageModel.totalPrice.toString(),
                           style: homePagePrice,
                         ),
                         Text(
@@ -481,7 +481,7 @@ class FavouritesGridViewInfoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  homePageModel.price.toString(),
+                  homePageModel.totalPrice.toString(),
                   style: homePageGridPrice,
                 ),
                 Text(

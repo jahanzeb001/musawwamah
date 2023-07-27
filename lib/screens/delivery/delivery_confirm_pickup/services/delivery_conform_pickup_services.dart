@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_type_check
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:obaiah_mobile_app/screens/delivery/delivery_confirm_pickup/models/delivery_confirm_pickup_model.dart';
@@ -8,20 +9,22 @@ import 'package:obaiah_mobile_app/utils/constants/app_urls.dart';
 import 'package:obaiah_mobile_app/utils/constants/base_client.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/horse_didnot_match_model.dart';
+import '../models/refused_to_received_model.dart';
+
 class DeliverConformPivkupService {
   ////////////////////////horse ot match
   static Future<dynamic> horseDidnotMatch(
       int deliveryPersonId, int horseId) async {
-    Map data = {"horseId": 92, "deliveryPersonId": deliveryPersonId};
     try {
       var url = "${AppUrls.baseUrl}${AppUrls.horsenotmatch}/$horseId";
       var res = await BaseClientClass.get(url, "");
 
       if (res is http.Response) {
-        print('our response  ${res.body.toString()}');
-        return rejectonnectionResponseFromJson(res.body);
+        log('our response  ${res.body.toString()}');
+        return horseDidnotMatchFromJson(res.body);
       } else {
-        return rejectonnectionResponseFromJson(res.body);
+        return horseDidnotMatchFromJson(res.body);
       }
     } catch (e) {
       return e;
@@ -30,14 +33,13 @@ class DeliverConformPivkupService {
 
   static Future<dynamic> customerRefusedToReceived(
       int deliveryPersonId, int horseId) async {
-    Map data = {"horseId": 92, "deliveryPersonId": deliveryPersonId};
     try {
       var url = "${AppUrls.baseUrl}${AppUrls.refusebycustomer}/$horseId";
       var res = await BaseClientClass.get(url, "");
 
       if (res is http.Response) {
-        print(res.body.toString());
-        return res;
+        log(res.body.toString());
+        return refusedByCustomerFromJson(res.body);
       } else {
         return res;
       }

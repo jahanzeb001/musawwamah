@@ -30,10 +30,12 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   var totalPaid = '';
   var transfervaluy = 0;
-  addTransport(price, commission, transport) {
+  addTransport(price, commission, transport, opnion) {
     log(int.parse(price).toString());
 
-    totalPaid = (int.parse(price) + int.parse(commission) + 500).toString();
+    totalPaid =
+        (int.parse(price) + int.parse(commission) + int.parse(opnion) + 500)
+            .toString();
 
     setState(() {
       totalPaid = totalPaid;
@@ -41,8 +43,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
   }
 
-  removeTransport(price, commission, transport) {
-    totalPaid = (int.parse(totalPaid) - 500).toString();
+  removeTransport(price, commission, transport, opnion) {
+    totalPaid = (int.parse(price) + int.parse(opnion) + int.parse(commission))
+        .toString();
     setState(() {
       totalPaid = totalPaid;
       transfervaluy = 0;
@@ -50,9 +53,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   mintialvalue() {
-    var mprice = widget.homeModel.data!.totalPrice;
-    var mcommission = widget.homeModel.data!.siteCommision;
-    totalPaid = (int.parse(mprice!) + int.parse(mcommission!)).toString();
+    var mprice = widget.homeModel.data!.price;
+    var openion = widget.homeModel.data!.expertOpinionPrice;
+    var comission = widget.homeModel.data!.siteCommision;
+    totalPaid =
+        (int.parse(mprice!) + int.parse(openion!) + int.parse('$comission'))
+            .toString();
   }
 
   final checkoutController = Get.find<CheckoutController>();
@@ -418,21 +424,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                 .checkNeedTransportServices(
                                                     value: val!);
                                             if (val) {
-                                              var price = widget
-                                                  .homeModel.data!.totalPrice;
+                                              var price =
+                                                  widget.homeModel.data!.price;
                                               var commission = widget.homeModel
                                                   .data!.siteCommision;
                                               var transport = '500';
-                                              addTransport(
-                                                  price, commission, transport);
+                                              var opnion = widget.homeModel
+                                                  .data!.expertOpinionPrice;
+                                              addTransport(price, commission,
+                                                  transport, opnion);
                                             } else {
-                                              var price = widget
-                                                  .homeModel.data!.totalPrice;
+                                              var price =
+                                                  widget.homeModel.data!.price;
                                               var commission = widget.homeModel
                                                   .data!.siteCommision;
                                               var transport = '500';
-                                              removeTransport(
-                                                  price, commission, transport);
+                                              var opnion = widget.homeModel
+                                                  .data!.expertOpinionPrice;
+                                              removeTransport(price, commission,
+                                                  transport, opnion);
                                             }
                                             log('$val');
                                           });
@@ -479,19 +489,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         widget.homeModel.data!.city ?? "",
                                   )),
                                   Expanded(
-                                      child: RecommendationComponent(
-                                    recommendationServiceName: "to me",
-                                    recommendationServiceValue:
-                                        checkoutController
-                                            .cityProvinceController.text,
-                                  )),
+                                    child: Obx(
+                                      () => RecommendationComponent(
+                                        recommendationServiceName: "to me",
+                                        recommendationServiceValue:
+                                            '${checkoutController.tome.value}',
+                                      ),
+                                    ),
+                                  ),
                                   Expanded(
                                       child: RecommendationComponent(
-                                    recommendationServiceName: "price",
-                                    recommendationServiceValue: widget
-                                        .homeModel.data!.totalPrice
-                                        .toString(),
-                                  )),
+                                          recommendationServiceName: "price",
+                                          recommendationServiceValue:
+                                              ('${int.parse(widget.homeModel.data!.price.toString()) + int.parse(widget.homeModel.data!.expertOpinionPrice.toString())}'))),
                                 ],
                               ),
                             ),
@@ -542,9 +552,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     ),
                                     gapW10,
                                     ReUsableText(
-                                        text: widget.homeModel.data!.totalPrice
-                                            .toString()
-                                            .tr,
+                                        text:
+                                            ('${int.parse(widget.homeModel.data!.price.toString()) + int.parse(widget.homeModel.data!.expertOpinionPrice.toString())}')
+                                                .tr,
                                         textStyle: homePageGridHeading)
                                   ]),
                                   tableVerticalSpacer,

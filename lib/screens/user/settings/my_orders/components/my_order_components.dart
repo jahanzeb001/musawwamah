@@ -140,44 +140,45 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)))),
                 child: Container(
-                    height: 170,
-                    width: 155,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        right: BorderSide(width: 3.0, color: cPrimaryColor),
-                        bottom: BorderSide(width: 3.0, color: cPrimaryColor),
-                      ),
+                  height: 170,
+                  width: 155,
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      right: BorderSide(width: 3.0, color: cPrimaryColor),
+                      bottom: BorderSide(width: 3.0, color: cPrimaryColor),
                     ),
-                    child: CachedNetworkImage(
-                      imageUrl:
+                  ),
+                  child:
+                      // CachedNetworkImage(
+                      //   imageUrl:
+                      //       "${AppUrls.ImagebaseUrl}${homePageModel.horseFrontView ?? ""}",
+                      //   imageBuilder: (context, imageProvider) => Container(
+                      //     decoration: BoxDecoration(
+                      //       image: DecorationImage(
+                      //         //image size fill
+                      //         image: imageProvider,
+                      //         fit: BoxFit.cover,
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   placeholder: (context, url) => Container(
+                      //     alignment: Alignment.center,
+                      //     child: CircularProgressIndicator(
+                      //       color: cPrimaryColor,
+                      //     ), // you can add pre loader iamge as well to show loading.
+                      //   ), //show progress  while loading image
+                      //   errorWidget: (context, url, error) => Container(
+                      //     alignment: Alignment.center,
+                      //     child: CircularProgressIndicator(
+                      //       color: cPrimaryColor,
+                      //     ), // you can add pre loader iamge as well to show loading.
+                      //   ), //s
+                      //   //show no iamge availalbe image on error laoding
+                      // )
+                      Image.network(
                           "${AppUrls.ImagebaseUrl}${homePageModel.horseFrontView ?? ""}",
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            //image size fill
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      placeholder: (context, url) => Container(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(
-                          color: cPrimaryColor,
-                        ), // you can add pre loader iamge as well to show loading.
-                      ), //show progress  while loading image
-                      errorWidget: (context, url, error) => Container(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(
-                          color: cPrimaryColor,
-                        ), // you can add pre loader iamge as well to show loading.
-                      ), //s
-                      //show no iamge availalbe image on error laoding
-                    )
-                    // Image.network(
-                    //     "${AppUrls.ImagebaseUrl}${homePageModel.horseFrontView ?? ""}",
-                    //     fit: BoxFit.cover),
-                    ),
+                          fit: BoxFit.cover),
+                ),
               )),
             ],
           ),
@@ -195,9 +196,9 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                       style: romanSilver408,
                     ),
                     ReUsableText(
-                        text: homePageModel.price.toString(),
+                        text: homePageModel.totalPrice.toString(),
                         textStyle: homePagePrice),
-                    homePageModel.isDelivered == '1'
+                    homePageModel.isPaid == '0'
                         ? OutlinedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
@@ -232,7 +233,7 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                         padding: padA10,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: homePageModel.isPaid == 1
+                            color: homePageModel.isPaid == '1'
                                 ? cPrimaryColor
                                 : cRomanSilverColor,
                             borderRadius: BorderRadius.circular(6)),
@@ -246,7 +247,7 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    homePageModel.isDelivered == 1
+                    homePageModel.isDelivered == '0'
                         ? gapH7
                         : const SizedBox.shrink()
                   ],
@@ -328,38 +329,39 @@ class _MyOrdersGridViewInfoCardState extends State<MyOrdersGridViewInfoCard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)))),
               child: Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      right: BorderSide(width: 3.0, color: cPrimaryColor),
-                      bottom: BorderSide(width: 3.0, color: cPrimaryColor),
-                    ),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    right: BorderSide(width: 3.0, color: cPrimaryColor),
+                    bottom: BorderSide(width: 3.0, color: cPrimaryColor),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl:
+                ),
+                child:
+                    // CachedNetworkImage(
+                    //   imageUrl:
+                    //       "${AppUrls.ImagebaseUrl}${widget.homePageModel.horseFrontView ?? ""}",
+                    //   imageBuilder: (context, imageProvider) => Container(
+                    //     decoration: BoxDecoration(
+                    //       image: DecorationImage(
+                    //         //image size fill
+                    //         image: imageProvider,
+                    //         fit: BoxFit.cover,
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   placeholder: (context, url) => Container(
+                    //     alignment: Alignment.center,
+                    //     child: CircularProgressIndicator(
+                    //       color: cPrimaryColor,
+                    //     ), // you can add pre loader iamge as well to show loading.
+                    //   ), //show progress  while loading image
+                    //   errorWidget: (context, url, error) => Image.asset(
+                    //       "assets/images/home_images/horse_image_large.jpg"),
+                    //   //show no iamge availalbe image on error laoding
+                    // )
+                    Image.network(
                         "${AppUrls.ImagebaseUrl}${widget.homePageModel.horseFrontView ?? ""}",
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          //image size fill
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    placeholder: (context, url) => Container(
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                        color: cPrimaryColor,
-                      ), // you can add pre loader iamge as well to show loading.
-                    ), //show progress  while loading image
-                    errorWidget: (context, url, error) => Image.asset(
-                        "assets/images/home_images/horse_image_large.jpg"),
-                    //show no iamge availalbe image on error laoding
-                  )
-                  // Image.network(
-                  //     "${AppUrls.ImagebaseUrl}${homePageModel.horseFrontView ?? ""}",
-                  //     fit: BoxFit.cover),
-                  ),
+                        fit: BoxFit.cover),
+              ),
             ),
           ),
           gapH10,
@@ -426,7 +428,7 @@ class _MyOrdersGridViewInfoCardState extends State<MyOrdersGridViewInfoCard> {
             padding: padA10,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: widget.homePageModel.isDelivered == '1'
+                color: widget.homePageModel.isPaid == '1'
                     ? cPrimaryColor
                     : cRomanSilverColor,
                 borderRadius: BorderRadius.circular(6)),

@@ -145,6 +145,8 @@ class AppRoutes {
                   homeModel: arguments['homeModel'],
                   horseId: arguments['horseId'],
                   sellerPhone: arguments['sellerPhone'],
+                  index: arguments['index'],
+                  aglino: arguments['aglino'],
                 ));
       case deliveryConfirmDropOffScreen:
         Map<String, dynamic> arguments =
@@ -154,6 +156,7 @@ class AppRoutes {
                   homePageModel: arguments["homeModel"],
                   horseId: arguments['horseId'],
                   purchaserNumber: arguments['purchaserNumber'],
+                  aglino: arguments['aglino'],
                 ));
 
       case modifyHorse:

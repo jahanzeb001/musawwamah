@@ -35,7 +35,7 @@ class _WalletPortfolioScreenState extends State<WalletPortfolioScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: ReusableAppBar(
-            titleText: "portfolio",
+            titleText: "portfolio1",
             textStyle: black718,
             onPressFunction: () {
               Navigator.pop(context);

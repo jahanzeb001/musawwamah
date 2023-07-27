@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class ConfirmDropOffService {
   static Future<dynamic> confirmDropOff(
-      {int? horseId,
+      {String? horseId,
       String? horseImageFromRight,
       String? horseImageFromLeft,
       String? horseFrontView,
@@ -15,7 +15,7 @@ class ConfirmDropOffService {
       String? signature,
       String? notes}) async {
     Map data = {
-      "horseId": horseId,
+      "horseId": '$horseId',
       "horseImageFromRight": horseImageFromRight,
       "horseImageFromLeft": horseImageFromLeft,
       "horseFrontView": horseFrontView,

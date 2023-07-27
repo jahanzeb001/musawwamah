@@ -36,12 +36,14 @@ class DeliveryConfirmDropOffScreen extends StatefulWidget {
   final HorseDetailsResponse homePageModel;
   final int horseId;
   var purchaserNumber;
+  var aglino;
 
   DeliveryConfirmDropOffScreen(
       {Key? key,
       required this.homePageModel,
       required this.horseId,
-      required this.purchaserNumber})
+      required this.purchaserNumber,
+      required this.aglino})
       : super(key: key);
 
   @override
@@ -62,6 +64,7 @@ class _DeliveryConfirmDropOffScreenState
   File? horseRightView;
   File? horseNotesView;
   bool isLoading = false;
+  bool sendOtp = false;
 
   //////////////////horse back view
   VideoPlayerController? _videoPlayerController;
@@ -182,9 +185,8 @@ class _DeliveryConfirmDropOffScreenState
         Get.snackbar(
           'success'.tr,
           'codesent'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
 
         // Get.to(() => PinputExample(
@@ -196,9 +198,8 @@ class _DeliveryConfirmDropOffScreenState
         Get.snackbar(
           'success'.tr,
           'completed'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         credentials = credential;
         await FirebaseAuth.instance.signInWithCredential(credential);
@@ -208,18 +209,16 @@ class _DeliveryConfirmDropOffScreenState
         Get.snackbar(
           'Error',
           'failed!',
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         if (ex.code == 'invalid-phone-number') {
           log('invalid phone number');
           Get.snackbar(
             'Error',
             'invalid phone number',
-            colorText: Colors.white,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.indigo,
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.white,
           );
         }
         log(ex.code.toString());
@@ -241,21 +240,21 @@ class _DeliveryConfirmDropOffScreenState
       if (authResult.user != null) {
         Get.snackbar(
           'success'.tr,
-          'successfullyloggedin'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          'Conformed'.tr,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         // OTP verification successful
-
+        setState(() {
+          sendOtp = true;
+        });
         return true;
       } else {
         Get.snackbar(
           'errorwrongotp'.tr,
           'pleaseentercorrectotp'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         // OTP verification failed
         return false;
@@ -263,10 +262,9 @@ class _DeliveryConfirmDropOffScreenState
     } catch (e) {
       Get.snackbar(
         'errorwrongotp'.tr,
-        'failedloggedin'.tr,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.indigo,
+        'pleaseentercorrectotp'.tr,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white,
       );
       // Error occurred during OTP verification
       print('Error verifying OTP: $e');
@@ -339,7 +337,7 @@ class _DeliveryConfirmDropOffScreenState
                       style: onyx716,
                     ),
                     Text(
-                      "# 51450049".tr,
+                      "# ${widget.aglino}".tr,
                       style: onyx716,
                     ),
                   ],
@@ -614,7 +612,8 @@ class _DeliveryConfirmDropOffScreenState
                                   gapH5,
                                   Expanded(
                                     child: Text(
-                                        widget.homePageModel.data?.safety ?? "",
+                                        widget.homePageModel.data?.casuality ??
+                                            "",
                                         style: auctionValueTextStyle),
                                   ),
                                   gapH25,
@@ -642,8 +641,10 @@ class _DeliveryConfirmDropOffScreenState
                                   Expanded(
                                     child: Text(
                                         widget.homePageModel.data
-                                                ?.isVaccinated ??
-                                            "",
+                                                    ?.isVaccinated ==
+                                                '1'
+                                            ? 'Yes'
+                                            : 'no',
                                         style: auctionValueTextStyle),
                                   ),
                                 ],
@@ -956,7 +957,7 @@ class _DeliveryConfirmDropOffScreenState
                                           deliveryConfirmDropOffController
                                               .isNotesImagePlaceShowed
                                               .value = false;
-                                          _pickVideo(ImageSource.camera);
+                                          //_pickVideo(ImageSource.camera);
                                         }),
                                   ),
                                   SizedBox(
@@ -1219,41 +1220,50 @@ class _DeliveryConfirmDropOffScreenState
                 ),
                 gapH20,
                 //Component 10
-                Obx(
-                  () => OutlinedButton(
-                      onPressed: () {
-                        deliveryConfirmDropOffController.confirmDeliveryDropOff(
-                            hid: widget.homePageModel.data?.id,
-                            horseImageFromLeft: horseLeftView,
-                            horseImageFromRight: horseRightView,
-                            horseBackView: horseBackView,
-                            horseFrontView: horseFrontView,
-                            horseVideo: _pickedVideo,
-                            notesImage: horseNotesView,
-                            notesText: deliveryConfirmDropOffController
-                                .compulsoryNotesController.text,
-                            signature: signature);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shadowColor: cPrimaryColor,
-                        foregroundColor: cPrimaryColor,
-                        fixedSize: Size(context.width * 0.7, 50),
-                        side: const BorderSide(color: cBlackColor),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        elevation: 0.0,
+                sendOtp == false
+                    ? Container()
+                    : Obx(
+                        () => OutlinedButton(
+                            onPressed: () {
+                              if (signature == null) {
+                                Get.snackbar("notifications",
+                                    'Please Pick up Signature');
+                              } else {
+                                deliveryConfirmDropOffController
+                                    .confirmDeliveryDropOff(
+                                        hid: widget.homePageModel.data?.id,
+                                        horseImageFromLeft: horseLeftView,
+                                        horseImageFromRight: horseRightView,
+                                        horseBackView: horseBackView,
+                                        horseFrontView: horseFrontView,
+                                        horseVideo: _pickedVideo,
+                                        notesImage: horseNotesView,
+                                        notesText:
+                                            deliveryConfirmDropOffController
+                                                .compulsoryNotesController.text,
+                                        signature: signature);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shadowColor: cPrimaryColor,
+                              foregroundColor: cPrimaryColor,
+                              fixedSize: Size(context.width * 0.7, 50),
+                              side: const BorderSide(color: cBlackColor),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              elevation: 0.0,
+                            ),
+                            child: deliveryConfirmDropOffController
+                                    .deliveryConfirmDropOffLoading.value
+                                ? CircularProgressIndicator(
+                                    color: cBlackColor,
+                                  )
+                                : FittedBox(
+                                    child: Text("delivery confirmation".tr,
+                                        style: black720),
+                                  )),
                       ),
-                      child: deliveryConfirmDropOffController
-                              .deliveryConfirmDropOffLoading.value
-                          ? CircularProgressIndicator(
-                              color: cBlackColor,
-                            )
-                          : FittedBox(
-                              child: Text("delivery confirmation".tr,
-                                  style: black720),
-                            )),
-                ),
                 gapH20,
                 OutlinedButton(
                     onPressed: () {

@@ -713,6 +713,7 @@ class _AddNewHorseScreenState extends State<AddNewHorseScreen> {
                                                                   .value,
                                                           onChangeFunction:
                                                               (value) {
+                                                            print('$value');
                                                             addNewHorseController
                                                                 .checkForCondition(
                                                                     value:

@@ -58,7 +58,7 @@ class DeliveryConfirmDropOffController extends GetxController {
       deliveryConfirmPickupModel = res;
       if (deliveryConfirmPickupModel.success == true) {
         confirmDropOff(
-            horseId: hid,
+            horseId: '$hid',
             horseImageFromRight: deliveryConfirmPickupModel.horseImageFromRight,
             horseImageFromLeft: deliveryConfirmPickupModel.horseImageFromLeft,
             horseBackView: deliveryConfirmPickupModel.horseBackView,
@@ -74,7 +74,8 @@ class DeliveryConfirmDropOffController extends GetxController {
     } else {
       deliveryConfirmDropOffLoading.value = false;
       error1.value = res.toString();
-      Get.snackbar("notification", error1.value);
+      log("main error ==== ${error1.value}");
+      Get.snackbar("notification", "${error1.value}");
     }
   }
 
@@ -82,7 +83,7 @@ class DeliveryConfirmDropOffController extends GetxController {
   ///
   var confirmDroOffModel = ConfirmDropOffResponse();
   void confirmDropOff(
-      {int? horseId,
+      {String? horseId,
       String? horseImageFromRight,
       String? horseImageFromLeft,
       String? horseFrontView,
@@ -95,16 +96,15 @@ class DeliveryConfirmDropOffController extends GetxController {
     error1.value = "";
 
     var res = await ConfirmDropOffService.confirmDropOff(
-        horseId: horseId,
-        horseImageFromLeft: horseImageFromLeft,
-        horseImageFromRight: horseImageFromRight,
-        horseBackView: horseBackView,
-        horseFrontView: horseFrontView,
-        notes: notes,
-        horseVideo: horseVideo,
-        notesImage: notesImage,
-        // signature: signature
-        signature: signature);
+        horseId: '$horseId',
+        horseImageFromLeft: '$horseImageFromLeft',
+        horseImageFromRight: '$horseImageFromRight',
+        horseBackView: '$horseBackView',
+        horseFrontView: '$horseFrontView',
+        notes: '$notes',
+        horseVideo: '$horseVideo',
+        notesImage: '$notesImage',
+        signature: '$signature');
     deliveryConfirmDropOffLoading.value = false;
 
     if (res is ConfirmDropOffResponse) {
@@ -114,7 +114,8 @@ class DeliveryConfirmDropOffController extends GetxController {
     } else {
       deliveryConfirmDropOffLoading.value = false;
       error1.value = res.toString();
-      Get.snackbar("notifications", error1.value);
+      log('errorr === ${error1.value}');
+      Get.snackbar("notifications", "${error1.value}");
     }
   }
 

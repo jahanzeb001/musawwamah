@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -119,6 +121,7 @@ class ReusableRegionDropDownFormField extends StatelessWidget {
         dropdownColor: Colors.white,
         value: citiesListArabic[0],
         onChanged: (String? newValue) {
+          log('$newValue');
           controller?.text = newValue!;
         },
         items: citiesListArabic.map((String items) {

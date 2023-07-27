@@ -44,11 +44,18 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
+  AccountController accountController = Get.put(AccountController());
+  @override
+  void initState() {
+    accountController.loadData();
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final accountController = Get.find<AccountController>();
-    log(accountController.frontimage);
-    log(accountController.backimage);
+    AccountController accountController = Get.find<AccountController>();
+
     return Scaffold(
         appBar: ReusableAppBar(
             titleText: "account",
@@ -132,10 +139,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                 context);
                                                           },
                                                           child: accountController
-                                                                      .frontimage ==
+                                                                      .frontimage !=
                                                                   null
                                                               ? Image.network(
-                                                                  '${AppUrls.ImagebaseUrl}${accountController.frontimage}')
+                                                                  '${AppUrls.ImagebaseUrl}${accountController.getUserModel.data!.idPhotoFront}')
                                                               : CustomContainerComponent(
                                                                   image:
                                                                       idFrontView,
@@ -176,10 +183,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                 context);
                                                           },
                                                           child: accountController
-                                                                      .backimage ==
+                                                                      .backimage !=
                                                                   null
                                                               ? Image.network(
-                                                                  '${AppUrls.ImagebaseUrl}${accountController.backimage}')
+                                                                  '${AppUrls.ImagebaseUrl}${accountController.getUserModel.data!.idPhotoBack}')
                                                               : CustomContainerComponent(
                                                                   image:
                                                                       idBackView,
@@ -284,8 +291,16 @@ class _AccountScreenState extends State<AccountScreen> {
                                                     .updatingUser.value,
                                                 backGroundColor: cPrimaryColor,
                                                 onPressedFunction: () {
-                                                  if (idBackView == null ||
-                                                      idFrontView == null) {
+                                                  if (accountController
+                                                              .getUserModel
+                                                              .data!
+                                                              .idPhotoFront ==
+                                                          null ||
+                                                      accountController
+                                                              .getUserModel
+                                                              .data!
+                                                              .idPhotoBack ==
+                                                          null) {
                                                     Get.snackbar("Alert",
                                                         "Select Id Images");
                                                   } else {

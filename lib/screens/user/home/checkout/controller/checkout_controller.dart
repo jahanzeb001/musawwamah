@@ -17,6 +17,7 @@ class CheckoutController extends GetxController {
   int userId = 0;
   RxBool loadingUser = false.obs;
   RxString errorGettingUser = "".obs;
+  RxString tome = "".obs;
   var getUserModel = GetUserResponse();
 
   @override
@@ -50,6 +51,7 @@ class CheckoutController extends GetxController {
       regionController.text = getUserModel.data!.region.toString();
       cityProvinceController.text =
           getUserModel.data!.cityOrProvince.toString();
+      tome.value = getUserModel.data!.cityOrProvince.toString();
       bankNameController.text = getUserModel.data!.bankName.toString();
       ibanNoController.text = getUserModel.data!.ibanNumber.toString();
     } else {

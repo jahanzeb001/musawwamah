@@ -28,32 +28,12 @@ class MyDeliveryWalletScreen extends StatefulWidget {
 }
 
 class _MyDeliveryWalletScreenState extends State<MyDeliveryWalletScreen> {
-  final walletPortfolioController = Get.put(MyDeliveryWalletController());
-  List<dynamic> data = [];
-
-  Future fetchData(uid) async {
-    var url = "${AppUrls.baseUrl}${AppUrls.getMyDelWalletDetails}/$uid";
-    var response = await BaseClientClass.get(url, "");
-
-    if (response.statusCode == 200) {
-      var responseBody = response.body;
-      try {
-        //responseMap = json.decode(responseBody);
-        var responseMap = json.decode(responseBody);
-        data = responseMap['data'];
-        setState(() {});
-        print('my response==== ${data.elementAt(0)['id']}');
-      } catch (e) {
-        print('Error parsing JSON: $e');
-      }
-    } else {
-      print('Request failed with status: ${response.statusCode}');
-    }
-  }
+  DeliveryController walletDetailPortfolioController =
+      Get.put(DeliveryController());
 
   @override
   void initState() {
-    fetchData(widget.deliveryId);
+    walletDetailPortfolioController.getMyAccountDetail(widget.deliveryId);
     //walletPortfolioController.getUserId();
     // TODO: implement initState
     super.initState();
@@ -62,126 +42,142 @@ class _MyDeliveryWalletScreenState extends State<MyDeliveryWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DeliveryController dControllr = Get.put(DeliveryController());
     return Scaffold(
       appBar: ReusableAppBar(
-          titleText: "portfolio",
+          titleText: "portfolio2",
           textStyle: black718,
           onPressFunction: () {
             Navigator.pop(context);
           }),
-      body:
-          // data.length == 0
-          //     ? Center(
-          //         child: CircularProgressIndicator(color: cPrimaryColor),
-          //       )
-          SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Center(
-              child: Container(
-                padding: padA20,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: cPrimaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("your balance is".tr, style: onyx612),
-                    gapH5,
-                    Obx(() => ReUsableText(
-                        text: '${dControllr.userBalance}', textStyle: onyx824)),
-                  ],
-                ),
-              ),
-            ),
-            gapH30,
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  "operations history:".tr,
-                  style: black512,
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: Flexible(
-                  child: ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: data.length,
-                separatorBuilder: (BuildContext context, int index) => gapH20,
-                itemBuilder: (BuildContext context, int index) {
-                  final transaction = data[index];
-                  final transactionId = transaction['id'];
-                  final amount = transaction['amount'];
-
-                  final date = transaction['date'];
-                  final via = transaction['transactionType'];
-
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    var total =
-                        dControllr.userBalance.value + int.parse(amount);
-                    dControllr.setTotal(total);
-                  });
-
-                  return Container(
-                    width: context.width * 1,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: cPrimaryColor24Opacity,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+      body: Obx(
+        () => walletDetailPortfolioController.loading.value
+            ? Center(
+                child: CircularProgressIndicator(
+                color: cPrimaryColor,
+              ))
+            : walletDetailPortfolioController.error.value != ""
+                ? Center(
+                    child: Custom_Error(
+                        onpressed: () {
+                          walletDetailPortfolioController
+                              .getMyAccountDetail(widget.deliveryId);
+                        },
+                        error: walletDetailPortfolioController.error.value),
+                  )
+                // : walletPortfolioController.myWalletModel.data?.length == 0
+                //     ? Center(
+                //         child: NoDataMessage(
+                //         message: "No Data Found",
+                //       ))
+                : SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '$date',
+                        Center(
+                          child: Container(
+                            padding: padA20,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: cPrimaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("your balance is".tr, style: onyx612),
+                                gapH5,
+                                ReUsableText(
+                                    text: 'dControllr.userBalance',
+                                    textStyle: onyx824),
+                              ],
+                            ),
+                          ),
+                        ),
+                        gapH30,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "operations history:".tr,
                               style: black512,
                             ),
-                            Text(
-                              '$via',
-                              style: black512,
-                            ),
-                          ],
+                          ),
                         ),
-                        gapH10,
-                        ReUsableText(text: amount, textStyle: black824),
-                        gapH2,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '',
-                              style: black410,
-                            ),
-                            Text(
-                              '',
-                              style: black410,
-                            ),
-                          ],
+                        Container(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          child: Flexible(
+                              child: ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: walletDetailPortfolioController
+                                .myDeleveryWalletDetailModel.data!
+                                .toJson()
+                                .length,
+                            separatorBuilder:
+                                (BuildContext context, int index) => gapH20,
+                            itemBuilder: (BuildContext context, int index) {
+                              // WidgetsBinding.instance.addPostFrameCallback((_) {
+                              //   var total =
+                              //       dControllr.userBalance.value + int.parse(amount);
+                              //   dControllr.setTotal(total);
+                              // });
+
+                              return Container(
+                                width: context.width * 1,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: cPrimaryColor24Opacity,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '${walletDetailPortfolioController.myDeleveryWalletDetailModel.data!.date}',
+                                          style: black512,
+                                        ),
+                                        Text(
+                                          'via',
+                                          style: black512,
+                                        ),
+                                      ],
+                                    ),
+                                    gapH10,
+                                    ReUsableText(
+                                        text: 'amount', textStyle: black824),
+                                    gapH2,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '',
+                                          style: black410,
+                                        ),
+                                        Text(
+                                          '',
+                                          style: black410,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          )),
                         ),
+                        gapH80,
                       ],
                     ),
-                  );
-                },
-              )),
-            ),
-            gapH80,
-          ],
-        ),
+                  ),
       ),
 
       // ListView.builder(

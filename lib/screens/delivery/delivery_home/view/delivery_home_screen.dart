@@ -86,7 +86,7 @@ class DeliveryHomeScreen extends StatelessWidget {
                                               ),
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                    "${AppUrls.ImagebaseUrl}${deliveryHomeController.deliveryAccountModel.data!.deliveryAccount!.idPhotoFront}}",
+                                                    "${AppUrls.ImagebaseUrl}${deliveryHomeController.deliveryAccountModel.data!.deliveryAccount!.idPhotoFront}",
                                                 imageBuilder:
                                                     (context, imageProvider) =>
                                                         Container(
