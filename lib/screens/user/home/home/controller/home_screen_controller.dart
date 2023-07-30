@@ -94,26 +94,36 @@ class HomeScreenController extends GetxController {
   //       false;
   // }
 
+  /////////////
+  RxBool isTypedShow = false.obs;
+  RxBool isTypedSelected = false.obs;
+  RxBool isRegionShow = false.obs;
+  RxBool isRegionSelected = false.obs;
+
+  RxBool isAgeShow = false.obs;
+  RxBool isAgeSelected = false.obs;
+
+  RxBool isColorShow = false.obs;
+  RxBool isColorSelected = false.obs;
+
+  RxBool isCasualityShow = false.obs;
+  RxBool isCasualitySelected = false.obs;
+
+  RxBool isOriginalityShow = false.obs;
+  RxBool isOriginalitySelected = false.obs;
+/////////////////////////////
   var loading2 = false.obs;
   var error2 = "".obs;
   var propertiseModel = GetFilterPropertiseResponse();
 //////////////////////////////////////////////
   List<String>? type;
-  List<String>? selectedtype;
   List<String>? region;
-  List<String>? selectedregion;
   List<String>? age;
-  List<String>? selectedage;
   List<String>? color;
-  List<String>? selectedColor;
   List<String>? casuality;
-  List<String>? selectedCasuality;
   List<String>? originality;
-  List<String>? selectedorignality;
 
-  RxBool typeSelected = false.obs;
-  RxBool regionSelected = false.obs;
-/////////////////////////////////////////////////
+  /////////////
   void getPropertiseList() async {
     loading2.value = true;
     error2.value = "";

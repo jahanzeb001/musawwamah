@@ -1,10 +1,13 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:obaiah_mobile_app/screens/user/add_new_horse/controller/add_new_horse_controller.dart';
 import 'package:obaiah_mobile_app/screens/user/auth/authentication/view/login.dart';
 import 'package:obaiah_mobile_app/utils/constants/app_urls.dart';
@@ -12,11 +15,12 @@ import 'package:obaiah_mobile_app/utils/constants/custom_error.dart';
 import 'package:obaiah_mobile_app/utils/constants/no_data_message.dart';
 import 'package:obaiah_mobile_app/utils/get_storage/get_storage_controller.dart';
 import 'package:obaiah_mobile_app/utils/spacing/gaps.dart';
-import '../../../../../gen/assets.gen.dart';
 import '../../../../../reusable_widgets/reusable_bottom_appbar.dart';
 import '../../../../../reusable_widgets/reusable_search_sorting_component.dart';
 import '../../../../../utils/colors/colors.dart';
 import '../../../../../utils/constants/constants.dart';
+import '../../../add_new_horse/service/local_notifications.dart';
+import '../../../add_new_horse/view/add_new_horse_screen.dart';
 import '../../../settings/wallet_portfolio/controller/wallet_portfolio_controller.dart';
 import '../components/home_screen_components.dart';
 import '../controller/home_screen_controller.dart';
@@ -33,7 +37,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   final getStorageController = Get.find<GetStorageController>();
   final addNewHorseController = Get.find<AddNewHorseController>();
   final walletPortfolioController = Get.put(WalletPortfolioController());
-
+  int userId = 0;
+  String deviceToken = "";
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final List sliderimages = ['banner', 'banner_2'];
   final List<String> letters = [
@@ -45,6 +50,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   @override
   initState() {
     super.initState();
+    userId = GetStorage().read("userId");
 
     Future.delayed(Duration.zero, () {
       if (firebaseAuth.currentUser == null) {
@@ -79,6 +85,94 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       // }
     });
     homeScreenController.getApprovedHorses();
+
+    loadAndSave();
+
+    /////////////////push notifications data
+    FirebaseMessaging.instance.getInitialMessage().then(
+      (message) {
+        print("FirebaseMessaging.instance.getInitialMessage");
+        if (message != null) {
+          print("New Notification");
+          if (message.data['_id'] != null) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => AddNewHorseScreen(
+                    //  id: message.data['_id'],
+                    ),
+              ),
+            );
+          }
+        }
+      },
+    );
+
+    // 2. This method only call when App in forground it mean app must be opened
+    FirebaseMessaging.onMessage.listen(
+      (message) {
+        print("FirebaseMessaging.onMessage.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data11 ${message.data}");
+          LocalNotificationService.createanddisplaynotification(message);
+        }
+      },
+    );
+
+    // 3. This method only call when App in background and not terminated(not closed)
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (message) {
+        print("FirebaseMessaging.onMessageOpenedApp.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data22 ${message.data['_id']}");
+        }
+      },
+    );
+  }
+
+////////////////////get device token
+  Future<String?> getDeviceToken() async {
+    try {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      String? token = await messaging.getToken();
+      return token;
+    } catch (e) {
+      print('Error getting device token: $e');
+      return null; // Return null to indicate that token retrieval failed
+    }
+  }
+
+///////////////////////save device token
+  Future<void> saveDeviceTokenToFirestore() async {
+    String? deviceToken = await getDeviceToken();
+    if (deviceToken != null) {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+// Replace this with the actual user ID
+
+      QuerySnapshot querySnapshot = await firestore
+          .collection('users')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        print('Device token for user $userId is already saved in Firestore.');
+      } else {
+        await firestore.collection('users').add({
+          'deviceToken': deviceToken,
+          'userId': userId,
+        });
+        print('Device token for user $userId saved to Firestore.');
+      }
+    }
+  }
+
+  loadAndSave() async {
+    await getDeviceToken();
+    await saveDeviceTokenToFirestore();
   }
 
   @override

@@ -1,7 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,7 +11,6 @@ import 'package:obaiah_mobile_app/screens/user/home/home/models/get_approved_hor
 import 'package:obaiah_mobile_app/screens/user/settings/account/controller/account_controller.dart';
 import 'package:obaiah_mobile_app/utils/colors/colors.dart';
 import 'package:obaiah_mobile_app/utils/constants/app_urls.dart';
-import 'package:obaiah_mobile_app/utils/constants/lists.dart';
 import 'package:obaiah_mobile_app/utils/spacing/gaps.dart';
 import 'package:obaiah_mobile_app/utils/spacing/padding.dart';
 
@@ -529,101 +526,386 @@ class FilterDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Flexible(child: MyListView()),
           Flexible(
-              child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: filterNamesList.length,
-            separatorBuilder: (BuildContext context, int index) => gapH10,
-            itemBuilder: (BuildContext context, int index) {
-              return Obx(() {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTileComponent(
-                      index: index,
-                      filterClass: filterNamesList.elementAt(index),
-                      isSelected: selectedValueList.elementAt(index),
-                    ),
-                    gapH10,
-                    Visibility(
-                        visible: selectedValueList.elementAt(index),
-                        child: Container(
-                          height: 50,
-                          width: context.width * 1,
-                          decoration: BoxDecoration(
-                              color: cPrimaryColor24Opacity,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
+              child: Container(
+                  height: 380,
+                  //   color: Colors.red,
+                  child: Obx(
+                    () => SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              homeController.isTypedShow.value =
+                                  !homeController.isTypedShow.value;
+                            },
+                            child: Container(
+                              height: 40,
+                              color: Colors.white,
+                              child: Row(
                                 children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: "option".tr, style: onyx712),
-                                        const TextSpan(text: " "),
-                                        TextSpan(text: "1".tr, style: onyx712),
-                                      ],
-                                    ),
+                                  SizedBox(
+                                    width: 10,
                                   ),
-                                  gapW20,
-                                  Obx(() {
-                                    return ListTileCheckBox(
-                                        checkBxValue:
-                                            filterCheckBoxValueList[index],
-                                        onChangeFunction: (val) {
-                                          log(val.toString());
-                                          log("${filterCheckBoxValueList[index]}");
-                                          Get.find<HomeScreenController>()
-                                              .changeFilterCheckBoxValue(
-                                                  index: index, value: val!);
-                                        });
-                                  }),
+                                  homeController.isTypedShow.value
+                                      ? SvgPicture.asset(Assets
+                                          .searchFilterImagesFilterTileIcon)
+                                      : const Icon(
+                                          Icons.menu_rounded,
+                                          color: cBlackColor,
+                                          size: 17,
+                                        ),
+                                  Spacer(),
+                                  Text("Type"),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
                                 ],
                               ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: "option".tr, style: onyx712),
-                                        const TextSpan(text: " "),
-                                        TextSpan(text: "2".tr, style: onyx712),
-                                      ],
-                                    ),
-                                  ),
-                                  gapW20,
-                                  Obx(() {
-                                    return ListTileCheckBox(
-                                        checkBxValue:
-                                            filterCheckBoxValueList[index + 1],
-                                        onChangeFunction: (val) {
-                                          Get.find<HomeScreenController>()
-                                              .changeFilterCheckBoxValue(
-                                                  index: index + 1,
-                                                  value:
-                                                      !filterCheckBoxValueList[
-                                                          index + 1]);
-                                        });
-                                  }),
-                                ],
-                              ),
-                              // AddHorseRadioButton()
-                            ],
+                            ),
                           ),
-                        )),
-                  ],
-                );
-              });
-            },
-          )),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          homeController.isTypedShow.value
+                              ? Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  height: 70,
+                                  color: cWhiteGrey,
+                                  child: ListView.builder(
+                                      itemCount: homeController.type?.length,
+                                      itemBuilder: (context, index) {
+                                        return Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(homeController.type![index]
+                                                .toString()),
+                                            Spacer(),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            homeController.isTypedSelected.value
+                                                ? Icon(Icons
+                                                    .check_box_outline_blank)
+                                                : Icon(Icons.check_box)
+                                          ],
+                                        );
+                                      }),
+                                )
+                              : SizedBox(),
+
+                          ///////////////////////region
+                          GestureDetector(
+                            onTap: () {
+                              homeController.isRegionShow.value =
+                                  !homeController.isRegionShow.value;
+                            },
+                            child: Container(
+                              height: 40,
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  homeController.isRegionShow.value
+                                      ? SvgPicture.asset(Assets
+                                          .searchFilterImagesFilterTileIcon)
+                                      : const Icon(
+                                          Icons.menu_rounded,
+                                          color: cBlackColor,
+                                          size: 17,
+                                        ),
+                                  Spacer(),
+                                  Text("Region"),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          homeController.isRegionShow.value
+                              ? Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  height: 100,
+                                  color: cWhiteGrey,
+                                )
+                              : SizedBox(),
+
+                          /////////////////////////////////age
+                          GestureDetector(
+                            onTap: () {
+                              homeController.isAgeShow.value =
+                                  !homeController.isAgeShow.value;
+                            },
+                            child: Container(
+                              height: 40,
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  homeController.isAgeShow.value
+                                      ? SvgPicture.asset(Assets
+                                          .searchFilterImagesFilterTileIcon)
+                                      : const Icon(
+                                          Icons.menu_rounded,
+                                          color: cBlackColor,
+                                          size: 17,
+                                        ),
+                                  Spacer(),
+                                  Text("Age"),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          homeController.isAgeShow.value
+                              ? Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  height: 100,
+                                  color: cWhiteGrey,
+                                )
+                              : SizedBox(),
+
+                          /////////////////////////color
+
+                          GestureDetector(
+                            onTap: () {
+                              homeController.isColorShow.value =
+                                  !homeController.isColorShow.value;
+                            },
+                            child: Container(
+                              height: 40,
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  homeController.isColorShow.value
+                                      ? SvgPicture.asset(Assets
+                                          .searchFilterImagesFilterTileIcon)
+                                      : const Icon(
+                                          Icons.menu_rounded,
+                                          color: cBlackColor,
+                                          size: 17,
+                                        ),
+                                  Spacer(),
+                                  Text("Color"),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          homeController.isColorShow.value
+                              ? Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  height: 100,
+                                  color: cWhiteGrey,
+                                )
+                              : SizedBox(),
+
+                          //////////////////////casuality
+                          GestureDetector(
+                            onTap: () {
+                              homeController.isCasualityShow.value =
+                                  !homeController.isCasualityShow.value;
+                            },
+                            child: Container(
+                              height: 40,
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  homeController.isCasualityShow.value
+                                      ? SvgPicture.asset(Assets
+                                          .searchFilterImagesFilterTileIcon)
+                                      : const Icon(
+                                          Icons.menu_rounded,
+                                          color: cBlackColor,
+                                          size: 17,
+                                        ),
+                                  Spacer(),
+                                  Text("Casuality"),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          homeController.isCasualityShow.value
+                              ? Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  height: 100,
+                                  color: cWhiteGrey,
+                                )
+                              : SizedBox(),
+
+                          //////////////////////orignality
+
+                          GestureDetector(
+                            onTap: () {
+                              homeController.isOriginalityShow.value =
+                                  !homeController.isOriginalityShow.value;
+                            },
+                            child: Container(
+                              height: 40,
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  homeController.isOriginalityShow.value
+                                      ? SvgPicture.asset(Assets
+                                          .searchFilterImagesFilterTileIcon)
+                                      : const Icon(
+                                          Icons.menu_rounded,
+                                          color: cBlackColor,
+                                          size: 17,
+                                        ),
+                                  Spacer(),
+                                  Text("Originality"),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          homeController.isOriginalityShow.value
+                              ? Container(
+                                  height: 100,
+                                  color: cWhiteGrey,
+                                )
+                              : SizedBox(),
+                        ],
+                      ),
+                    ),
+                  ))),
+          //////////////////here start
+          // Flexible(child: MyListView()),
+          // Flexible(
+          //     child: ListView.separated(
+          //   shrinkWrap: true,
+          //   itemCount: filterNamesList.length,
+          //   separatorBuilder: (BuildContext context, int index) => gapH10,
+          //   itemBuilder: (BuildContext context, int index) {
+          //     return Obx(() {
+          //       return Column(
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: [
+          // ListTileComponent(
+          //   index: index,
+          //   filterClass: filterNamesList.elementAt(index),
+          //   isSelected: selectedValueList.elementAt(index),
+          // ),
+          //           gapH10,
+          //           Visibility(
+          //               visible: selectedValueList.elementAt(index),
+          //               child: Container(
+          //                 height: 50,
+          //                 width: context.width * 1,
+          //                 decoration: BoxDecoration(
+          //                     color: cPrimaryColor24Opacity,
+          //                     borderRadius: BorderRadius.circular(10)),
+          //                 child: Row(
+          //                   crossAxisAlignment: CrossAxisAlignment.center,
+          //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //                   children: [
+          //                     Row(
+          //                       mainAxisSize: MainAxisSize.min,
+          //                       children: [
+          //                         RichText(
+          //                           text: TextSpan(
+          //                             children: <TextSpan>[
+          //                               TextSpan(
+          //                                   text: "option".tr, style: onyx712),
+          //                               const TextSpan(text: " "),
+          //                               TextSpan(text: "1".tr, style: onyx712),
+          //                             ],
+          //                           ),
+          //                         ),
+          //                         gapW20,
+          //                         Obx(() {
+          //                           return ListTileCheckBox(
+          //                               checkBxValue:
+          //                                   filterCheckBoxValueList[index],
+          //                               onChangeFunction: (val) {
+          //                                 log(val.toString());
+          //                                 log("${filterCheckBoxValueList[index]}");
+          //                                 Get.find<HomeScreenController>()
+          //                                     .changeFilterCheckBoxValue(
+          //                                         index: index, value: val!);
+          //                               });
+          //                         }),
+          //                       ],
+          //                     ),
+          //                     Row(
+          //                       mainAxisSize: MainAxisSize.min,
+          //                       children: [
+          //                         RichText(
+          //                           text: TextSpan(
+          //                             children: <TextSpan>[
+          //                               TextSpan(
+          //                                   text: "option".tr, style: onyx712),
+          //                               const TextSpan(text: " "),
+          //                               TextSpan(text: "2".tr, style: onyx712),
+          //                             ],
+          //                           ),
+          //                         ),
+          //                         gapW20,
+          //                         Obx(() {
+          //                           return ListTileCheckBox(
+          //                               checkBxValue:
+          //                                   filterCheckBoxValueList[index + 1],
+          //                               onChangeFunction: (val) {
+          //                                 Get.find<HomeScreenController>()
+          //                                     .changeFilterCheckBoxValue(
+          //                                         index: index + 1,
+          //                                         value:
+          //                                             !filterCheckBoxValueList[
+          //                                                 index + 1]);
+          //                               });
+          //                         }),
+          //                       ],
+          //                     ),
+          //                     // AddHorseRadioButton()
+          //                   ],
+          //                 ),
+          //               )),
+          //         ],
+          //       );
+          //     });
+          //   },
+          // )),
 
           //////////here end
           gapH20,
