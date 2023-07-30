@@ -94,7 +94,8 @@ class AuthenticationController extends GetxController {
         saveUserData(
             loginModel.data!.user?.id ?? 0,
             int.parse(loginModel.data!.user?.accountBalance.toString() ?? ""),
-            loginModel.data!.deliveryAccount!.id ?? 0);
+            loginModel.data!.deliveryAccount!.id ?? 0,
+            loginModel.data!.deliveryAccount!.fullname);
 
         loginModel.message == "No user found" ? null : verifyPhone(phone);
 
@@ -141,7 +142,8 @@ class AuthenticationController extends GetxController {
       saveUserData(
           signupModel.data!.user!.id ?? 0,
           int.parse(signupModel.data?.user?.accountBalance.toString() ?? ""),
-          signupModel.data!.deliveryAccount!.id ?? 0);
+          signupModel.data!.deliveryAccount!.id ?? 0,
+          signupModel.data!.deliveryAccount!.fullname);
       if (isMobileValid(phone)) {
         verifyPhone(phone);
         // Get.snackbar("notification".tr, "sending otp");
@@ -181,11 +183,15 @@ class AuthenticationController extends GetxController {
   }
 
 ///////////////////to save user id to shared prefrences
-  void saveUserData(int userId, int accBalance, int deliveryPersonId) {
+  void saveUserData(
+      int userId, int accBalance, int deliveryPersonId, String? username) {
     final box = GetStorage();
     box.write('userId', userId);
     box.write('accbal', accBalance);
     box.write('delPerId', deliveryPersonId);
+
+    box.write('username', username);
+
     // box.write('logincount', '0');
 
     print("*****************************$userId");

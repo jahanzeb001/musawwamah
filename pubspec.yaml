@@ -17,6 +17,9 @@ dependencies:
   flutter_screenutil: ^5.0.0
   firebase_auth: ^4.4.2
   firebase_core: ^2.10.0
+  cloud_firestore: ^4.8.4
+  firebase_messaging: ^14.2.0
+  flutter_local_notifications: ^9.2.0
   flutter:
     sdk: flutter
   flutter_carousel_slider: ^1.1.0

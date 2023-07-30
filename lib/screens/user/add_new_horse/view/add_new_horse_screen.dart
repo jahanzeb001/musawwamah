@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -100,6 +99,13 @@ class _AddNewHorseScreenState extends State<AddNewHorseScreen> {
         );
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    addNewHorseController.fetchDeviceTokens();
   }
 
   @override

@@ -1,17 +1,27 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:obaiah_mobile_app/routes/app_routes.dart';
+import 'package:obaiah_mobile_app/screens/user/add_new_horse/service/local_notifications.dart';
 import 'package:obaiah_mobile_app/translations/translations.dart';
 import 'package:obaiah_mobile_app/utils/constants/constants.dart';
 import 'package:obaiah_mobile_app/utils/themes/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'bindings/initializing_dependencies.dart';
 
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.title);
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  LocalNotificationService.initialize();
   await GetStorage.init();
   bool isLogged = GetStorage().read('isLogin') ?? false;
   bool areDarkenThem = GetStorage().read("areDarkModeOn") ?? false;

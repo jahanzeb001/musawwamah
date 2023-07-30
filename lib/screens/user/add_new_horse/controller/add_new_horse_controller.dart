@@ -1,14 +1,17 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:obaiah_mobile_app/screens/user/add_new_horse/model/add_new_horse_model.dart';
 import 'package:obaiah_mobile_app/screens/user/add_new_horse/model/upload_images_response.dart';
 import 'package:obaiah_mobile_app/screens/user/add_new_horse/service/add_new_horse_service.dart';
-import '../../../../utils/constants/app_urls.dart';
+import 'package:obaiah_mobile_app/utils/constants/config.dart';
 import '../../../../utils/constants/lists.dart';
 import '../model/expert_opinion_data_model.dart';
+import 'package:http/http.dart' as http;
 
 class AddNewHorseController extends GetxController {
   final GlobalKey<FormState> addNewHorseFormKey = GlobalKey<FormState>();
@@ -57,10 +60,15 @@ class AddNewHorseController extends GetxController {
   RxInt expertOpinionval = 0.obs;
   RxInt siteCommisionVal = 0.obs;
   int bidingtotalprice = 0;
+
+  List<String> userTokens = [];
   onInit() {
     super.onInit();
+
     getExpertOpinoinData();
     getUserId();
+
+    // sendPushNotification("abc", addHorseImage.horseFrontView ?? "");
   }
 
   @override
@@ -156,12 +164,14 @@ class AddNewHorseController extends GetxController {
   RxString error = "".obs;
   RxString error2 = "".obs;
   int? userId;
+  String? username = "";
 
   var addHorseImage = AddImagesResponse();
   var addNewHorseModel = AddNewHorseResponse();
 
   void getUserId() {
     userId = GetStorage().read("userId");
+    username = GetStorage().read("username");
   }
 
   void addNewHorse(BuildContext context, File fview, File bview, File lview,
@@ -217,7 +227,8 @@ class AddNewHorseController extends GetxController {
 
     if (res is AddNewHorseResponse) {
       addNewHorseModel = res;
-
+      sendPushNotification(
+          nameOfHorseController.text, addHorseImage.horseFrontView ?? "");
       Get.snackbar(
         "notification".tr,
         res.message!,
@@ -292,6 +303,8 @@ class AddNewHorseController extends GetxController {
 
     if (res is AddNewHorseResponse) {
       addNewHorseModel = res;
+      sendPushNotification(
+          nameOfHorseController.text, addHorseImage.horseFrontView ?? "");
       Get.snackbar(
         "notification".tr,
         "your bid added successfully",
@@ -375,5 +388,69 @@ class AddNewHorseController extends GetxController {
 
     bidingtotalprice = price! + (price * percentage).toInt();
     print(bidingtotalprice); // Output: 110.0
+  }
+
+  /////////////////////////send posh notifications
+
+  Future<void> sendPushNotification(String horsename, String image) async {
+    // Replace with your FCM server key
+    final String url = 'https://fcm.googleapis.com/fcm/send';
+
+    final Map<String, dynamic> payload = {
+      "registration_ids": userTokens,
+      "notification": {
+        "body": "New ${horsename} has been added by $username",
+        "title": " New Horse Has been Added",
+        "android_channel_id": "pushnotificationapp",
+        "sound": false,
+        "image": image,
+      }
+    };
+
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'key=$SERVER_KEY',
+    };
+
+    try {
+      final http.Response response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: jsonEncode(payload),
+      );
+
+      if (response.statusCode == 200) {
+        print('Notification sent successfully!');
+      } else {
+        print(
+            'Failed to send notification. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+    } catch (e) {
+      print('Error sending notification: $e');
+    }
+  }
+
+  /////////////////////fetch token from firebase
+
+  Future<void> fetchDeviceTokens() async {
+    try {
+      // Access the 'users' collection
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('users').get();
+
+      // Loop through each document and extract the 'devicetoken' field
+      querySnapshot.docs.forEach((doc) {
+        String? devicetoken = doc.get(
+            'deviceToken'); // Replace 'devicetoken' with the actual field name in the document
+        if (devicetoken != null) {
+          userTokens.add(devicetoken);
+        }
+
+        print(" user token    ****************** ${userTokens.length}");
+      });
+    } catch (e) {
+      print('Error fetching device tokens: $e');
+    }
   }
 }
