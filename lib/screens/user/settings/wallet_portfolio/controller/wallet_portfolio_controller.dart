@@ -37,6 +37,8 @@ class WalletPortfolioController extends GetxController {
 
     if (res is GetDeleveryWalletResponse) {
       myWalletModel = res;
+      int mybalance = int.parse('${myWalletModel.accountBalance}');
+      GetStorage().write("accbal", mybalance);
     } else {
       loading.value = false;
       error.value = res.toString();

@@ -39,9 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
         Get.snackbar(
           'success'.tr,
           'codesent'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         mycustomAlert('+92' + email.text, verificationId);
         // Get.to(() => PinputExample(
@@ -53,9 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
         Get.snackbar(
           'success'.tr,
           'completed'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         credentials = credential;
         await FirebaseAuth.instance.signInWithCredential(credential);
@@ -74,9 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
           Get.snackbar(
             'Error',
             'invalid phone number',
-            colorText: Colors.white,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.indigo,
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.white,
           );
         }
         log(ex.code.toString());
@@ -451,9 +448,8 @@ class _LoginScreenState extends State<LoginScreen> {
           Get.snackbar(
             'success'.tr,
             'successfullyloggedin'.tr,
-            colorText: Colors.white,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.indigo,
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.white,
           );
           // OTP verification successful
           Get.offAll(const HomeScreenView());
@@ -473,9 +469,8 @@ class _LoginScreenState extends State<LoginScreen> {
         Get.snackbar(
           'errorwrongotp'.tr,
           'failedloggedin'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         // Error occurred during OTP verification
         print('Error verifying OTP: $e');

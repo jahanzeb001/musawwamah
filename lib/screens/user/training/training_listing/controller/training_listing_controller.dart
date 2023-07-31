@@ -11,7 +11,7 @@ class TrainingListingController extends GetxController {
   var mybalance = "".obs;
   int userBalance = 0;
   var myTraningListingModel = GetTraningListingResponse();
-  List<String> images = [];
+
   @override
   void onInit() {
     loading.value = true;

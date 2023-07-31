@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:obaiah_mobile_app/utils/constants/custom_error.dart';
 import 'package:obaiah_mobile_app/utils/constants/no_data_message.dart';
-
 import '../../../../reusable_widgets/reusable_appbar.dart';
 import '../../../../reusable_widgets/reusable_dropdown_formfield.dart';
 import '../../../../utils/colors/colors.dart';

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:alt_sms_autofill/alt_sms_autofill.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:obaiah_mobile_app/generated/assets.dart';
 
 import '../../../../../reusable_widgets/reusable_button.dart';
@@ -54,10 +55,16 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   arabicFunction: () {
                     authenticationController.changeLanguage(
                         languageCode: "ar", countryCode: "SA");
+                    final box = GetStorage();
+                    box.write('languages', "SA");
+                    log('${box.read('languages')}');
                   },
                   englishFunction: () {
                     authenticationController.changeLanguage(
                         languageCode: "en", countryCode: "US");
+                    final box = GetStorage();
+                    box.write('languages', "US");
+                    log('${box.read('languages')}');
                   },
                 ),
                 const Spacer(

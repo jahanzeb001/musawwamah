@@ -185,7 +185,7 @@ class Pivot {
   String? startTime;
   String? endTime;
   String? price;
-  dynamic days;
+  String? days;
   DateTime? createdAt;
   DateTime? updatedAt;
 

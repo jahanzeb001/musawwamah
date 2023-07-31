@@ -253,6 +253,15 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                                 .length,
                                             itemBuilder: (BuildContext context,
                                                 int index) {
+                                              String originalString1 =
+                                                  "${trainingListingController.myTraningListingModel.data!.region!.services![index].pivot!.days}";
+
+                                              var horseridingDays =
+                                                  originalString1.substring(
+                                                      1,
+                                                      originalString1.length -
+                                                          1);
+
                                               return Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -270,7 +279,7 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                                         MainAxisSize.min,
                                                     children: [
                                                       Text(
-                                                        '${trainingListingController.myTraningListingModel.data!.region!.services![index].pivot!.days}',
+                                                        '$horseridingDays',
                                                         // "الأحد - الثلاثاء - الأربعاء",
                                                         style: onyx711,
                                                       ),

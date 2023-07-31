@@ -48,7 +48,7 @@ class _HomeAuctionViewState extends State<HomeAuctionView> {
     });
     // TODO: implement initState
     super.initState();
-    // walletPortfolioController.getMyWallet(walletPortfolioController.userId!);
+    //walletPortfolioController.getMyWallet(walletPortfolioController.userId!);
   }
 
   Widget build(BuildContext context) {

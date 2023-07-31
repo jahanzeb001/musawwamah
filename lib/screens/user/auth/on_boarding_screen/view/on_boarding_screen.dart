@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:obaiah_mobile_app/generated/assets.dart';
 import 'package:obaiah_mobile_app/screens/user/auth/authentication/view/login.dart';
 import 'package:obaiah_mobile_app/utils/colors/colors.dart';
@@ -46,9 +47,15 @@ class OnBoardingScreen extends StatelessWidget {
                     if (locael.toString() == 'US') {
                       onBoardingController.changeLanguage(
                           languageCode: "ar", countryCode: "SA");
+                      final box = GetStorage();
+                      box.write('languages', "SA");
+                      log('logg${box.read('languages')}');
                     } else {
                       onBoardingController.changeLanguage(
                           languageCode: "en", countryCode: "US");
+                      final box = GetStorage();
+                      box.write('languages', "US");
+                      log('logg${box.read('languages')}');
                     }
                   },
                   child: Container(

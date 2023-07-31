@@ -54,8 +54,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
           },
         ));
       }
-      log('${getStorageController.box.read("logincount")}');
-      if (getStorageController.box.read("logincount") == '0') {
+      log('login count = ${getStorageController.box.read("logincount")}');
+      if (getStorageController.box.read("logincount") == '0' ||
+          getStorageController.box.read("logincount") == null) {
         showDialog(
             context: context,
             builder: (context) => HomePageAlertDialog(

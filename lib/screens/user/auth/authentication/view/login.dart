@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:obaiah_mobile_app/generated/assets.dart';
 import 'package:obaiah_mobile_app/utils/text_styles/textstyles.dart';
 
@@ -47,9 +48,15 @@ class LoginScreen extends StatelessWidget {
                         if (locael.toString() == 'US') {
                           authenticationController.changeLanguage(
                               languageCode: "ar", countryCode: "SA");
+                          final box = GetStorage();
+                          box.write('languages', "SA");
+                          log('${box.read('languages')}');
                         } else {
                           authenticationController.changeLanguage(
                               languageCode: "en", countryCode: "US");
+                          final box = GetStorage();
+                          box.write('languages', "US");
+                          log('${box.read('languages')}');
                         }
                       },
                       child: Container(

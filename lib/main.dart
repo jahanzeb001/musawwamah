@@ -48,8 +48,13 @@ class _ObaiahAppState extends State<ObaiahApp> {
   final NotificationService notificationService = NotificationService();
 
   User? uid = FirebaseAuth.instance.currentUser;
+  var languiges;
   @override
   void initState() {
+    final box = GetStorage();
+    log('logg${box.read('languages')}');
+    languiges = box.read('languages');
+
     super.initState();
     FirebaseMessaging.instance
         .getInitialMessage()
@@ -86,10 +91,14 @@ class _ObaiahAppState extends State<ObaiahApp> {
     return GetMaterialApp(
         translations: Translation(),
         // By Default
-        locale: const Locale("en", "US"),
+        locale: languiges != null
+            ? languiges == 'US'
+                ? Locale('en', 'US')
+                : Locale('ar', 'SA')
+            : Locale('en', 'US'),
         //To Get Device Locale Get.deviceLocale
         // locale: Get.deviceLocale,
-        fallbackLocale: const Locale("en", "US"),
+        fallbackLocale: Locale("en", "US"),
         title: 'Obaiah Mobile App',
         initialBinding: InitializingDependency(),
         debugShowCheckedModeBanner: false,

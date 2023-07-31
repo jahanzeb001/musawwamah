@@ -31,7 +31,8 @@ class AuthenticationController extends GetxController {
   changeLanguage({required String languageCode, required String countryCode}) {
     var locale = Locale(languageCode, countryCode);
     Get.updateLocale(locale);
-    log("Changing Language");
+    log("Changing Language...");
+    log('${Get.deviceLocale}');
   }
 
   @override
@@ -186,6 +187,7 @@ class AuthenticationController extends GetxController {
     box.write('userId', userId);
     box.write('accbal', accBalance);
     box.write('delPerId', deliveryPersonId);
+
     // box.write('logincount', '0');
 
     print("*****************************$userId");

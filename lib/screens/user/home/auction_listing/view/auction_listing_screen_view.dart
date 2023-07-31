@@ -1424,10 +1424,12 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                                                 Expanded(
                                                   child: Text(
                                                       auctionListingController
-                                                              .addBidingHorseModel
-                                                              .data
-                                                              ?.isVaccinated ??
-                                                          "",
+                                                                  .addBidingHorseModel
+                                                                  .data
+                                                                  ?.isVaccinated ==
+                                                              '1'
+                                                          ? "yes"
+                                                          : "no",
                                                       style:
                                                           auctionValueTextStyle),
                                                 ),

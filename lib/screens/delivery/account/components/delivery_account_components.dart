@@ -9,6 +9,7 @@ import '../../../../generated/assets.dart';
 import '../../../../utils/colors/colors.dart';
 import '../../../../utils/spacing/padding.dart';
 import '../../../../utils/text_styles/textstyles.dart';
+import '../controller/delivery_account_controller.dart';
 
 class DeliveryAccountTextFormComponent extends StatelessWidget {
   final TextEditingController textController;
@@ -64,7 +65,7 @@ class DeliveryAccountTextFormComponent extends StatelessWidget {
   }
 }
 
-class CustomContainerComponent extends StatelessWidget {
+class CustomContainerComponent extends StatefulWidget {
   final String text;
   final Function()? onTapFunction;
   File? image;
@@ -74,22 +75,32 @@ class CustomContainerComponent extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<CustomContainerComponent> createState() =>
+      _CustomContainerComponentState();
+}
+
+class _CustomContainerComponentState extends State<CustomContainerComponent> {
+  final deliveryAccountController = Get.find<DeliveryAccountController>();
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTapFunction,
+      onTap: widget.onTapFunction,
       child: Container(
         padding: padA10,
         height: 60,
         alignment: Alignment.center,
         decoration: BoxDecoration(
             color: cWhiteColor, borderRadius: BorderRadius.circular(10)),
-        child: image == null
-            ? Text(
-                text.tr,
-                textAlign: TextAlign.center,
-                style: auctionValueTextStyle,
-              )
-            : Image.file(image!),
+        child: widget.image == null
+            ? Image.network(
+                '${deliveryAccountController.deliveryAccountModel.data!.deliveryAccount!.idPhotoFront}')
+            // Text(
+            //     widget.text.tr,
+            //     textAlign: TextAlign.center,
+            //     style: auctionValueTextStyle,
+            //   )
+
+            : Image.file(widget.image!),
       ),
     );
   }
