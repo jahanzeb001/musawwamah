@@ -64,11 +64,8 @@ class AddNewHorseController extends GetxController {
   List<String> userTokens = [];
   onInit() {
     super.onInit();
-
     getExpertOpinoinData();
     getUserId();
-
-    // sendPushNotification("abc", addHorseImage.horseFrontView ?? "");
   }
 
   @override
@@ -399,9 +396,9 @@ class AddNewHorseController extends GetxController {
     final Map<String, dynamic> payload = {
       "registration_ids": userTokens,
       "notification": {
-        "body": "New ${horsename} has been added by $username",
+        "body": "New ${horsename} has been added by user $userId",
         "title": " New Horse Has been Added",
-        "android_channel_id": "pushnotificationapp",
+        "android_channel_id": "mussawammahnotification",
         "sound": false,
         "image": image,
       }
