@@ -95,6 +95,12 @@ import 'dart:convert';
 //
 //     final deliveryAccountResponse = deliveryAccountResponseFromJson(jsonString);
 
+// To parse this JSON data, do
+//
+//     final deliveryAccountResponse = deliveryAccountResponseFromJson(jsonString);
+
+import 'dart:convert';
+
 DeliveryAccountResponse deliveryAccountResponseFromJson(String str) =>
     DeliveryAccountResponse.fromJson(json.decode(str));
 
@@ -127,43 +133,21 @@ class DeliveryAccountResponse {
 }
 
 class Data {
-  DeliveryAccount? deliveryAccount;
-  DeliveryAccount? user;
-
-  Data({
-    this.deliveryAccount,
-    this.user,
-  });
-
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        deliveryAccount: json["delivery_account"] == null
-            ? null
-            : DeliveryAccount.fromJson(json["delivery_account"]),
-        user: json["user"] == null
-            ? null
-            : DeliveryAccount.fromJson(json["user"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "delivery_account": deliveryAccount?.toJson(),
-        "user": user?.toJson(),
-      };
-}
-
-class DeliveryAccount {
+  String? accountBalance;
   int? id;
-  dynamic deliveryPersonId;
-  dynamic horseId;
-  dynamic via;
+  String? deliveryPersonId;
+  String? horseId;
+  String? via;
   dynamic invoiceId;
   String? amount;
   String? transactionType;
-  String? date;
+  DateTime? date;
   String? status;
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  DeliveryAccount({
+  Data({
+    this.accountBalance,
     this.id,
     this.deliveryPersonId,
     this.horseId,
@@ -177,8 +161,8 @@ class DeliveryAccount {
     this.updatedAt,
   });
 
-  factory DeliveryAccount.fromJson(Map<String, dynamic> json) =>
-      DeliveryAccount(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+        accountBalance: json["account_balance"],
         id: json["id"],
         deliveryPersonId: json["deliveryPersonId"],
         horseId: json["horseId"],
@@ -186,13 +170,18 @@ class DeliveryAccount {
         invoiceId: json["invoiceId"],
         amount: json["amount"],
         transactionType: json["transactionType"],
-        date: json["date"],
+        date: json["date"] == null ? null : DateTime.parse(json["date"]),
         status: json["status"],
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "account_balance": accountBalance,
         "id": id,
         "deliveryPersonId": deliveryPersonId,
         "horseId": horseId,
@@ -200,9 +189,10 @@ class DeliveryAccount {
         "invoiceId": invoiceId,
         "amount": amount,
         "transactionType": transactionType,
-        "date": date,
+        "date":
+            "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
         "status": status,
-        "createdAt": createdAt,
-        "updatedAt": updatedAt,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
       };
 }

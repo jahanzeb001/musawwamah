@@ -5,7 +5,7 @@ import '../../models/wallet_history_model.dart';
 
 // Radio Group Lists
 const List<String> horseTypeList = ["Horse", "mare"];
-const List<String> conditionList = ["injured", "salim"];
+const List<String> conditionList = ["salim", "injured"];
 const List<String> originalityList = ["arabic", "hybrid"];
 const List<String> yesOrNoList = ["yes", "no"];
 

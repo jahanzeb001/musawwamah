@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
@@ -7,7 +6,9 @@ import 'package:obaiah_mobile_app/screens/delivery/delivery_confirm_pickup/model
 import 'package:obaiah_mobile_app/screens/delivery/my_deliveries/view/my_delivery_screen.dart';
 import 'package:otp_text_field/otp_field.dart';
 
+import '../../my_deliveries/controller/my_deliveries_controller.dart';
 import '../models/horse_didnot_match_model.dart';
+import '../models/refused_to_received_model.dart';
 import '../services/delivery_conform_pickup_services.dart';
 
 class DeliveryConfirmPickUpController extends GetxController {
@@ -32,6 +33,8 @@ class DeliveryConfirmPickUpController extends GetxController {
   RxBool loading2 = false.obs;
   RxString error2 = "".obs;
   var horseDidnotModel = HorseDidnotMatch();
+  var refucedToCustomerModel = RefusedByCustomer();
+  MyDeliveriesController getconnection = Get.find<MyDeliveriesController>();
 
   void horseDidnotMatch(int deliveryPersonId, int horseId, int index) async {
     print("methos id running on index :$index");
@@ -43,9 +46,11 @@ class DeliveryConfirmPickUpController extends GetxController {
     loading2.value = false;
     if (res is HorseDidnotMatch) {
       horseDidnotModel = res;
-      Get.snackbar("notifications".tr, "Horse Did Not Match");
-
-      // getMyConnection(deliveryAccountId!);
+      Get.snackbar("notifications".tr, "Success Data Update");
+      getconnection.loadData();
+      // Use Get.until to pop routes until a specific route is reached
+      Get.off(() => MyDeliveryScreen());
+      getconnection.loadData();
     } else {
       loading2.value = false;
       error2.value = res.toString();
@@ -62,9 +67,11 @@ class DeliveryConfirmPickUpController extends GetxController {
     var res = await DeliverConformPivkupService.customerRefusedToReceived(
         deliveryPersonId, horseId);
     loading2.value = false;
-    if (res is HorseDidnotMatch) {
-      horseDidnotModel = res;
+    if (res is RefusedByCustomer) {
+      refucedToCustomerModel = res;
       Get.snackbar("notifications".tr, "Success");
+      Get.off(() => MyDeliveryScreen());
+      getconnection.loadData();
 
       // getMyConnection(deliveryAccountId!);
     } else {

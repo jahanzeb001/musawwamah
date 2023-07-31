@@ -5,6 +5,7 @@ import 'package:obaiah_mobile_app/screens/user/settings/account/controller/accou
 import '../../../../../utils/colors/colors.dart';
 import '../../../../../utils/spacing/gaps.dart';
 import '../../../../../utils/text_styles/textstyles.dart';
+import '../controller/checkout_controller.dart';
 
 class CheckOutTextFormComponent extends StatelessWidget {
   final TextEditingController textController;
@@ -46,7 +47,7 @@ const tableVerticalSpacer = TableRow(children: [
   gapH10,
 ]);
 
-class RecommendationComponent extends StatelessWidget {
+class RecommendationComponent extends StatefulWidget {
   final String recommendationServiceName;
   final String recommendationServiceValue;
 
@@ -57,18 +58,27 @@ class RecommendationComponent extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<RecommendationComponent> createState() =>
+      _RecommendationComponentState();
+}
+
+class _RecommendationComponentState extends State<RecommendationComponent> {
+  @override
+  final checkoutController = Get.find<CheckoutController>();
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          recommendationServiceName.tr,
+          widget.recommendationServiceName.tr,
           style: onyx511,
         ),
         gapH6,
         Text(
-          recommendationServiceValue.tr,
+          widget.recommendationServiceValue == '1'
+              ? checkoutController.cityProvinceController.text
+              : widget.recommendationServiceValue.tr,
           style: onyx811,
         ),
       ],

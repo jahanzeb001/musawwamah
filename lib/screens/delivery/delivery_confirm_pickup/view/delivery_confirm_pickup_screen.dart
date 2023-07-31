@@ -29,9 +29,16 @@ class DeliveryConfirmPickupScreen extends StatefulWidget {
   final HorseDetailsResponse? homeModel;
   int horseId;
   var sellerPhone;
+  int index;
+  var aglino;
 
   DeliveryConfirmPickupScreen(
-      {Key? key, this.homeModel, required this.horseId, this.sellerPhone})
+      {Key? key,
+      this.homeModel,
+      required this.horseId,
+      this.sellerPhone,
+      required this.index,
+      required this.aglino})
       : super(key: key);
 
   @override
@@ -48,6 +55,7 @@ class _DeliveryConfirmPickupScreenState
   File? horseRightView;
   File? horseNotesView;
   bool isLoading = false;
+  bool sendOtp = false;
 
   //////////////////horse back view
   VideoPlayerController? _videoPlayerController;
@@ -139,9 +147,8 @@ class _DeliveryConfirmPickupScreenState
         Get.snackbar(
           'success'.tr,
           'codesent'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
 
         // Get.to(() => PinputExample(
@@ -153,9 +160,8 @@ class _DeliveryConfirmPickupScreenState
         Get.snackbar(
           'success'.tr,
           'completed'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         credentials = credential;
         await FirebaseAuth.instance.signInWithCredential(credential);
@@ -165,18 +171,16 @@ class _DeliveryConfirmPickupScreenState
         Get.snackbar(
           'Error',
           'failed!',
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         if (ex.code == 'invalid-phone-number') {
           log('invalid phone number');
           Get.snackbar(
             'Error',
             'invalid phone number',
-            colorText: Colors.white,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.indigo,
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.white,
           );
         }
         log(ex.code.toString());
@@ -198,21 +202,21 @@ class _DeliveryConfirmPickupScreenState
       if (authResult.user != null) {
         Get.snackbar(
           'success'.tr,
-          'successfullyloggedin'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          'Conformed'.tr,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         // OTP verification successful
-
+        setState(() {
+          sendOtp = true;
+        });
         return true;
       } else {
         Get.snackbar(
           'errorwrongotp'.tr,
           'pleaseentercorrectotp'.tr,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
         );
         // OTP verification failed
         return false;
@@ -220,10 +224,9 @@ class _DeliveryConfirmPickupScreenState
     } catch (e) {
       Get.snackbar(
         'errorwrongotp'.tr,
-        'failedloggedin'.tr,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.indigo,
+        'pleaseentercorrectotp'.tr,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white,
       );
       // Error occurred during OTP verification
       print('Error verifying OTP: $e');
@@ -301,7 +304,7 @@ class _DeliveryConfirmPickupScreenState
                       style: onyx716,
                     ),
                     Text(
-                      "# 51450049".tr,
+                      "# ${widget.aglino}".tr,
                       style: onyx716,
                     ),
                   ],
@@ -571,7 +574,7 @@ class _DeliveryConfirmPickupScreenState
                                   gapH5,
                                   Expanded(
                                     child: Text(
-                                        widget.homeModel?.data?.safety ?? "",
+                                        widget.homeModel?.data?.casuality ?? "",
                                         style: auctionValueTextStyle),
                                   ),
                                   gapH25,
@@ -598,8 +601,10 @@ class _DeliveryConfirmPickupScreenState
                                   gapH5,
                                   Expanded(
                                     child: Text(
-                                        widget.homeModel?.data?.isVaccinated ??
-                                            "",
+                                        widget.homeModel?.data?.didHeComplete ==
+                                                '1'
+                                            ? 'Yes'
+                                            : 'No',
                                         style: auctionValueTextStyle),
                                   ),
                                 ],
@@ -1042,48 +1047,51 @@ class _DeliveryConfirmPickupScreenState
                 ),
                 gapH20,
                 //Component 8
-                Obx(
-                  () => OutlinedButton(
-                      onPressed: () {
-                        deliveryConfirmPickUpController.confirmDeliveryPickup(
-                          hid: widget.homeModel?.data?.id,
-                          horseImageFromRight: horseRightView,
-                          horseImageFromLeft: horseLeftView,
-                          horseFrontView: horseFrontView,
-                          horseBackView: horseBackView,
-                          notesImage: horseNotesView,
-                          horseVideo: _pickedVideo,
-                          notesText: deliveryConfirmPickUpController
-                              .compulsoryNotesController.text,
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shadowColor: cPrimaryColor,
-                        foregroundColor: cPrimaryColor,
-                        fixedSize: Size(context.width * 0.7, 50),
-                        side: const BorderSide(color: cBlackColor),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        elevation: 0.0,
+                sendOtp == false
+                    ? Text('')
+                    : Obx(
+                        () => OutlinedButton(
+                            onPressed: () {
+                              deliveryConfirmPickUpController
+                                  .confirmDeliveryPickup(
+                                hid: widget.homeModel?.data?.id,
+                                horseImageFromRight: horseRightView,
+                                horseImageFromLeft: horseLeftView,
+                                horseFrontView: horseFrontView,
+                                horseBackView: horseBackView,
+                                notesImage: horseNotesView,
+                                horseVideo: _pickedVideo,
+                                notesText: deliveryConfirmPickUpController
+                                    .compulsoryNotesController.text,
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shadowColor: cPrimaryColor,
+                              foregroundColor: cPrimaryColor,
+                              fixedSize: Size(context.width * 0.7, 50),
+                              side: const BorderSide(color: cBlackColor),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              elevation: 0.0,
+                            ),
+                            child: FittedBox(
+                              child: deliveryConfirmPickUpController
+                                      .deliveryConfirmPickupLoading.value
+                                  ? CircularProgressIndicator(
+                                      color: cBlackColor,
+                                    )
+                                  : Text("confirm receipt".tr, style: black720),
+                            )),
                       ),
-                      child: FittedBox(
-                        child: deliveryConfirmPickUpController
-                                .deliveryConfirmPickupLoading.value
-                            ? CircularProgressIndicator(
-                                color: cBlackColor,
-                              )
-                            : Text("confirm receipt".tr, style: black720),
-                      )),
-                ),
                 gapH20,
                 OutlinedButton(
                     onPressed: () {
                       log('${widget.horseId}');
 
-                      var personid = GetStorage().read("delPerId");
-                      DeliveryConfirmPickUpController()
-                          .horseDidnotMatch(personid, personid!, 1);
+                      int personid = GetStorage().read("delPerId");
+                      DeliveryConfirmPickUpController().horseDidnotMatch(
+                          personid, widget.horseId, widget.index);
                     },
                     style: ElevatedButton.styleFrom(
                       shadowColor: cPrimaryColor,

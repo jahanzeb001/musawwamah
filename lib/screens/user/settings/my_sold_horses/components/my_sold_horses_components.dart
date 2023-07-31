@@ -117,7 +117,7 @@ class MySoldHorsesListViewInfoCard extends StatelessWidget {
                 style: romanSilver408,
               ),
               ReUsableText(
-                  text: homePageModel.price.toString(),
+                  text: homePageModel.totalPrice.toString(),
                   textStyle: homePagePrice),
               homePageModel.isPaid == 1
                   ? Column(
@@ -369,7 +369,7 @@ class MySoldHorsesGridViewInfoCard extends StatelessWidget {
           ),
           gapH10,
           ReUsableText(
-              text: homePageModel.price.toString(),
+              text: homePageModel.totalPrice.toString(),
               textStyle: homePageGridPrice),
           Text(
             "allegiance case".tr,

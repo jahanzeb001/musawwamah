@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:obaiah_mobile_app/screens/user/live_auction/view/rating.dart';
+import 'package:obaiah_mobile_app/screens/user/live_auction/view/touTube-live_apis.dart';
 import '../../../../generated/assets.dart';
 import '../../../../reusable_widgets/reusable_alertDialog.dart';
 import '../../../../reusable_widgets/reusable_appbar.dart';
@@ -77,9 +78,14 @@ class _LiveAuctionScreenState extends State<LiveAuctionScreen> {
                           children: [
                             Column(
                               children: [
-                                Text(
-                                  "bidding for a horse".tr,
-                                  style: silver510,
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(() => YouTubeLiveStreamingDemo());
+                                  },
+                                  child: Text(
+                                    "bidding for a horse".tr,
+                                    style: silver510,
+                                  ),
                                 ),
                                 Text(
                                   homePageList[0].name.tr,

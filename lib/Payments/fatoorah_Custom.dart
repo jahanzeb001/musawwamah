@@ -16,6 +16,7 @@ import 'package:myfatoorah_flutter/utils/MFCountry.dart';
 import 'package:myfatoorah_flutter/utils/MFEnvironment.dart';
 import 'package:obaiah_mobile_app/utils/colors/colors.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import '../screens/user/home/checkout/controller/checkout_controller.dart';
 import '../screens/user/settings/my_orders/view/my_orders_screen.dart';
 import '../utils/constants/constants.dart';
 import 'add_payment.dart';
@@ -315,10 +316,12 @@ class _FatoorahCustomState extends State<FatoorahCustom> {
         var suplier = '';
 
         if (widget.role == 'payment') {
+          final checkoutController = Get.find<CheckoutController>();
           AddPaymentRecord.addPayment(
               userId: userId,
               horseid: horseid,
               sellerid: widget.sellerid,
+              pickup: checkoutController.tome.value,
               invoceid: invoceid,
               invicestatus: invicestatus,
               invcereference: invcereference,

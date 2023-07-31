@@ -1,28 +1,28 @@
 // To parse this JSON data, do
 //
-//     final horseDidnotMatch = horseDidnotMatchFromJson(jsonString);
+//     final refusedByCustomer = refusedByCustomerFromJson(jsonString);
 
 import 'dart:convert';
 
-HorseDidnotMatch horseDidnotMatchFromJson(String str) =>
-    HorseDidnotMatch.fromJson(json.decode(str));
+RefusedByCustomer refusedByCustomerFromJson(String str) =>
+    RefusedByCustomer.fromJson(json.decode(str));
 
-String horseDidnotMatchToJson(HorseDidnotMatch data) =>
+String refusedByCustomerToJson(RefusedByCustomer data) =>
     json.encode(data.toJson());
 
-class HorseDidnotMatch {
+class RefusedByCustomer {
   bool? success;
   String? message;
   Data? data;
 
-  HorseDidnotMatch({
+  RefusedByCustomer({
     this.success,
     this.message,
     this.data,
   });
 
-  factory HorseDidnotMatch.fromJson(Map<String, dynamic> json) =>
-      HorseDidnotMatch(
+  factory RefusedByCustomer.fromJson(Map<String, dynamic> json) =>
+      RefusedByCustomer(
         success: json["success"],
         message: json["message"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
@@ -81,8 +81,8 @@ class Data {
   String? weight;
   String? didHeComplete;
   String? safety;
-  String? rejectedByCustomer;
-  int? horseNotMatch;
+  int? rejectedByCustomer;
+  String? horseNotMatch;
 
   Data({
     this.id,

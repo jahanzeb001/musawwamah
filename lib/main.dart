@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,8 @@ import 'package:obaiah_mobile_app/utils/constants/constants.dart';
 import 'package:obaiah_mobile_app/utils/themes/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'bindings/initializing_dependencies.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'myauth/notifications_services.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
@@ -23,6 +27,13 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   LocalNotificationService.initialize();
   await GetStorage.init();
+  await NotificationService.intializeServices();
+  //** Notification Services */
+
+  String? refreshedToken = await FirebaseMessaging.instance.getToken();
+  log(refreshedToken.toString());
+
+  //logout();
   bool isLogged = GetStorage().read('isLogin') ?? false;
   bool areDarkenThem = GetStorage().read("areDarkModeOn") ?? false;
   print("*********************$isLogged");
@@ -44,7 +55,42 @@ class ObaiahApp extends StatefulWidget {
 }
 
 class _ObaiahAppState extends State<ObaiahApp> {
+  final NotificationService notificationService = NotificationService();
+
   User? uid = FirebaseAuth.instance.currentUser;
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        _handleNotification(message);
+      }
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _handleNotification(message);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      _handleNotification(message);
+    });
+  }
+
+  void _handleNotification(RemoteMessage message) {
+    String? payload = message.data['payload'];
+    print('Received notification: ${message.notification?.body}');
+    print('Payload: $payload');
+
+    // Show the notification using Flutter Local Notifications
+    notificationService.showNotification(
+      title: message.notification?.title ?? 'Notification',
+      body: message.notification?.body ?? 'Empty notification',
+      payload: payload,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
