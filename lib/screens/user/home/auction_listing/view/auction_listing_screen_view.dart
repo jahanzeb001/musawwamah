@@ -18,10 +18,12 @@ import 'package:obaiah_mobile_app/utils/spacing/gaps.dart';
 import 'package:obaiah_mobile_app/utils/spacing/padding.dart';
 import 'package:obaiah_mobile_app/utils/text_styles/textstyles.dart';
 
+import '../../../../../Calendar/calendar_client.dart';
 import '../../../../../reusable_widgets/reusable_alertDialog.dart';
 import '../../../settings/wallet_portfolio/controller/wallet_portfolio_controller.dart';
 import '../components/auction_components.dart';
 import '../controller/auction_controller.dart';
+import 'package:intl/intl.dart' as intl;
 
 class AuctionListingScreenView extends StatefulWidget {
   int? horseId;
@@ -96,6 +98,11 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
       });
     });
   }
+
+  var startTime;
+  var endTime;
+  var startdate;
+  var servicetitle;
 
   // Duration _parseRemainingTime(String remainingTimeString) {
   //   final parts = remainingTimeString.split(':');
@@ -462,10 +469,53 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                                             gapH25,
                                             ElevatedButton(
                                               onPressed: () {
-                                                Get.snackbar(
-                                                    "notification".tr,
-                                                    "you will be notified about this auction"
-                                                        .tr);
+                                                var start = startTime;
+                                                var end = endTime;
+                                                var adate = startdate;
+                                                var title = servicetitle;
+
+                                                DateTime sdate =
+                                                    intl.DateFormat.jm()
+                                                        .parse(start);
+                                                DateTime edate =
+                                                    intl.DateFormat.jm()
+                                                        .parse(end);
+                                                final dateFormat =
+                                                    intl.DateFormat.yMd()
+                                                        .parse(adate);
+                                                var actualdate =
+                                                    intl.DateFormat("yyyyddMM")
+                                                        .format(dateFormat);
+                                                var actualstime =
+                                                    intl.DateFormat("HH:mmss")
+                                                        .format(sdate);
+                                                var actual1 = actualstime
+                                                    .toString()
+                                                    .replaceAll(':', '');
+                                                var actualetime =
+                                                    intl.DateFormat("HH:mmss")
+                                                        .format(edate);
+                                                var actual2 = actualetime
+                                                    .toString()
+                                                    .replaceAll(':', '');
+                                                var conformsdate =
+                                                    '${actualdate}T${actual1}0ZUTC+05:00';
+                                                var conformedate =
+                                                    '${actualdate}T${actual2}0ZUTC+05:00';
+
+                                                print(
+                                                    '${actualdate}T${actualstime}0ZUTC+03:00');
+                                                print(
+                                                    '${actualdate}T${actualetime}0ZUTC+03:00');
+                                                CalendarClient().insert(
+                                                  title,
+                                                  conformsdate,
+                                                  conformedate,
+                                                );
+                                                // Get.snackbar(
+                                                //     "notification".tr,
+                                                //     "you will be notified about this auction"
+                                                //         .tr);
                                               },
                                               style: ElevatedButton.styleFrom(
                                                   fixedSize: Size(
@@ -743,6 +793,8 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                                                                     radius: 10,
                                                                     onPressFunction:
                                                                         () {
+                                                                      Navigator.pop(
+                                                                          context);
                                                                       var hhid = int.parse(widget
                                                                           .horseId
                                                                           .toString());
@@ -758,7 +810,8 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                                                                       auctionListingController.addBid(
                                                                           hhid,
                                                                           uid,
-                                                                          amount);
+                                                                          amount,
+                                                                          context);
                                                                     },
                                                                   ),
                                                                   gapH20,
@@ -792,8 +845,6 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                                                           return InsuranceConfirmationDialog(
                                                             onPressFunction:
                                                                 () {
-                                                              Navigator.pop(
-                                                                  context);
                                                               showDialog(
                                                                   context:
                                                                       context,
@@ -803,8 +854,6 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                                                                     return BidAdditionDialog(
                                                                       onPressFunction:
                                                                           () {
-                                                                        Navigator.pop(
-                                                                            context);
                                                                         auctionListingController.addInsurance(
                                                                             auctionListingController.userId ??
                                                                                 0,

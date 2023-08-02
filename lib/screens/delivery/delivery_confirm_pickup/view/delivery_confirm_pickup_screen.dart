@@ -148,7 +148,6 @@ class _DeliveryConfirmPickupScreenState
           'success'.tr,
           'codesent'.tr,
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
 
         // Get.to(() => PinputExample(
@@ -161,7 +160,6 @@ class _DeliveryConfirmPickupScreenState
           'success'.tr,
           'completed'.tr,
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
         credentials = credential;
         await FirebaseAuth.instance.signInWithCredential(credential);
@@ -172,7 +170,6 @@ class _DeliveryConfirmPickupScreenState
           'Error',
           'failed!',
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
         if (ex.code == 'invalid-phone-number') {
           log('invalid phone number');
@@ -180,7 +177,6 @@ class _DeliveryConfirmPickupScreenState
             'Error',
             'invalid phone number',
             snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.white,
           );
         }
         log(ex.code.toString());
@@ -204,7 +200,6 @@ class _DeliveryConfirmPickupScreenState
           'success'.tr,
           'Conformed'.tr,
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
         // OTP verification successful
         setState(() {
@@ -216,7 +211,6 @@ class _DeliveryConfirmPickupScreenState
           'errorwrongotp'.tr,
           'pleaseentercorrectotp'.tr,
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
         // OTP verification failed
         return false;
@@ -226,7 +220,6 @@ class _DeliveryConfirmPickupScreenState
         'errorwrongotp'.tr,
         'pleaseentercorrectotp'.tr,
         snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.white,
       );
       // Error occurred during OTP verification
       print('Error verifying OTP: $e');
@@ -1054,16 +1047,16 @@ class _DeliveryConfirmPickupScreenState
                             onPressed: () {
                               deliveryConfirmPickUpController
                                   .confirmDeliveryPickup(
-                                hid: widget.homeModel?.data?.id,
-                                horseImageFromRight: horseRightView,
-                                horseImageFromLeft: horseLeftView,
-                                horseFrontView: horseFrontView,
-                                horseBackView: horseBackView,
-                                notesImage: horseNotesView,
-                                horseVideo: _pickedVideo,
-                                notesText: deliveryConfirmPickUpController
-                                    .compulsoryNotesController.text,
-                              );
+                                      hid: widget.homeModel?.data?.id,
+                                      horseImageFromRight: horseRightView,
+                                      horseImageFromLeft: horseLeftView,
+                                      horseFrontView: horseFrontView,
+                                      horseBackView: horseBackView,
+                                      notesImage: horseNotesView,
+                                      horseVideo: _pickedVideo,
+                                      notesText: deliveryConfirmPickUpController
+                                          .compulsoryNotesController.text,
+                                      context: context);
                             },
                             style: ElevatedButton.styleFrom(
                               shadowColor: cPrimaryColor,
@@ -1091,7 +1084,7 @@ class _DeliveryConfirmPickupScreenState
 
                       int personid = GetStorage().read("delPerId");
                       DeliveryConfirmPickUpController().horseDidnotMatch(
-                          personid, widget.horseId, widget.index);
+                          personid, widget.horseId, widget.index, context);
                     },
                     style: ElevatedButton.styleFrom(
                       shadowColor: cPrimaryColor,

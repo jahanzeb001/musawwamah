@@ -26,6 +26,13 @@ class _MyDeliveryScreenState extends State<MyDeliveryScreen> {
     super.initState();
   }
 
+  Future<void> _refreshData() async {
+    // Simulate an API call or any other data-fetching process
+    await Future.delayed(Duration(seconds: 2));
+
+    myDeliveryController.loadData();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ReusableAppBar(
@@ -34,61 +41,64 @@ class _MyDeliveryScreenState extends State<MyDeliveryScreen> {
             Navigator.pop(context);
           },
           textStyle: black718),
-      body: SafeArea(
-          child: Obx(() => myDeliveryController.loading.value
-              ? Center(
-                  child: CircularProgressIndicator(
-                  color: cPrimaryColor,
-                ))
-              : myDeliveryController.error.value != ""
-                  ? Center(
-                      child: Custom_Error(
-                          onpressed: () {
-                            myDeliveryController.getMyConnection(
-                                myDeliveryController.deliveryAccountId!);
-                          },
-                          error: myDeliveryController.error.value),
-                    )
-                  : myDeliveryController.myCoonectionsModel.data?.length == 0
-                      ? Center(child: NoDataMessage(message: "No Data Found"))
-                      : Container(
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          height: context.height * 1,
-                          width: context.width * 1,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                gapH10,
-                                Flexible(
-                                  child: ListView.separated(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: myDeliveryController
-                                        .myCoonectionsModel.data!.length,
-                                    separatorBuilder:
-                                        (BuildContext context, int index) =>
-                                            gapH15,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return MyDeliveriesListViewInfoCard(
-                                        homePageModel: myDeliveryController
-                                            .myCoonectionsModel.data![index],
-                                        index: index,
-                                        loading1:
-                                            myDeliveryController.loading2.value,
-                                        loading:
-                                            myDeliveryController.loading3.value,
-                                      );
-                                    },
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: SafeArea(
+            child: Obx(() => myDeliveryController.loading.value
+                ? Center(
+                    child: CircularProgressIndicator(
+                    color: cPrimaryColor,
+                  ))
+                : myDeliveryController.error.value != ""
+                    ? Center(
+                        child: Custom_Error(
+                            onpressed: () {
+                              myDeliveryController.getMyConnection(
+                                  myDeliveryController.deliveryAccountId!);
+                            },
+                            error: myDeliveryController.error.value),
+                      )
+                    : myDeliveryController.myCoonectionsModel.data?.length == 0
+                        ? Center(child: NoDataMessage(message: "No Data Found"))
+                        : Container(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            height: context.height * 1,
+                            width: context.width * 1,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  gapH10,
+                                  Flexible(
+                                    child: ListView.separated(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: myDeliveryController
+                                          .myCoonectionsModel.data!.length,
+                                      separatorBuilder:
+                                          (BuildContext context, int index) =>
+                                              gapH15,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return MyDeliveriesListViewInfoCard(
+                                          homePageModel: myDeliveryController
+                                              .myCoonectionsModel.data![index],
+                                          index: index,
+                                          loading1: myDeliveryController
+                                              .loading2.value,
+                                          loading: myDeliveryController
+                                              .loading3.value,
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                                gapH20,
-                              ],
+                                  gapH20,
+                                ],
+                              ),
                             ),
-                          ),
-                        ))),
+                          ))),
+      ),
     );
   }
 }

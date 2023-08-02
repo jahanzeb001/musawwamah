@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../Payments/fatoorahCopied.dart';
 import '../Payments/fatoorah_Custom.dart';
 import '../generated/assets.dart';
 import '../utils/colors/colors.dart';

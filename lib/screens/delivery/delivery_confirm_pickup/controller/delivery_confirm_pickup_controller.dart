@@ -36,7 +36,8 @@ class DeliveryConfirmPickUpController extends GetxController {
   var refucedToCustomerModel = RefusedByCustomer();
   MyDeliveriesController getconnection = Get.find<MyDeliveriesController>();
 
-  void horseDidnotMatch(int deliveryPersonId, int horseId, int index) async {
+  void horseDidnotMatch(
+      int deliveryPersonId, int horseId, int index, context) async {
     print("methos id running on index :$index");
     loading2.value = true;
     error2.value = "";
@@ -49,8 +50,8 @@ class DeliveryConfirmPickUpController extends GetxController {
       Get.snackbar("notifications".tr, "Success Data Update");
       getconnection.loadData();
       // Use Get.until to pop routes until a specific route is reached
-      Get.off(() => MyDeliveryScreen());
       getconnection.loadData();
+      gotoback(context);
     } else {
       loading2.value = false;
       error2.value = res.toString();
@@ -59,7 +60,7 @@ class DeliveryConfirmPickUpController extends GetxController {
   }
 
   void customerRefusedToReceived(
-      int deliveryPersonId, int horseId, int index) async {
+      int deliveryPersonId, int horseId, int index, context) async {
     print("methos id running on index :$index");
     loading2.value = true;
     error2.value = "";
@@ -70,9 +71,9 @@ class DeliveryConfirmPickUpController extends GetxController {
     if (res is RefusedByCustomer) {
       refucedToCustomerModel = res;
       Get.snackbar("notifications".tr, "Success");
-      Get.off(() => MyDeliveryScreen());
-      getconnection.loadData();
 
+      getconnection.loadData();
+      gotoback(context);
       // getMyConnection(deliveryAccountId!);
     } else {
       loading2.value = false;
@@ -98,7 +99,8 @@ class DeliveryConfirmPickUpController extends GetxController {
       File? horseBackView,
       File? horseVideo,
       String? notesText,
-      int? hid}) async {
+      int? hid,
+      BuildContext? context}) async {
     deliveryConfirmPickupLoading.value = true;
     error1.value = "";
 
@@ -113,7 +115,7 @@ class DeliveryConfirmPickUpController extends GetxController {
     if (res is DeliveryConfirmPickupResponse) {
       deliveryConfirmPickupModel = res;
 
-      confirmPickup(notesText ?? "", hid ?? 0);
+      confirmPickup(notesText ?? "", hid ?? 0, context);
 
       print(deliveryConfirmPickupModel.horseBackView);
     } else {
@@ -126,7 +128,7 @@ class DeliveryConfirmPickUpController extends GetxController {
   ////////////////////////////////////
   var confirmPickupModel1 = ConfirmPickupResponse();
 
-  void confirmPickup(String notes, int horseId) async {
+  void confirmPickup(String notes, int horseId, context) async {
     deliveryConfirmPickupLoading.value = true;
     error1.value = "";
 
@@ -143,11 +145,15 @@ class DeliveryConfirmPickUpController extends GetxController {
     if (res is ConfirmPickupResponse) {
       confirmPickupModel1 = res;
       Get.snackbar("notification", "Saved Successfully");
-      Get.off(() => MyDeliveryScreen());
+      gotoback(context);
     } else {
       deliveryConfirmPickupLoading.value = false;
       error1.value = res.toString();
       Get.snackbar("notification", error1.value);
     }
   }
+}
+
+gotoback(context) {
+  Navigator.pop(context);
 }

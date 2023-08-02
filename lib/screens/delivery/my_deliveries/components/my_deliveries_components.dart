@@ -302,7 +302,14 @@ class _MyDeliveriesListViewInfoCardState
               : widget.homePageModel.horse!.horseNotMatch == "1"
                   ? Text('')
                   : widget.homePageModel.horse!.rejectedByCustomer == "1"
-                      ? Text('Rejected By Customer', style: black512)
+                      ? Container(
+                          width: 150,
+                          padding: padA10,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: cRomanSilverColor,
+                              borderRadius: BorderRadius.circular(6)),
+                          child: Text('Rejected By Customer', style: black512))
                       : widget.homePageModel.status == "Delivered"
                           ? Container()
                           : Column(

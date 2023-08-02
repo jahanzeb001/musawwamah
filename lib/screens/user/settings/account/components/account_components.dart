@@ -5,7 +5,9 @@ import 'package:get/get.dart';
 import 'package:obaiah_mobile_app/utils/text_styles/textstyles.dart';
 
 import '../../../../../utils/colors/colors.dart';
+import '../../../../../utils/constants/app_urls.dart';
 import '../../../../../utils/spacing/padding.dart';
+import '../controller/account_controller.dart';
 
 class AccountTextFormComponent extends StatelessWidget {
   final TextEditingController textController;
@@ -46,7 +48,7 @@ class AccountTextFormComponent extends StatelessWidget {
   }
 }
 
-class CustomContainerComponent extends StatelessWidget {
+class CustomContainerComponent extends StatefulWidget {
   final String text;
   final Function()? onTapFunction;
   File? image;
@@ -56,23 +58,33 @@ class CustomContainerComponent extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<CustomContainerComponent> createState() =>
+      _CustomContainerComponentState();
+}
+
+class _CustomContainerComponentState extends State<CustomContainerComponent> {
+  AccountController accountController = Get.find<AccountController>();
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTapFunction,
+      onTap: widget.onTapFunction,
       child: Container(
         padding: padA10,
         height: 60,
         alignment: Alignment.center,
         decoration: BoxDecoration(
             color: cWhiteColor, borderRadius: BorderRadius.circular(10)),
-        child: image == null
-            ? Text(
-                text.tr,
-                textAlign: TextAlign.center,
-                style: auctionValueTextStyle,
-              )
+        child: widget.image == null
+            ? accountController.getUserModel.data!.idPhotoFront != null
+                ? Image.network(
+                    '${AppUrls.ImagebaseUrl}${accountController.getUserModel.data!.idPhotoFront}')
+                : Text(
+                    widget.text.tr,
+                    textAlign: TextAlign.center,
+                    style: auctionValueTextStyle,
+                  )
             : Image.file(
-                image!,
+                widget.image!,
                 fit: BoxFit.contain,
               ),
       ),

@@ -119,7 +119,7 @@ class MySoldHorsesListViewInfoCard extends StatelessWidget {
               ReUsableText(
                   text: homePageModel.totalPrice.toString(),
                   textStyle: homePagePrice),
-              homePageModel.isPaid == 1
+              homePageModel.isPaid == '1'
                   ? Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -222,13 +222,13 @@ class MySoldHorsesListViewInfoCard extends StatelessWidget {
                 padding: padA10,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    color: homePageModel.isPaid == 1
+                    color: homePageModel.isPaid == '1'
                         ? cGreenAccentTwoColor
                         : cRomanSilverColor,
                     borderRadius: BorderRadius.circular(6)),
                 child: FittedBox(
                   child: Text(
-                    homePageModel.isPaid == 1
+                    homePageModel.isDelivered == '1'
                         ? "the amount has been transferred to your bank account"
                             .tr
                         : "waiting for the transfer of horse delivery".tr,
@@ -379,13 +379,13 @@ class MySoldHorsesGridViewInfoCard extends StatelessWidget {
             padding: padA10,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: homePageModel.isPaid == 1
+                color: homePageModel.isPaid == '1'
                     ? cGreenAccentTwoColor
                     : cRomanSilverColor,
                 borderRadius: BorderRadius.circular(6)),
             child: FittedBox(
               child: Text(
-                homePageModel.isPaid == 1
+                homePageModel.isDelivered == '0'
                     ? "the amount has been transferred to your bank account".tr
                     : "waiting for the transfer of horse delivery".tr,
                 style: onyx810,
@@ -393,7 +393,7 @@ class MySoldHorsesGridViewInfoCard extends StatelessWidget {
             ),
           ),
           gapH10,
-          homePageModel.isPaid == 1
+          homePageModel.isPaid == '1'
               ? Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

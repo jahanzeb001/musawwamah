@@ -183,10 +183,9 @@ class _DeliveryConfirmDropOffScreenState
 
         log('Code send');
         Get.snackbar(
-          'success'.tr,
+          'notifications'.tr,
           'codesent'.tr,
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
 
         // Get.to(() => PinputExample(
@@ -196,10 +195,9 @@ class _DeliveryConfirmDropOffScreenState
       verificationCompleted: (credential) async {
         log('completed');
         Get.snackbar(
-          'success'.tr,
+          'notifications'.tr,
           'completed'.tr,
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
         credentials = credential;
         await FirebaseAuth.instance.signInWithCredential(credential);
@@ -210,7 +208,6 @@ class _DeliveryConfirmDropOffScreenState
           'Error',
           'failed!',
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
         if (ex.code == 'invalid-phone-number') {
           log('invalid phone number');
@@ -218,7 +215,6 @@ class _DeliveryConfirmDropOffScreenState
             'Error',
             'invalid phone number',
             snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.white,
           );
         }
         log(ex.code.toString());
@@ -239,10 +235,9 @@ class _DeliveryConfirmDropOffScreenState
 
       if (authResult.user != null) {
         Get.snackbar(
-          'success'.tr,
+          'notifications'.tr,
           'Conformed'.tr,
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
         // OTP verification successful
         setState(() {
@@ -254,7 +249,6 @@ class _DeliveryConfirmDropOffScreenState
           'errorwrongotp'.tr,
           'pleaseentercorrectotp'.tr,
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
         // OTP verification failed
         return false;
@@ -264,7 +258,6 @@ class _DeliveryConfirmDropOffScreenState
         'errorwrongotp'.tr,
         'pleaseentercorrectotp'.tr,
         snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.white,
       );
       // Error occurred during OTP verification
       print('Error verifying OTP: $e');
@@ -1272,7 +1265,7 @@ class _DeliveryConfirmDropOffScreenState
                       var personid = GetStorage().read("delPerId");
                       DeliveryConfirmPickUpController()
                           .customerRefusedToReceived(
-                              personid, widget.horseId, 1);
+                              personid, widget.horseId, 1, context);
                     },
                     style: ElevatedButton.styleFrom(
                       shadowColor: cPrimaryColor,

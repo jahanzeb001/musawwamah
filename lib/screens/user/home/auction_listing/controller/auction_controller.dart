@@ -9,6 +9,8 @@ import 'package:obaiah_mobile_app/screens/user/home/auction_listing/model/add_in
 import 'package:obaiah_mobile_app/screens/user/home/auction_listing/service/auction_listing_service.dart';
 import 'package:obaiah_mobile_app/screens/user/home/auction_listing/model/add_biding_horse_model.dart';
 
+import '../../home_auction/controller/home_auction_controller.dart';
+
 class AuctionController extends GetxController {
   RxBool isAuctionComingSoon = RxBool(false);
   var amountController = TextEditingController();
@@ -60,21 +62,31 @@ class AuctionController extends GetxController {
   }
 
   ////////////////////add insurance
+  var addingBid = false.obs;
+  var errorAddingBid = "".obs;
+  var addBidModel = AddInsuranceResponse();
+  final homeScreenController = Get.find<HomeAuctionController>();
+  void addBid(int hid, int uid, int amount, context) async {
+    addingInsurance.value = true;
+    errorAddingInsurance.value = "";
+    var res = await AuctionListingService.addBid(hid, uid, amount);
+    addingInsurance.value = false;
+    if (res != '') {
+      addInsuranceController.clear();
+      Get.snackbar("notification".tr, "added successfully");
+      addBiddingHorse(hid);
+      homeScreenController.getBiddingHorse();
+      //gotoback(context);
+    } else {
+      Get.snackbar("notification".tr, "Error no added");
+    }
+  }
+
+  ////////////////////add insurance
   var addingInsurance = false.obs;
   var errorAddingInsurance = "".obs;
   var addInsuranceModel = AddInsuranceResponse();
   var addInsuranceController = TextEditingController();
-
-  void addBid(int hid, int uid, int amount) async {
-    var res = await AuctionListingService.addBid(hid, uid, amount);
-
-    if (res) {
-      Get.snackbar("notification".tr, "insurance added successfully");
-    } else {
-      Get.snackbar("notification".tr, "Error no added ");
-    }
-  }
-
   void addInsurance(int uid, int amount) async {
     addingInsurance.value = true;
     errorAddingInsurance.value = "";
@@ -99,4 +111,8 @@ class AuctionController extends GetxController {
 
     print("user id is :$userId} ");
   }
+}
+
+gotoback(context) {
+  Navigator.pop(context);
 }

@@ -138,27 +138,21 @@ class _AccountScreenState extends State<AccountScreen> {
                                                             _showBottomSheetMenuForFront(
                                                                 context);
                                                           },
-                                                          child: accountController
-                                                                      .frontimage !=
-                                                                  null
-                                                              ? Image.network(
-                                                                  '${AppUrls.ImagebaseUrl}${accountController.getUserModel.data!.idPhotoFront}')
-                                                              : CustomContainerComponent(
-                                                                  image:
-                                                                      idFrontView,
-                                                                  onTapFunction:
-                                                                      () {
-                                                                    _showBottomSheetMenuForFront(
-                                                                        context);
+                                                          child:
+                                                              CustomContainerComponent(
+                                                            image: idFrontView,
+                                                            onTapFunction: () {
+                                                              _showBottomSheetMenuForFront(
+                                                                  context);
 
-                                                                    print(
-                                                                        "The image of the id Front View is ====== ${idFrontView}");
-                                                                    print(
-                                                                        "The image of the id Front View is ====== ${idBackView}");
-                                                                  },
-                                                                  text:
-                                                                      "id photo from the front",
-                                                                ))
+                                                              print(
+                                                                  "The image of the id Front View is ====== ${idFrontView}");
+                                                              print(
+                                                                  "The image of the id Front View is ====== ${idBackView}");
+                                                            },
+                                                            text:
+                                                                "id photo from the front",
+                                                          ))
                                                       : CustomContainerComponent(
                                                           image: idFrontView,
                                                           onTapFunction: () {
@@ -182,22 +176,16 @@ class _AccountScreenState extends State<AccountScreen> {
                                                             _showBottomSheetMenu(
                                                                 context);
                                                           },
-                                                          child: accountController
-                                                                      .backimage !=
-                                                                  null
-                                                              ? Image.network(
-                                                                  '${AppUrls.ImagebaseUrl}${accountController.getUserModel.data!.idPhotoBack}')
-                                                              : CustomContainerComponent(
-                                                                  image:
-                                                                      idBackView,
-                                                                  onTapFunction:
-                                                                      () {
-                                                                    _showBottomSheetMenu(
-                                                                        context);
-                                                                  },
-                                                                  text:
-                                                                      "id photo from the back",
-                                                                ),
+                                                          child:
+                                                              CustomContainerComponent(
+                                                            image: idBackView,
+                                                            onTapFunction: () {
+                                                              _showBottomSheetMenu(
+                                                                  context);
+                                                            },
+                                                            text:
+                                                                "id photo from the back",
+                                                          ),
                                                         )
                                                       : CustomContainerComponent(
                                                           image: idBackView,
@@ -291,45 +279,31 @@ class _AccountScreenState extends State<AccountScreen> {
                                                     .updatingUser.value,
                                                 backGroundColor: cPrimaryColor,
                                                 onPressedFunction: () {
-                                                  if (accountController
-                                                              .getUserModel
-                                                              .data!
-                                                              .idPhotoFront ==
-                                                          null ||
+                                                  accountController.UpdateUser(
+                                                      accountController.uid,
                                                       accountController
-                                                              .getUserModel
-                                                              .data!
-                                                              .idPhotoBack ==
-                                                          null) {
-                                                    Get.snackbar("Alert",
-                                                        "Select Id Images");
-                                                  } else {
-                                                    accountController.UpdateUser(
-                                                        accountController.uid,
-                                                        accountController
-                                                            .fullNameController
-                                                            .text,
-                                                        accountController
-                                                            .idNumberController
-                                                            .text,
-                                                        accountController
-                                                            .regionController
-                                                            .text,
-                                                        accountController
-                                                            .cityProvinceController
-                                                            .text,
-                                                        accountController
-                                                            .mobileNumberController
-                                                            .text,
-                                                        accountController
-                                                            .bankNameController
-                                                            .text,
-                                                        accountController
-                                                            .ibanNoController
-                                                            .text,
-                                                        idBackView!,
-                                                        idFrontView!);
-                                                  }
+                                                          .fullNameController
+                                                          .text,
+                                                      accountController
+                                                          .idNumberController
+                                                          .text,
+                                                      accountController
+                                                          .regionController
+                                                          .text,
+                                                      accountController
+                                                          .cityProvinceController
+                                                          .text,
+                                                      accountController
+                                                          .mobileNumberController
+                                                          .text,
+                                                      accountController
+                                                          .bankNameController
+                                                          .text,
+                                                      accountController
+                                                          .ibanNoController
+                                                          .text,
+                                                      idBackView!,
+                                                      idFrontView!);
                                                 },
                                               )),
                                         ),

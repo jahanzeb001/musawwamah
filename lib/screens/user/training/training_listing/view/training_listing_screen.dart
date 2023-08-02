@@ -261,6 +261,12 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                                       1,
                                                       originalString1.length -
                                                           1);
+                                              log('$horseridingDays');
+                                              String inputString =
+                                                  '$horseridingDays';
+                                              String outputString = inputString
+                                                  .replaceAll('"', '');
+                                              log(outputString);
 
                                               return Row(
                                                 mainAxisAlignment:
@@ -279,7 +285,7 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                                         MainAxisSize.min,
                                                     children: [
                                                       Text(
-                                                        '$horseridingDays',
+                                                        '$outputString',
                                                         // "الأحد - الثلاثاء - الأربعاء",
                                                         style: onyx711,
                                                       ),
@@ -400,40 +406,57 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                             ),
                                             Flexible(
                                                 child: ElevatedButton(
-                                                    onPressed: () {
-                                                      int month = int.parse(
-                                                          hoesebackController
-                                                              .value.text);
-                                                      int price = int.parse(
-                                                          '${trainingListingController.myTraningListingModel.data!.region!.services![0].pivot!.price}');
-                                                      ;
-                                                      var totalPaid =
-                                                          month * price;
-                                                      int userId = int.parse(
-                                                          '${trainingListingController.myTraningListingModel.data!.trainerUserId}');
-                                                      int hospitilityId = int.parse(
-                                                          '${trainingListingController.myTraningListingModel.data!.region!.services![0].id}');
-                                                      if (month == 0) {
-                                                        Get.snackbar(
-                                                          "notification".tr,
-                                                          "no services selected to be purchased"
-                                                              .tr,
-                                                        );
-                                                      } else {
-                                                        showDialog(
-                                                            context: context,
-                                                            builder: (context) =>
-                                                                AddAmountDialog(
-                                                                  price:
-                                                                      totalPaid,
-                                                                  userid:
-                                                                      userId,
-                                                                  hospitilityid:
-                                                                      hospitilityId,
-                                                                  month: month,
-                                                                ));
-                                                      }
-                                                    },
+                                                    onPressed:
+                                                        trainingListingController
+                                                                    .myTraningListingModel
+                                                                    .data!
+                                                                    .region!
+                                                                    .services![
+                                                                        0]
+                                                                    .pivot!
+                                                                    .enabled !=
+                                                                '1'
+                                                            ? null
+                                                            : () {
+                                                                int month = int.parse(
+                                                                    hoesebackController
+                                                                        .value
+                                                                        .text);
+                                                                int price =
+                                                                    int.parse(
+                                                                        '${trainingListingController.myTraningListingModel.data!.region!.services![0].pivot!.price}');
+                                                                ;
+                                                                var totalPaid =
+                                                                    month *
+                                                                        price;
+                                                                int userId =
+                                                                    int.parse(
+                                                                        '${trainingListingController.myTraningListingModel.data!.trainerUserId}');
+                                                                int hospitilityId =
+                                                                    int.parse(
+                                                                        '${trainingListingController.myTraningListingModel.data!.region!.services![0].id}');
+                                                                if (month ==
+                                                                    0) {
+                                                                  Get.snackbar(
+                                                                    "notification"
+                                                                        .tr,
+                                                                    "no services selected to be purchased"
+                                                                        .tr,
+                                                                  );
+                                                                } else {
+                                                                  showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (context) =>
+                                                                              AddAmountDialog(
+                                                                                price: totalPaid,
+                                                                                userid: userId,
+                                                                                hospitilityid: hospitilityId,
+                                                                                month: month,
+                                                                              ));
+                                                                }
+                                                              },
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                       backgroundColor:
@@ -546,38 +569,61 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
                                             ),
                                             Flexible(
                                                 child: ElevatedButton(
-                                                    onPressed: () {
-                                                      int month = int.parse(
-                                                          numberofShareController
-                                                              .value.text);
-                                                      int price = int.parse(
-                                                          '${trainingListingController.myTraningListingModel.data!.region!.services![1].pivot!.price}');
-                                                      var totalPaid =
-                                                          month * price;
-                                                      int userId = int.parse(
-                                                          '${trainingListingController.myTraningListingModel.data!.id}');
-                                                      int hospitilityId = int.parse(
-                                                          '${trainingListingController.myTraningListingModel.data!.region!.services![0].id}');
-                                                      if (month == 0) {
-                                                        Get.snackbar(
-                                                          "notification".tr,
-                                                          "no services selected to be purchased"
-                                                              .tr,
-                                                        );
-                                                      } else {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (context) =>
-                                                              AddAmountDialog(
-                                                            price: totalPaid,
-                                                            userid: userId,
-                                                            hospitilityid:
-                                                                '$hospitilityId',
-                                                            month: month,
-                                                          ),
-                                                        );
-                                                      }
-                                                    },
+                                                    onPressed:
+                                                        trainingListingController
+                                                                    .myTraningListingModel
+                                                                    .data!
+                                                                    .region!
+                                                                    .services![
+                                                                        1]
+                                                                    .pivot!
+                                                                    .enabled !=
+                                                                '1'
+                                                            ? null
+                                                            : () {
+                                                                int month = int.parse(
+                                                                    numberofShareController
+                                                                        .value
+                                                                        .text);
+                                                                int price =
+                                                                    int.parse(
+                                                                        '${trainingListingController.myTraningListingModel.data!.region!.services![1].pivot!.price}');
+                                                                var totalPaid =
+                                                                    month *
+                                                                        price;
+                                                                int userId =
+                                                                    int.parse(
+                                                                        '${trainingListingController.myTraningListingModel.data!.id}');
+                                                                int hospitilityId =
+                                                                    int.parse(
+                                                                        '${trainingListingController.myTraningListingModel.data!.region!.services![0].id}');
+                                                                if (month ==
+                                                                    0) {
+                                                                  Get.snackbar(
+                                                                    "notification"
+                                                                        .tr,
+                                                                    "no services selected to be purchased"
+                                                                        .tr,
+                                                                  );
+                                                                } else {
+                                                                  showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (context) =>
+                                                                            AddAmountDialog(
+                                                                      price:
+                                                                          totalPaid,
+                                                                      userid:
+                                                                          userId,
+                                                                      hospitilityid:
+                                                                          '$hospitilityId',
+                                                                      month:
+                                                                          month,
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              },
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                       backgroundColor:

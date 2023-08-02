@@ -8,6 +8,7 @@ import 'package:obaiah_mobile_app/screens/user/add_new_horse/model/upload_images
 import 'package:obaiah_mobile_app/screens/user/add_new_horse/service/add_new_horse_service.dart';
 import '../../../../utils/constants/app_urls.dart';
 import '../../../../utils/constants/lists.dart';
+import '../../home/home/controller/home_screen_controller.dart';
 import '../model/expert_opinion_data_model.dart';
 
 class AddNewHorseController extends GetxController {
@@ -164,6 +165,7 @@ class AddNewHorseController extends GetxController {
     userId = GetStorage().read("userId");
   }
 
+  final homeScreenController = Get.find<HomeScreenController>();
   void addNewHorse(BuildContext context, File fview, File bview, File lview,
       File rview, List<File> moreimages, File video) async {
     error.value = "";
@@ -217,7 +219,7 @@ class AddNewHorseController extends GetxController {
 
     if (res is AddNewHorseResponse) {
       addNewHorseModel = res;
-
+      homeScreenController.getApprovedHorses();
       Get.snackbar(
         "notification".tr,
         res.message!,

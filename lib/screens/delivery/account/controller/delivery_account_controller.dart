@@ -44,10 +44,10 @@ class DeliveryAccountController extends GetxController {
   var error = "".obs;
   var deliveryAccountModel = DeliveryAccountResponse();
 
-  String idBackBase64 = "";
-  String idFrontBase64 = "";
-  String idFrontextension = "";
-  String idBackextension = "";
+  RxString idBackBase64 = "".obs;
+  RxString idFrontBase64 = "".obs;
+  RxString idFrontextension = "".obs;
+  RxString idBackextension = "".obs;
 
   @override
   void onInit() {
@@ -112,15 +112,15 @@ class DeliveryAccountController extends GetxController {
       List<String>? ordersAcceptanceRegionList) async {
     error2.value = "";
     updatingAccount.value = true;
-    fileToString(idPhotoFront!, idPhotoBack!);
+    await fileToString(idPhotoFront!, idPhotoBack!);
     var res = await UpdateDeliveryAccountService.updateUser2(
         userId: userId,
         fullname: fullname,
         region: region,
         cityOrProvince: cityOrProvince,
         idNumber: idNumber,
-        idPhotoFront: idFrontBase64,
-        idPhotoBack: idBackBase64,
+        idPhotoFront: idFrontBase64.value,
+        idPhotoBack: idBackBase64.value,
         mobileNumber: mobileNumber,
         bankName: bankName,
         ibanNumber: ibanNumber,
@@ -145,12 +145,12 @@ class DeliveryAccountController extends GetxController {
     File idBview,
   ) async {
     /////////////////////////////////////////////////////////////
-    idFrontBase64 = base64Encode(await idFview.readAsBytes());
+    idFrontBase64.value = base64Encode(await idFview.readAsBytes());
     String extension = path.extension(idFview.path);
-    idFrontextension = extension.substring(1);
+    idFrontextension.value = extension.substring(1);
     /////////////////////////////////////////////////////////////
-    idBackBase64 = base64Encode(await idBview.readAsBytes());
+    idBackBase64.value = base64Encode(await idBview.readAsBytes());
     String extension2 = path.extension(idBview.path);
-    idBackextension = extension2.substring(1);
+    idBackextension.value = extension2.substring(1);
   }
 }

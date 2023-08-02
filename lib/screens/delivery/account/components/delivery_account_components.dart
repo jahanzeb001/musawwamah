@@ -7,6 +7,7 @@ import 'package:obaiah_mobile_app/utils/spacing/gaps.dart';
 
 import '../../../../generated/assets.dart';
 import '../../../../utils/colors/colors.dart';
+import '../../../../utils/constants/app_urls.dart';
 import '../../../../utils/spacing/padding.dart';
 import '../../../../utils/text_styles/textstyles.dart';
 import '../controller/delivery_account_controller.dart';
@@ -92,14 +93,16 @@ class _CustomContainerComponentState extends State<CustomContainerComponent> {
         decoration: BoxDecoration(
             color: cWhiteColor, borderRadius: BorderRadius.circular(10)),
         child: widget.image == null
-            ? Image.network(
-                '${deliveryAccountController.deliveryAccountModel.data!.deliveryAccount!.idPhotoFront}')
-            // Text(
-            //     widget.text.tr,
-            //     textAlign: TextAlign.center,
-            //     style: auctionValueTextStyle,
-            //   )
-
+            ? deliveryAccountController.deliveryAccountModel.data!
+                        .deliveryAccount!.idPhotoBack !=
+                    null
+                ? Image.network(
+                    '${AppUrls.ImagebaseUrl}${deliveryAccountController.deliveryAccountModel.data!.deliveryAccount!.idPhotoBack}')
+                : Text(
+                    widget.text.tr,
+                    textAlign: TextAlign.center,
+                    style: auctionValueTextStyle,
+                  )
             : Image.file(widget.image!),
       ),
     );

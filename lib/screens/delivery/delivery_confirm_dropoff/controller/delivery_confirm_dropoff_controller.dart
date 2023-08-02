@@ -13,6 +13,7 @@ import 'package:otp_text_field/otp_text_field.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 import '../../delivery_confirm_pickup/models/delivery_confirm_pickup_model.dart';
+import '../../my_deliveries/controller/my_deliveries_controller.dart';
 
 class DeliveryConfirmDropOffController extends GetxController {
   CarouselSliderController sliderController = CarouselSliderController();
@@ -32,7 +33,7 @@ class DeliveryConfirmDropOffController extends GetxController {
   RxBool deliveryConfirmDropOffLoading = false.obs;
   RxString error1 = "".obs;
   String savedBase64Image = "";
-
+  final myDeliveryController = Get.find<MyDeliveriesController>();
   void confirmDeliveryDropOff(
       {File? horseImageFromRight,
       File? horseImageFromLeft,
@@ -42,7 +43,8 @@ class DeliveryConfirmDropOffController extends GetxController {
       File? horseVideo,
       String? notesText,
       File? signature,
-      int? hid}) async {
+      int? hid,
+      BuildContext? context}) async {
     deliveryConfirmDropOffLoading.value = true;
     error1.value = "";
     String completeBase64Image = await convertFileToBase64(signature!);
@@ -66,7 +68,8 @@ class DeliveryConfirmDropOffController extends GetxController {
             horseVideo: deliveryConfirmPickupModel.horseVideo,
             notesImage: deliveryConfirmPickupModel.notesImage,
             signature: completeBase64Image,
-            notes: notesText);
+            notes: notesText,
+            context: context);
       }
       //   confirmPickup(notesText ?? "", hid ?? 0);
 
@@ -91,7 +94,8 @@ class DeliveryConfirmDropOffController extends GetxController {
       String? horseBackView,
       String? horseVideo,
       String? signature,
-      String? notes}) async {
+      String? notes,
+      BuildContext? context}) async {
     deliveryConfirmDropOffLoading.value = true;
     error1.value = "";
 
@@ -110,7 +114,8 @@ class DeliveryConfirmDropOffController extends GetxController {
     if (res is ConfirmDropOffResponse) {
       confirmDroOffModel = res;
       Get.snackbar("notifications", confirmDroOffModel.message.toString());
-      Get.off(() => MyDeliveryScreen());
+      myDeliveryController.loadData();
+      gotoback(context);
     } else {
       deliveryConfirmDropOffLoading.value = false;
       error1.value = res.toString();
@@ -132,4 +137,8 @@ class DeliveryConfirmDropOffController extends GetxController {
 
     return completeBase64Image;
   }
+}
+
+gotoback(context) {
+  Navigator.pop(context);
 }

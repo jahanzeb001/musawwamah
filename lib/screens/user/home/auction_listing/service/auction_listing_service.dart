@@ -25,7 +25,12 @@ class AuctionListingService {
   /////////////////////add bidd
 
   static Future<dynamic> addBid(int hid, int uid, int amount) async {
-    Map data = {"horseId": hid, "userId": uid, "amount": amount};
+    Map data = {
+      "horseId": hid,
+      "userId": uid,
+      "amount": amount,
+      "status": true
+    };
     try {
       var url = "${AppUrls.baseUrl}${AppUrls.addBid}";
       var res = await BaseClientClass.post(url, data);

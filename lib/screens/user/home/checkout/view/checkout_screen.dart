@@ -423,6 +423,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             checkoutController
                                                 .checkNeedTransportServices(
                                                     value: val!);
+
                                             if (val) {
                                               var price =
                                                   widget.homeModel.data!.price;

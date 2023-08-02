@@ -198,7 +198,7 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                     ReUsableText(
                         text: homePageModel.totalPrice.toString(),
                         textStyle: homePagePrice),
-                    homePageModel.isPaid == '0'
+                    homePageModel.isDelivered == '1'
                         ? OutlinedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
@@ -247,7 +247,7 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    homePageModel.isDelivered == '0'
+                    homePageModel.isDelivered == '1'
                         ? gapH7
                         : const SizedBox.shrink()
                   ],

@@ -53,9 +53,7 @@ class _MyHorsesStableScreenState extends State<MyHorsesStableScreen> {
                               },
                               error: myHorsesStableController.error.value),
                         )
-                      : myHorsesStableController
-                                  .stableHorseModel.data!.length ==
-                              0
+                      : myHorsesStableController.stableHorseModel.data == null
                           ? Center(
                               child: NoDataMessage(message: "No Data Found"))
                           : Container(

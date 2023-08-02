@@ -1,4 +1,7 @@
 import 'dart:developer';
+import 'package:get/get.dart';
+
+import '../screens/user/home/checkout/controller/checkout_controller.dart';
 import '../utils/constants/app_urls.dart';
 import '../utils/constants/base_client.dart';
 import 'package:http/http.dart' as http;
@@ -114,6 +117,9 @@ class AddPaymentRecord {
       var res = await BaseClientClass.post(url, data);
 
       if (res is http.Response) {
+        final checkoutController = Get.find<CheckoutController>();
+        checkoutController.needTransportServices.value = false;
+        log('mychecked services =====> ${checkoutController.needTransportServices}');
         log(res.body);
         return (res.body);
       } else {

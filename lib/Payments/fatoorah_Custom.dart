@@ -354,10 +354,11 @@ class _FatoorahCustomState extends State<FatoorahCustom> {
               delivertome: 'Makkah',
               dropoff: 'riyadh',
               deliveryfee: '1',
-              transport: '1');
-          var dddd = 'sub';
-          var bal = int.parse(widget.totalprice).toDouble();
-          setBalance(bal, dddd);
+              transport:
+                  checkoutController.needTransportServices == true ? '1' : '0');
+          // var dddd = 'sub';
+          // var bal = int.parse(widget.totalprice).toDouble();
+          // setBalance(bal, dddd);
         } else if (widget.role == 'traning') {
           var useridd = GetStorage().read("userId");
           AddPaymentRecord.addTraning(

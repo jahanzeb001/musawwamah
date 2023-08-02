@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:obaiah_mobile_app/screens/user/add_new_horse/model/upload_images_response.dart';
@@ -75,10 +77,6 @@ class MyHorsesStableController extends GetxController {
   var addHorseImage = AddImagesResponse();
 
   void modifyHorse({
-    File? fview,
-    File? bview,
-    File? lview,
-    File? rview,
     int? hid,
     String? nameOfHorse,
     String? type,
@@ -96,21 +94,23 @@ class MyHorsesStableController extends GetxController {
     dynamic expertOpinionPrice,
     dynamic totalPrice,
     String? ibanNumber,
+    BuildContext? context,
   }) async {
     loading3.value = true;
     error3.value = "";
 
-    var res1 =
-        await MyHorseStableService.uploadFiles(fview!, bview!, lview!, rview!);
-    if (res1 is AddImagesResponse) {
-      addHorseImage = res1;
-    } else {
-      loading.value = false;
-      Get.snackbar(
-        "notification".tr,
-        error.value,
-      );
-    }
+    // var res1 =
+    //     await MyHorseStableService.uploadFiles(fview!, bview!, lview!, rview!);
+    // if (res1 is AddImagesResponse) {
+    //   log('$res1');
+    //   addHorseImage = res1;
+    // } else {
+    //   loading.value = false;
+    //   Get.snackbar(
+    //     "notification".tr,
+    //     error.value,
+    //   );
+    // }
     var res = await MyHorseStableService.modifyHorse(
         hid: hid,
         nameOfHorse: nameOfHorse,
@@ -140,12 +140,16 @@ class MyHorsesStableController extends GetxController {
       modifyHorseModel = res;
 
       Get.snackbar("notification".tr, res.message.toString());
-
-      Get.back();
+      loadData();
+      gotoback(context);
     } else {
       loading3.value = false;
       error3.value = res.toString();
       Get.snackbar("notification".tr, error3.value);
     }
   }
+}
+
+gotoback(context) {
+  Navigator.pop(context);
 }

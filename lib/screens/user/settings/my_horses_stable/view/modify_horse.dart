@@ -153,69 +153,70 @@ class _ModifiyStableHorseState extends State<ModifiyStableHorse> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 12),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: cCulturedWhiteColor,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          gapW30,
-                          Expanded(
-                              child: CustomContainerComponent2(
-                            onTapFunction: () {
-                              _showBottomSheetMenu(context);
-                            },
-                            text: "horse back view",
-                            image: horseBackView,
-                          )),
-                          gapW40,
-                          Expanded(
-                            child: CustomContainerComponent2(
-                                onTapFunction: () {
-                                  _horseFrontViewMenu(context);
-                                },
-                                image: horseFrontView,
-                                text: "horse image from front"),
-                          ),
-                          gapW30,
-                        ],
-                      ),
-                      gapH20,
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          gapW30,
-                          Expanded(
-                              child: CustomContainerComponent2(
-                                  onTapFunction: () {
-                                    _horseLeftViewMenu(context);
-                                  },
-                                  image: horseLeftView,
-                                  text: "horse image from left")),
-                          gapW40,
-                          Expanded(
-                            child: CustomContainerComponent2(
-                                onTapFunction: () {
-                                  _horseRightViewMenu(context);
-                                },
-                                image: horseRightView,
-                                text: "picture of the horse from the right"),
-                          ),
-                          gapW30,
-                        ],
-                      ),
-                    ]),
-              ),
-            ),
+            // Container(
+            //   margin: EdgeInsets.symmetric(horizontal: 12),
+            //   alignment: Alignment.center,
+            //   decoration: BoxDecoration(
+            //       color: cCulturedWhiteColor,
+            //       borderRadius: BorderRadius.circular(10)),
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(vertical: 10),
+            //     child: Column(
+            //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //         mainAxisSize: MainAxisSize.min,
+            //         children: [
+            //           Row(
+            //             mainAxisSize: MainAxisSize.min,
+            //             children: [
+            //               gapW30,
+            //               Expanded(
+            //                   child: CustomContainerComponent2(
+            //                 onTapFunction: () {
+            //                   _showBottomSheetMenu(context);
+            //                 },
+            //                 text: "horse back view",
+            //                 image: horseBackView,
+            //               )),
+            //               gapW40,
+            //               Expanded(
+            //                 child: CustomContainerComponent2(
+            //                     onTapFunction: () {
+            //                       _horseFrontViewMenu(context);
+            //                     },
+            //                     image: horseFrontView,
+            //                     text: "horse image from front"),
+            //               ),
+            //               gapW30,
+            //             ],
+            //           ),
+            //           gapH20,
+            //           Row(
+            //             mainAxisSize: MainAxisSize.min,
+            //             children: [
+            //               gapW30,
+            //               Expanded(
+            //                   child: CustomContainerComponent2(
+            //                       onTapFunction: () {
+            //                         _horseLeftViewMenu(context);
+            //                       },
+            //                       image: horseLeftView,
+            //                       text: "horse image from left")),
+            //               gapW40,
+            //               Expanded(
+            //                 child: CustomContainerComponent2(
+            //                     onTapFunction: () {
+            //                       _horseRightViewMenu(context);
+            //                     },
+            //                     image: horseRightView,
+            //                     text: "picture of the horse from the right"),
+            //               ),
+            //               gapW30,
+            //             ],
+            //           ),
+            //         ]),
+            //   ),
+            // ),
+
             gapH20,
             Container(
               margin: EdgeInsets.symmetric(horizontal: 12),
@@ -463,35 +464,25 @@ class _ModifiyStableHorseState extends State<ModifiyStableHorse> {
               height: 45,
               child: Obx(() => ElevatedButton(
                   onPressed: () {
-                    if (horseFrontView == null &&
-                        horseBackView == null &&
-                        horseLeftView == null &&
-                        horseRightView == null) {
-                      Get.snackbar("notification", "Please select all images ");
-                    } else {
-                      myHorsesStableController.modifyHorse(
-                          fview: horseFrontView,
-                          bview: horseBackView,
-                          lview: horseLeftView,
-                          rview: horseRightView,
-                          hid: widget.horseId,
-                          nameOfHorse: nameOfHorse.text,
-                          fathersName: fathersName.text,
-                          mothersName: mothersName.text,
-                          type: type.text,
-                          monthOfBirth: monthOfBirth.text,
-                          yearOfBirth: yearOfBirth.text,
-                          age: age.text,
-                          color: color.text,
-                          casuality: casuality.text,
-                          originality: orignality.text,
-                          region: region.text,
-                          city: city.text,
-                          siteCommision: siteCommision.text,
-                          expertOpinionPrice: expertOpinionPrice.text,
-                          totalPrice: totalPrice.text,
-                          ibanNumber: ibanNumber.text);
-                    }
+                    myHorsesStableController.modifyHorse(
+                        hid: widget.horseId,
+                        nameOfHorse: nameOfHorse.text,
+                        fathersName: fathersName.text,
+                        mothersName: mothersName.text,
+                        type: type.text,
+                        monthOfBirth: monthOfBirth.text,
+                        yearOfBirth: yearOfBirth.text,
+                        age: age.text,
+                        color: color.text,
+                        casuality: casuality.text,
+                        originality: orignality.text,
+                        region: region.text,
+                        city: city.text,
+                        siteCommision: siteCommision.text,
+                        expertOpinionPrice: expertOpinionPrice.text,
+                        totalPrice: totalPrice.text,
+                        ibanNumber: ibanNumber.text,
+                        context: context);
                   },
                   style: ElevatedButton.styleFrom(
                     shadowColor: cPrimaryColor,
