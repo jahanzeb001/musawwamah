@@ -42,9 +42,10 @@ class AuctionListingScreenView extends StatefulWidget {
 class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
   final auctionListingController = Get.find<AuctionController>();
   final walletPortfolioController = Get.put(WalletPortfolioController());
-  Timer? _timer;
-  Duration? _remainingTime;
-
+  // Timer? _timer;
+  // Duration? _remainingTime;
+  late Timer _timer;
+  Duration _remainingTime = Duration();
   //Duration? formattedTime;
 
   @override
@@ -54,7 +55,7 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
     walletPortfolioController.getMyWallet(walletPortfolioController.userId!);
     auctionListingController.loading2.value = true;
     auctionListingController.addBiddingHorse(widget.horseId!);
-    _remainingTime = _parseRemainingTime(widget.remainingTime);
+    _remainingTime = parseDuration(widget.remainingTime.toString());
 
     // initializeDateFormatting("ar_SA", "en_PK").then((_) {
     //   // DateTime currentTime = DateTime.now().toUtc().add(Duration(hours: 3)); // Adjust for Saudi Arabia time zone
@@ -69,8 +70,31 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
     //  print(_remainingTime);
     //   //String formattedTime = DateFormat('HH:mm:ss', 'en_PK').format(currentTime);
     // });
-    _startTimer();
+    //_startTimer();
     super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _remainingTime = parseDuration(widget.remainingTime.toString());
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime.inSeconds > 0) {
+          _remainingTime -= Duration(seconds: 1);
+        } else {
+          _timer.cancel();
+        }
+      });
+    });
+  }
+
+  Duration parseDuration(String timeString) {
+    final parts = timeString.split(':');
+    final hours = int.parse(parts[0]);
+    final minutes = int.parse(parts[1]);
+    final seconds = double.parse(parts[2]).floor();
+
+    return Duration(hours: hours, minutes: minutes, seconds: seconds);
   }
 
   // Duration? _timeParsing(String s){
@@ -87,17 +111,17 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
   //   return _remainingTime;
   // }
 
-  void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_remainingTime!.inSeconds <= 0) {
-          _remainingTime = _remainingTime! - Duration(seconds: 1);
-        } else {
-          _timer!.cancel();
-        }
-      });
-    });
-  }
+  // void _startTimer() {
+  //   _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+  //     setState(() {
+  //       if (_remainingTime!.inSeconds <= 0) {
+  //         _remainingTime = _remainingTime! - Duration(seconds: 1);
+  //       } else {
+  //         _timer!.cancel();
+  //       }
+  //     });
+  //   });
+  // }
 
   var startTime;
   var endTime;
@@ -112,35 +136,35 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
   //   return Duration(hours: hours, minutes: minutes, seconds: seconds);
   // }
 
-  Duration _parseRemainingTime(String? remainingTimeString) {
-    if (remainingTimeString!.isEmpty) {
-      throw ArgumentError('Invalid remainingTimeString: $remainingTimeString');
-    }
+  // Duration _parseRemainingTime(String? remainingTimeString) {
+  //   if (remainingTimeString!.isEmpty) {
+  //     throw ArgumentError('Invalid remainingTimeString: $remainingTimeString');
+  //   }
 
-    final parts = remainingTimeString.split(':');
+  //   final parts = remainingTimeString.split(':');
 
-    if (parts.length != 3) {
-      throw ArgumentError(
-          'Invalid remainingTimeString format: $remainingTimeString');
-    }
+  //   if (parts.length != 3) {
+  //     throw ArgumentError(
+  //         'Invalid remainingTimeString format: $remainingTimeString');
+  //   }
 
-    try {
-      final hours = int.parse(parts[0]);
-      final minutes = int.parse(parts[1]);
-      final seconds = int.parse(parts[2]);
-      return Duration(hours: hours, minutes: minutes, seconds: seconds);
-    } catch (e) {
-      throw FormatException(
-          'Invalid number format in remainingTimeString: $remainingTimeString');
-    }
-  }
+  //   try {
+  //     final hours = int.parse(parts[0]);
+  //     final minutes = int.parse(parts[1]);
+  //     final seconds = int.parse(parts[2]);
+  //     return Duration(hours: hours, minutes: minutes, seconds: seconds);
+  //   } catch (e) {
+  //     throw FormatException(
+  //         'Invalid number format in remainingTimeString: $remainingTimeString');
+  //   }
+  // }
 
-  String _formatTime(Duration duration) {
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes.remainder(60);
-    final seconds = duration.inSeconds.remainder(60);
-    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-  }
+  // String _formatTime(Duration duration) {
+  //   final hours = duration.inHours;
+  //   final minutes = duration.inMinutes.remainder(60);
+  //   final seconds = duration.inSeconds.remainder(60);
+  //   return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -252,8 +276,7 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                                                 children: [
                                                   Text(
                                                     // "$formattedTime",
-                                                    _formatTime(
-                                                        _remainingTime!),
+                                                    '${_remainingTime.inHours.toString().padLeft(2, '0')}:${(_remainingTime.inMinutes % 60).toString().padLeft(2, '0')}:${(_remainingTime.inSeconds % 60).toString().padLeft(2, '0')}',
                                                     style: const TextStyle(
                                                         fontFamily: "Tajawal",
                                                         color:
@@ -444,8 +467,7 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                                                     ),
                                                     child: Text(
                                                       // "$formattedTime",
-                                                      _formatTime(
-                                                          _remainingTime!),
+                                                      '${_remainingTime.inHours.toString().padLeft(2, '0')}:${(_remainingTime.inMinutes % 60).toString().padLeft(2, '0')}:${(_remainingTime.inSeconds % 60).toString().padLeft(2, '0')}',
                                                       style: onyx928,
                                                     ),
                                                   ),
@@ -679,8 +701,7 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                                                           ),
                                                           child: Text(
                                                             // "$formattedTime",
-                                                            _formatTime(
-                                                                _remainingTime!),
+                                                            '${_remainingTime.inHours.toString().padLeft(2, '0')}:${(_remainingTime.inMinutes % 60).toString().padLeft(2, '0')}:${(_remainingTime.inSeconds % 60).toString().padLeft(2, '0')}',
                                                             style:
                                                                 auctionLargeTextStyle,
                                                           ),

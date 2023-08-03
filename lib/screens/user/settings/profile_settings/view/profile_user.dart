@@ -13,6 +13,7 @@ import '../../../../../utils/constants/constants.dart';
 import '../../../../../utils/spacing/padding.dart';
 import '../../../../../utils/text_styles/textstyles.dart';
 import '../../../../delivery/delivery_home/view/delivery_home_screen.dart';
+import '../../../support/supportScreen.dart';
 import '../../wallet_portfolio/controller/wallet_portfolio_controller.dart';
 import '../components/profile_components.dart';
 import '../controller/profile_controller.dart';
@@ -157,7 +158,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   gapW30,
                   Expanded(
                     child: ProfileOptionWidget(
-                      onTapFunction: () {},
+                      onTapFunction: () {
+                        Get.to(() => UserSupportScreen());
+                      },
                       assetName: Assets.profileImagesHelp,
                       text: "help",
                     ),

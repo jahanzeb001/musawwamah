@@ -46,6 +46,7 @@ dependencies:
   flutter_credit_card: ^3.0.6
   flutter_webview_plugin: ^0.4.0
   shared_preferences: ^2.2.0
+  material_design_icons_flutter: ^7.0.7296
   
   
   

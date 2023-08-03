@@ -73,7 +73,7 @@ class OperationHistoryTile extends StatelessWidget {
   }
 }
 
-class BottomButtonComponent extends StatelessWidget {
+class BottomButtonComponent extends StatefulWidget {
   final String assetName;
   final Color? backGroundColor;
   final Function()? onPressFunction;
@@ -88,16 +88,21 @@ class BottomButtonComponent extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<BottomButtonComponent> createState() => _BottomButtonComponentState();
+}
+
+class _BottomButtonComponentState extends State<BottomButtonComponent> {
+  @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      icon: SvgPicture.asset(assetName),
+      icon: SvgPicture.asset(widget.assetName),
       style: ElevatedButton.styleFrom(
-          backgroundColor: backGroundColor,
+          backgroundColor: widget.backGroundColor,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
-      onPressed: onPressFunction,
+      onPressed: widget.onPressFunction,
       label: Text(
-        text.tr,
+        widget.text.tr,
         style: black712,
       ),
     );
@@ -105,11 +110,17 @@ class BottomButtonComponent extends StatelessWidget {
 }
 
 //Component BidAdditionDialog
-class AddAmountDialog extends StatelessWidget {
+class AddAmountDialog extends StatefulWidget {
   final TextEditingController ibanNoController;
   const AddAmountDialog({Key? key, required this.ibanNoController})
       : super(key: key);
 
+  @override
+  State<AddAmountDialog> createState() => _AddAmountDialogState();
+}
+
+class _AddAmountDialogState extends State<AddAmountDialog> {
+  TextEditingController _balanceController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final walletPortfolioController = Get.find<WalletPortfolioController>();
@@ -137,9 +148,36 @@ class AddAmountDialog extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: WalletPortfolioTextFormComponent(
-                        text: "enter balance",
-                        textController: ibanNoController),
+                    child: TextFormField(
+                      controller: _balanceController,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontFamily: "Tajawal",
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14),
+                      decoration: InputDecoration(
+                        filled: true,
+                        labelStyle: const TextStyle(
+                          fontFamily: "Tajawal",
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: cOnyxColor,
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        label: Center(child: Text('enter balance'.tr)),
+                        fillColor: cWhiteColor,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            borderSide: BorderSide.none),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter Balance  ';
+                        }
+
+                        return null;
+                      },
+                    ),
                   ),
                   Expanded(
                     child: AmountAdditionBoxComponent(
@@ -162,12 +200,12 @@ class AddAmountDialog extends StatelessWidget {
                   userid: walletPortfolioController.userId,
                   horseid: '',
                   sellerid: '',
-                  totalprice: ibanNoController.text.trim(),
+                  totalprice: _balanceController.text,
                   role: 'addwalet'),
               gapH15,
               ElevatedButton(
                   onPressed: () {
-                    print(ibanNoController.text);
+                    print(_balanceController.text);
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
@@ -189,6 +227,7 @@ class AmountRecoveryDialog extends StatefulWidget {
   final TextEditingController ibanNoController;
   var accountBalance;
   var userid;
+  bool isLoading = false;
 
   AmountRecoveryDialog({
     required this.bankNameController,
@@ -375,17 +414,23 @@ class _AmountRecoveryDialogState extends State<AmountRecoveryDialog> {
                         child: WalletAlertDialogButtonComponent(
                           text: "confirm your return request",
                           backGroundColor: cPrimaryColor,
-                          onPressedFunction: () {
+                          onPressedFunction: () async {
                             if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Processing Data')),
-                              );
-                              ReFundBalance.recoverbalance(
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   const SnackBar(
+                              //       content: Text('Processing Data')),
+                              // );
+                              Center(
+                                  child: CircularProgressIndicator(
+                                color: cPrimaryColor,
+                              ));
+                              await ReFundBalance.recoverbalance(
                                   widget.bankNameController.text,
                                   widget.ibanNoController.text,
                                   amount.text,
-                                  widget.userid);
+                                  widget.userid,
+                                  context);
+                              //Navigator.pop(context);
                             }
                           },
                         ),

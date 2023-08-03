@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Payments/fatoorah_Custom.dart';
@@ -51,11 +53,12 @@ class _ReusablePaymentActionWidgetState
               onTapFunction: () {
                 Navigator.pop(context);
                 //Get.to(() => PaymentScreen());
+                log('${widget.totalprice}');
                 Get.to(() => FatoorahCustom(
                       userid: widget.userid,
                       horseid: widget.horseid,
                       sellerid: widget.sellerid,
-                      totalprice: widget.totalprice,
+                      totalprice: int.parse('${widget.totalprice}'),
                       role: widget.role,
                     ));
               },
@@ -73,17 +76,6 @@ class _ReusablePaymentActionWidgetState
                       totalprice: widget.totalprice,
                       role: widget.role,
                     ));
-                // Get.to(() => PaymentScreen(
-                //       Category: 'frommada',
-                //       discountvalue: '10',
-                //       finalprice: 100,
-                //       frommada: true,
-                //       isdiscount: true,
-                //       saloonId: '12345',
-                //       saloonname: 'alibaba',
-                //       totalamount: '100',
-                //       totaldiscount: '50',
-                //     ));
               },
               beforeLogoAssetString: Assets.paymentImagesVisaIcon,
               afterLogoAssetString: Assets.paymentImagesMasterCardLogo,

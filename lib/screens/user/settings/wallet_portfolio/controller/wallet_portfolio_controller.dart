@@ -7,6 +7,7 @@ import 'package:obaiah_mobile_app/screens/user/settings/wallet_portfolio/service
 class WalletPortfolioController extends GetxController {
   TextEditingController bankNameController = TextEditingController();
   TextEditingController ibanNoController = TextEditingController();
+  TextEditingController amountNoController = TextEditingController();
 
   RxBool loading = false.obs;
   RxString error = "".obs;

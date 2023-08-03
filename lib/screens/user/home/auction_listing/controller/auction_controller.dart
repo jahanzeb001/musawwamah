@@ -17,6 +17,7 @@ class AuctionController extends GetxController {
   var loading2 = false.obs;
   var error2 = "".obs;
   String? horsesId;
+  Rx remeaningTimeforAction = ''.obs;
   int userBalance = 0;
   List<String> images = [];
   int? userId;
