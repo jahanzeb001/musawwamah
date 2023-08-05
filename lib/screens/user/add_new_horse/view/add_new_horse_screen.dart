@@ -105,7 +105,7 @@ class _AddNewHorseScreenState extends State<AddNewHorseScreen> {
   void initState() {
     super.initState();
 
-    addNewHorseController.fetchDeviceTokens();
+    // addNewHorseController.fetchDeviceTokens();
   }
 
   @override

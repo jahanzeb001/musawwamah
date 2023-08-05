@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +85,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     });
     homeScreenController.getApprovedHorses();
 
-    loadAndSave();
+    //loadAndSave();
 
     /////////////////push notifications data
     FirebaseMessaging.instance.getInitialMessage().then(
@@ -146,34 +145,34 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   }
 
 ///////////////////////save device token
-  Future<void> saveDeviceTokenToFirestore() async {
-    String? deviceToken = await getDeviceToken();
-    if (deviceToken != null) {
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
+//   Future<void> saveDeviceTokenToFirestore() async {
+//     String? deviceToken = await getDeviceToken();
+//     if (deviceToken != null) {
+//       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-// Replace this with the actual user ID
+// // Replace this with the actual user ID
 
-      QuerySnapshot querySnapshot = await firestore
-          .collection('users')
-          .where('userId', isEqualTo: userId)
-          .get();
+//       QuerySnapshot querySnapshot = await firestore
+//           .collection('users')
+//           .where('userId', isEqualTo: userId)
+//           .get();
 
-      if (querySnapshot.docs.isNotEmpty) {
-        print('Device token for user $userId is already saved in Firestore.');
-      } else {
-        await firestore.collection('users').add({
-          'deviceToken': deviceToken,
-          'userId': userId,
-        });
-        print('Device token for user $userId saved to Firestore.');
-      }
-    }
-  }
+//       if (querySnapshot.docs.isNotEmpty) {
+//         print('Device token for user $userId is already saved in Firestore.');
+//       } else {
+//         await firestore.collection('users').add({
+//           'deviceToken': deviceToken,
+//           'userId': userId,
+//         });
+//         print('Device token for user $userId saved to Firestore.');
+//       }
+//     }
+//   }
 
-  loadAndSave() async {
-    await getDeviceToken();
-    await saveDeviceTokenToFirestore();
-  }
+  // loadAndSave() async {
+  //   await getDeviceToken();
+  //   await saveDeviceTokenToFirestore();
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -430,24 +429,24 @@ class AddNewHorseController extends GetxController {
 
   /////////////////////fetch token from firebase
 
-  Future<void> fetchDeviceTokens() async {
-    try {
-      // Access the 'users' collection
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('users').get();
+  // Future<void> fetchDeviceTokens() async {
+  //   try {
+  //     // Access the 'users' collection
+  //     QuerySnapshot querySnapshot =
+  //         await FirebaseFirestore.instance.collection('users').get();
 
-      // Loop through each document and extract the 'devicetoken' field
-      querySnapshot.docs.forEach((doc) {
-        String? devicetoken = doc.get(
-            'deviceToken'); // Replace 'devicetoken' with the actual field name in the document
-        if (devicetoken != null) {
-          userTokens.add(devicetoken);
-        }
+  //     // Loop through each document and extract the 'devicetoken' field
+  //     querySnapshot.docs.forEach((doc) {
+  //       String? devicetoken = doc.get(
+  //           'deviceToken'); // Replace 'devicetoken' with the actual field name in the document
+  //       if (devicetoken != null) {
+  //         userTokens.add(devicetoken);
+  //       }
 
-        print(" user token    ****************** ${userTokens.length}");
-      });
-    } catch (e) {
-      print('Error fetching device tokens: $e');
-    }
-  }
+  //       print(" user token    ****************** ${userTokens.length}");
+  //     });
+  //   } catch (e) {
+  //     print('Error fetching device tokens: $e');
+  //   }
+  // }
 }
