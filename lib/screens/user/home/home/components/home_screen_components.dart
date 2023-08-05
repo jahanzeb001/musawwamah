@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:obaiah_mobile_app/reusable_widgets/reusable_button.dart';
 import 'package:obaiah_mobile_app/reusable_widgets/reusable_dropdown_formfield.dart';
 import 'package:obaiah_mobile_app/screens/user/home/home/controller/home_screen_controller.dart';
+import 'package:obaiah_mobile_app/screens/user/home/home/models/filter_propertise_response.dart';
 import 'package:obaiah_mobile_app/screens/user/home/home/models/get_approved_horses_response.dart';
 import 'package:obaiah_mobile_app/screens/user/settings/account/controller/account_controller.dart';
 import 'package:obaiah_mobile_app/utils/colors/colors.dart';
@@ -504,15 +505,22 @@ class SortingDialog extends StatelessWidget {
   }
 }
 
-class FilterDialog extends StatelessWidget {
+class FilterDialog extends StatefulWidget {
   final List<bool> selectedValueList, filterCheckBoxValueList;
 
-  const FilterDialog({
+  FilterDialog({
     Key? key,
     required this.selectedValueList,
     required this.filterCheckBoxValueList,
   }) : super(key: key);
 
+  @override
+  State<FilterDialog> createState() => _FilterDialogState();
+}
+
+class _FilterDialogState extends State<FilterDialog> {
+  PropertiseFIlterResponse model = PropertiseFIlterResponse();
+  var ageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var homeController = Get.find<HomeScreenController>();
@@ -528,8 +536,9 @@ class FilterDialog extends StatelessWidget {
         children: [
           Flexible(
               child: Container(
-                  height: 380,
-                  //   color: Colors.red,
+                  margin: EdgeInsets.only(top: 20),
+                  //height: 310,
+                  //  color: Colors.red,
                   child: Obx(
                     () => SingleChildScrollView(
                       child: Column(
@@ -555,8 +564,10 @@ class FilterDialog extends StatelessWidget {
                                           color: cBlackColor,
                                           size: 17,
                                         ),
-                                  Spacer(),
-                                  Text("Type"),
+                                  SizedBox(
+                                    width: 70,
+                                  ),
+                                  Text("Horse Type"),
                                   SizedBox(
                                     width: 20,
                                   ),
@@ -570,27 +581,50 @@ class FilterDialog extends StatelessWidget {
                           homeController.isTypedShow.value
                               ? Container(
                                   margin: EdgeInsets.only(bottom: 10),
-                                  height: 70,
-                                  color: cWhiteGrey,
+                                  height: 100,
+                                  color: cPrimaryColor24Opacity,
                                   child: ListView.builder(
-                                      itemCount: homeController.type?.length,
+                                      padding: EdgeInsets.only(top: 0),
+                                      itemCount: homeController
+                                          .propertiseModel.type!.length,
                                       itemBuilder: (context, index) {
-                                        return Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(homeController.type![index]
-                                                .toString()),
-                                            Spacer(),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            homeController.isTypedSelected.value
-                                                ? Icon(Icons
-                                                    .check_box_outline_blank)
-                                                : Icon(Icons.check_box)
-                                          ],
+                                        final type = homeController
+                                            .propertiseModel.type![index];
+                                        return ListTile(
+                                          title: Text(type.type ?? ""),
+                                          trailing: Checkbox(
+                                            checkColor: cPrimaryColor,
+                                            activeColor: cWhiteColor,
+                                            value: type.isTypeSelected,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                for (int i = 0;
+                                                    i <
+                                                        homeController
+                                                            .propertiseModel
+                                                            .type!
+                                                            .length;
+                                                    i++) {
+                                                  homeController
+                                                      .propertiseModel
+                                                      .type![i]
+                                                      .isTypeSelected = false;
+                                                }
+                                                homeController
+                                                    .propertiseModel
+                                                    .type![index]
+                                                    .isTypeSelected = newValue!;
+
+                                                homeController.selectedType =
+                                                    (newValue
+                                                        ? type.type
+                                                        : "")!;
+                                              });
+
+                                              print(
+                                                  "*********************${homeController.selectedType}");
+                                            },
+                                          ),
                                         );
                                       }),
                                 )
@@ -601,6 +635,8 @@ class FilterDialog extends StatelessWidget {
                             onTap: () {
                               homeController.isRegionShow.value =
                                   !homeController.isRegionShow.value;
+
+                              homeController.isTypedShow.value = false;
                             },
                             child: Container(
                               height: 40,
@@ -618,7 +654,9 @@ class FilterDialog extends StatelessWidget {
                                           color: cBlackColor,
                                           size: 17,
                                         ),
-                                  Spacer(),
+                                  SizedBox(
+                                    width: 70,
+                                  ),
                                   Text("Region"),
                                   SizedBox(
                                     width: 20,
@@ -634,7 +672,52 @@ class FilterDialog extends StatelessWidget {
                               ? Container(
                                   margin: EdgeInsets.only(bottom: 10),
                                   height: 100,
-                                  color: cWhiteGrey,
+                                  color: cPrimaryColor24Opacity,
+                                  child: ListView.builder(
+                                      padding: EdgeInsets.only(top: 0),
+                                      itemCount: homeController
+                                          .propertiseModel.region!.length,
+                                      itemBuilder: (context, index) {
+                                        final region = homeController
+                                            .propertiseModel.region![index];
+                                        return ListTile(
+                                          title: Text(region.region ?? ""),
+                                          trailing: Checkbox(
+                                            checkColor: cPrimaryColor,
+                                            activeColor: cWhiteColor,
+                                            value: region.isRegionSelected,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                for (int i = 0;
+                                                    i <
+                                                        homeController
+                                                            .propertiseModel
+                                                            .region!
+                                                            .length;
+                                                    i++) {
+                                                  homeController
+                                                      .propertiseModel
+                                                      .region![i]
+                                                      .isRegionSelected = false;
+                                                }
+                                                homeController
+                                                        .propertiseModel
+                                                        .region![index]
+                                                        .isRegionSelected =
+                                                    newValue!;
+
+                                                homeController.selectedRegion =
+                                                    (newValue
+                                                        ? region.region
+                                                        : "")!;
+                                              });
+
+                                              print(
+                                                  "*********************${homeController.selectedRegion}");
+                                            },
+                                          ),
+                                        );
+                                      }),
                                 )
                               : SizedBox(),
 
@@ -643,6 +726,8 @@ class FilterDialog extends StatelessWidget {
                             onTap: () {
                               homeController.isAgeShow.value =
                                   !homeController.isAgeShow.value;
+
+                              homeController.isRegionShow.value = false;
                             },
                             child: Container(
                               height: 40,
@@ -660,7 +745,9 @@ class FilterDialog extends StatelessWidget {
                                           color: cBlackColor,
                                           size: 17,
                                         ),
-                                  Spacer(),
+                                  SizedBox(
+                                    width: 70,
+                                  ),
                                   Text("Age"),
                                   SizedBox(
                                     width: 20,
@@ -675,9 +762,83 @@ class FilterDialog extends StatelessWidget {
                           homeController.isAgeShow.value
                               ? Container(
                                   margin: EdgeInsets.only(bottom: 10),
-                                  height: 100,
-                                  color: cWhiteGrey,
-                                )
+                                  height: 50,
+                                  //   color: cPrimaryColor24Opacity,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.3),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: TextField(
+                                      cursorColor: cPrimaryColor24Opacity,
+                                      controller: ageController,
+                                      keyboardType: TextInputType.number,
+                                      decoration: InputDecoration(
+                                        hintText: 'Enter age...',
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 16.0, vertical: 12.0),
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  )
+
+                                  //  ListView.builder(
+                                  //     padding: EdgeInsets.only(top: 0),
+                                  //     itemCount: homeController
+                                  //         .propertiseModel.horseage!.length,
+                                  //     itemBuilder: (context, index) {
+                                  //       final horseage = homeController
+                                  //           .propertiseModel.horseage![index];
+                                  //       return ListTile(
+                                  //         title: Text(horseage.horseage ?? ""),
+                                  //         trailing: Checkbox(
+                                  //           checkColor: cPrimaryColor,
+                                  //           activeColor: cWhiteColor,
+                                  //           value: horseage.isHorseageSelected,
+                                  //           onChanged: (newValue) {
+                                  //             setState(() {
+                                  //               for (int i = 0;
+                                  //                   i <
+                                  //                       homeController
+                                  //                           .propertiseModel
+                                  //                           .horseage!
+                                  //                           .length;
+                                  //                   i++) {
+                                  //                 homeController
+                                  //                         .propertiseModel
+                                  //                         .horseage![i]
+                                  //                         .isHorseageSelected =
+                                  //                     false;
+                                  //               }
+                                  //               homeController
+                                  //                       .propertiseModel
+                                  //                       .horseage![index]
+                                  //                       .isHorseageSelected =
+                                  //                   newValue!;
+
+                                  //               homeController.selectedAge =
+                                  //                   (newValue
+                                  //                       ? horseage.horseage
+                                  //                       : "")!;
+                                  //             });
+
+                                  //             print(
+                                  //                 "*********************${homeController.selectedAge}");
+                                  //           },
+                                  //         ),
+                                  //       );
+                                  //     }),
+
+                                  )
                               : SizedBox(),
 
                           /////////////////////////color
@@ -686,6 +847,7 @@ class FilterDialog extends StatelessWidget {
                             onTap: () {
                               homeController.isColorShow.value =
                                   !homeController.isColorShow.value;
+                              homeController.isAgeShow.value = false;
                             },
                             child: Container(
                               height: 40,
@@ -703,7 +865,9 @@ class FilterDialog extends StatelessWidget {
                                           color: cBlackColor,
                                           size: 17,
                                         ),
-                                  Spacer(),
+                                  SizedBox(
+                                    width: 70,
+                                  ),
                                   Text("Color"),
                                   SizedBox(
                                     width: 20,
@@ -719,7 +883,52 @@ class FilterDialog extends StatelessWidget {
                               ? Container(
                                   margin: EdgeInsets.only(bottom: 10),
                                   height: 100,
-                                  color: cWhiteGrey,
+                                  color: cPrimaryColor24Opacity,
+                                  child: ListView.builder(
+                                      padding: EdgeInsets.only(top: 0),
+                                      itemCount: homeController
+                                          .propertiseModel.horsecolor!.length,
+                                      itemBuilder: (context, index) {
+                                        final horsecolor = homeController
+                                            .propertiseModel.horsecolor![index];
+                                        return ListTile(
+                                          title: Text(horsecolor.color ?? ""),
+                                          trailing: Checkbox(
+                                            checkColor: cPrimaryColor,
+                                            activeColor: cWhiteColor,
+                                            value: horsecolor.isColorSelected,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                for (int i = 0;
+                                                    i <
+                                                        homeController
+                                                            .propertiseModel
+                                                            .horsecolor!
+                                                            .length;
+                                                    i++) {
+                                                  homeController
+                                                      .propertiseModel
+                                                      .horsecolor![i]
+                                                      .isColorSelected = false;
+                                                }
+                                                homeController
+                                                        .propertiseModel
+                                                        .horsecolor![index]
+                                                        .isColorSelected =
+                                                    newValue!;
+
+                                                homeController.selectedColor =
+                                                    (newValue
+                                                        ? horsecolor.color
+                                                        : "")!;
+                                              });
+
+                                              print(
+                                                  "*********************${homeController.selectedColor}");
+                                            },
+                                          ),
+                                        );
+                                      }),
                                 )
                               : SizedBox(),
 
@@ -728,6 +937,7 @@ class FilterDialog extends StatelessWidget {
                             onTap: () {
                               homeController.isCasualityShow.value =
                                   !homeController.isCasualityShow.value;
+                              homeController.isColorShow.value = false;
                             },
                             child: Container(
                               height: 40,
@@ -745,8 +955,10 @@ class FilterDialog extends StatelessWidget {
                                           color: cBlackColor,
                                           size: 17,
                                         ),
-                                  Spacer(),
-                                  Text("Casuality"),
+                                  SizedBox(
+                                    width: 70,
+                                  ),
+                                  Text("Safety"),
                                   SizedBox(
                                     width: 20,
                                   ),
@@ -761,7 +973,56 @@ class FilterDialog extends StatelessWidget {
                               ? Container(
                                   margin: EdgeInsets.only(bottom: 10),
                                   height: 100,
-                                  color: cWhiteGrey,
+                                  color: cPrimaryColor24Opacity,
+                                  child: ListView.builder(
+                                      padding: EdgeInsets.only(top: 0),
+                                      itemCount: homeController
+                                          .propertiseModel.casuality!.length,
+                                      itemBuilder: (context, index) {
+                                        final casuality = homeController
+                                            .propertiseModel.casuality![index];
+                                        return ListTile(
+                                          title:
+                                              Text(casuality.casuality ?? ""),
+                                          trailing: Checkbox(
+                                            checkColor: cPrimaryColor,
+                                            activeColor: cWhiteColor,
+                                            value:
+                                                casuality.isCasualitySelected,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                for (int i = 0;
+                                                    i <
+                                                        homeController
+                                                            .propertiseModel
+                                                            .casuality!
+                                                            .length;
+                                                    i++) {
+                                                  homeController
+                                                          .propertiseModel
+                                                          .casuality![i]
+                                                          .isCasualitySelected =
+                                                      false;
+                                                }
+                                                homeController
+                                                        .propertiseModel
+                                                        .casuality![index]
+                                                        .isCasualitySelected =
+                                                    newValue!;
+
+                                                homeController
+                                                        .selectedCasuality =
+                                                    (newValue
+                                                        ? casuality.casuality
+                                                        : "")!;
+                                              });
+
+                                              print(
+                                                  "*********************${homeController.selectedCasuality}");
+                                            },
+                                          ),
+                                        );
+                                      }),
                                 )
                               : SizedBox(),
 
@@ -771,6 +1032,8 @@ class FilterDialog extends StatelessWidget {
                             onTap: () {
                               homeController.isOriginalityShow.value =
                                   !homeController.isOriginalityShow.value;
+
+                              homeController.isCasualityShow.value = false;
                             },
                             child: Container(
                               height: 40,
@@ -788,7 +1051,9 @@ class FilterDialog extends StatelessWidget {
                                           color: cBlackColor,
                                           size: 17,
                                         ),
-                                  Spacer(),
+                                  SizedBox(
+                                    width: 70,
+                                  ),
                                   Text("Originality"),
                                   SizedBox(
                                     width: 20,
@@ -802,8 +1067,60 @@ class FilterDialog extends StatelessWidget {
                           ),
                           homeController.isOriginalityShow.value
                               ? Container(
+                                  margin: EdgeInsets.only(bottom: 10),
                                   height: 100,
-                                  color: cWhiteGrey,
+                                  color: cPrimaryColor24Opacity,
+                                  child: ListView.builder(
+                                      padding: EdgeInsets.only(top: 0),
+                                      itemCount: homeController
+                                          .propertiseModel.originality!.length,
+                                      itemBuilder: (context, index) {
+                                        final originality = homeController
+                                            .propertiseModel
+                                            .originality![index];
+                                        return ListTile(
+                                          title: Text(
+                                              originality.originality ?? ""),
+                                          trailing: Checkbox(
+                                            checkColor: cPrimaryColor,
+                                            activeColor: cWhiteColor,
+                                            value: originality
+                                                .isOriginalitySelected,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                for (int i = 0;
+                                                    i <
+                                                        homeController
+                                                            .propertiseModel
+                                                            .originality!
+                                                            .length;
+                                                    i++) {
+                                                  homeController
+                                                          .propertiseModel
+                                                          .originality![i]
+                                                          .isOriginalitySelected =
+                                                      false;
+                                                }
+                                                homeController
+                                                        .propertiseModel
+                                                        .originality![index]
+                                                        .isOriginalitySelected =
+                                                    newValue!;
+
+                                                homeController
+                                                        .selectedOriginality =
+                                                    (newValue
+                                                        ? originality
+                                                            .originality
+                                                        : "")!;
+                                              });
+
+                                              print(
+                                                  "*********************${homeController.selectedOriginality}");
+                                            },
+                                          ),
+                                        );
+                                      }),
                                 )
                               : SizedBox(),
                         ],
@@ -916,9 +1233,36 @@ class FilterDialog extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: HomeFilterAlertDialogButtonComponent(
-                  text: "implementation",
+                  text: "Applicatioin",
                   backGroundColor: cPrimaryColor,
                   onPressedFunction: () {
+                    homeController.getApprovedHorses();
+                    // homeController.getApprovedHorses(
+                    //   filter: 1,
+                    //   // sortby: "",
+                    //   horseType: homeController.selectedType,
+                    //   region: homeController.selectedRegion,
+                    //   age: ageController.text,
+                    //   color: homeController.selectedColor,
+                    //   safety: homeController.selectedCasuality,
+                    //   originality: homeController.selectedOriginality,
+                    // );
+
+                    // homeController.isTypedShow.value = false;
+                    // homeController.isRegionShow.value = false;
+                    // homeController.isAgeShow.value = false;
+                    // homeController.isColorShow.value = false;
+                    // homeController.isCasualityShow.value = false;
+                    // homeController.isOriginalityShow.value = false;
+
+                    // ///////////reset value
+                    // homeController.selectedType = '';
+                    // homeController.selectedRegion = '';
+                    // ageController.text = '';
+                    // homeController.selectedType = '';
+                    // homeController.selectedColor = '';
+                    // homeController.selectedCasuality = '';
+                    // homeController.selectedOriginality = '';
                     Navigator.pop(context);
                   },
                 ),
@@ -930,6 +1274,31 @@ class FilterDialog extends StatelessWidget {
                   text: "survey",
                   backGroundColor: cRomanSilverColor,
                   onPressedFunction: () {
+                    homeController.getApprovedHorses(
+                      filter: 1,
+                      horseType: homeController.selectedType,
+                      region: homeController.selectedRegion,
+                      age: ageController.text,
+                      color: homeController.selectedColor,
+                      safety: homeController.selectedCasuality,
+                      originality: homeController.selectedOriginality,
+                    );
+
+                    homeController.isTypedShow.value = false;
+                    homeController.isRegionShow.value = false;
+                    homeController.isAgeShow.value = false;
+                    homeController.isColorShow.value = false;
+                    homeController.isCasualityShow.value = false;
+                    homeController.isOriginalityShow.value = false;
+
+///////////////reset values
+                    homeController.selectedType = '';
+                    homeController.selectedRegion = '';
+                    ageController.text = '';
+                    homeController.selectedType = '';
+                    homeController.selectedColor = '';
+                    homeController.selectedCasuality = '';
+                    homeController.selectedOriginality = '';
                     Navigator.pop(context);
                   },
                 ),
@@ -941,6 +1310,12 @@ class FilterDialog extends StatelessWidget {
             text: "cancel",
             backGroundColor: cRomanSilverColor,
             onPressedFunction: () {
+              homeController.isTypedShow.value = false;
+              homeController.isRegionShow.value = false;
+              homeController.isAgeShow.value = false;
+              homeController.isColorShow.value = false;
+              homeController.isCasualityShow.value = false;
+              homeController.isOriginalityShow.value = false;
               Navigator.pop(context);
             },
           ),
