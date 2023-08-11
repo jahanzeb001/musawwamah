@@ -18,7 +18,7 @@ class HorseDetailsResponse {
   Opinion? opinion;
   Data? data;
   int? sales;
-  int? ratting;
+  double? ratting;
 
   HorseDetailsResponse({
     this.success,

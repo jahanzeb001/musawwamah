@@ -14,38 +14,38 @@ class AppUrls {
   static const String getHorseDetails = "horse";
   static const String uplaodImages = "upload-images";
 
-  ////////////////////////////////////////////////////////////register_login
+  //////////////////////////register_login
   static const String signup = "signup";
   static const String login = "login";
 
-  ////////////////////////////////////////////////////////////User
+  //////////////////////////User
   static const String getUser = "user";
   static const String updateProfile = "user";
 
-  ////////////////////////////////////////////////////////////Purchase
+  /////////////////////////Purchase
   static const String getAllPurchase = "purchase";
   static const String getMyPurchase = "get-my-purchases";
 
-  ////////////////////////////////////////////////////////////delivery_wallet
+  ////////////////////////delivery_wallet
   static const String getAllRecords = "delivery-wallet";
   static const String getMyWallet = "";
 
-  ////////////////////////////////////////////////////////////Favourite/wishlist
+  ///////////////////////Favourite/wishlist
   static const String addToFavourite = "favourite";
   static const String reomoveFromWishlist = "remove-from-wishlist";
   static const String getWishList = "get-wishlist";
 
-  ////////////////////////////////////////////////////////////Sales
+  ///////////////////////Sales
   static const String getAllSales = "sale";
   static const String getMySales = "get-my-sales";
 
-  ////////////////////////////////////////////////////////////Wallet
+  //////////////////////Wallet
   static const String getAllWalletDetail = "wallet";
   static const String getMyWalletDetails = "get-my-wallet";
   static const String getMyDelWalletDetails = "get-my-delivery-wallet";
   static const String recoverBalance = "recovery";
 
-  ////////////////////////////////////////////////////////////delivery Account
+  ///////////////////////delivery Account
   static const String getDeliveryAccountData = "delivery-account";
   static const String updateDeliveryAccountData = "delivery-account";
 
@@ -55,6 +55,7 @@ class AppUrls {
   static const String addStableHorse = "stable";
   static const String deleteStableHorse = "stable";
   static const String addToSale = "add-to-sale";
+  static const String getAuctionNotification = "notification";
   ///////////////////get biding horse
   static const String getBidingHorse = "get-bidding-horses";
   static const String addBidHorse = "horse";
@@ -79,13 +80,23 @@ class AppUrls {
   //////////////////Traning
   static const String gettraning = "training";
   static const String purchasetraning = "training-payment";
+  static const String trainingPropertise = "training-properties";
+
   //////////////////Hospitality
   static const String gethospitalities = "hospitalities";
   static const String purchasehospitalitie = "hospitality-payment";
+  static const String gethospitalitiese = "hospitalities";
+  static const String gethospitalityadvancefilter =
+      "hospitality-advance-filter";
   //////////////////Hospitality
 
   static const String uploadImagesPickup = "upload-images";
   static const String confirmPickup = "confirm-pickup";
 
   static const String confirmDropOff = "confirm-delivery";
+
+  //////////////////User Profile
+  static const String getUserProfile = "user";
+  static const String updateUserProfile = "user";
+  static const String getUserReviews = "get-user-reviews";
 }

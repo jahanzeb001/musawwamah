@@ -9,6 +9,7 @@ import '../../../../../utils/colors/colors.dart';
 import '../../../../../utils/spacing/gaps.dart';
 import '../../../../../utils/spacing/padding.dart';
 import '../../../../../utils/text_styles/textstyles.dart';
+import '../../../home/checkout/receipts/sale_receipts.dart';
 
 class MySoldHorsesListViewInfoCard extends StatelessWidget {
   final Datum homePageModel;
@@ -124,7 +125,19 @@ class MySoldHorsesListViewInfoCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(() => SaleReceipts(
+                                  aliganceno: '${homePageModel.horseId}',
+                                  purchasername: '${homePageModel.purchaserId}',
+                                  address: '${homePageModel.pickupAddress}',
+                                  sellername: '${homePageModel.nameOfHorse}',
+                                  customerphone:
+                                      '${homePageModel.mobileNumber}',
+                                  horsepprice: '${homePageModel.price}',
+                                  dileverycharges: '10',
+                                  total: '${homePageModel.totalPrice}',
+                                ));
+                          },
                           style: ElevatedButton.styleFrom(
                             shadowColor: cPrimaryColor,
                             foregroundColor: cPrimaryColor,
@@ -228,10 +241,24 @@ class MySoldHorsesListViewInfoCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6)),
                 child: FittedBox(
                   child: Text(
-                    homePageModel.isDelivered == '1'
-                        ? "the amount has been transferred to your bank account"
-                            .tr
-                        : "waiting for the transfer of horse delivery".tr,
+                    homePageModel.isPaid == '0'
+                        ? "waiting for the transfer of horse delivery".tr
+                        : homePageModel.isPaid == '1'
+                            ? "The amount has been transferred to your bank account"
+                                .tr
+                            : homePageModel.status == 'Pending'
+                                ? "waiting for the transfer of horse delivery"
+                                    .tr
+                                : homePageModel.status == 'Delivered'
+                                    ? "Delivered".tr
+                                    : homePageModel.status == 'Not-Matched'
+                                        ? " Horse Not Matched".tr
+                                        : homePageModel.status == 'Picked-up'
+                                            ? "Picked Up".tr
+                                            : homePageModel.status == 'Rejected'
+                                                ? "Rejected".tr
+                                                : "waiting for the transfer of horse delivery"
+                                                    .tr,
                     style: onyx810,
                   ),
                 ),

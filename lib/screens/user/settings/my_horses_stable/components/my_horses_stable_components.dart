@@ -40,10 +40,10 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                homePageModel.nameOfHorse ?? "",
+                homePageModel.horse!.nameOfHorse.toString(),
                 style: primary717,
               ),
-              homePageModel.status != "Pending"
+              homePageModel.status == "null"
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -54,7 +54,7 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                         ),
                         gapW5,
                         Text(
-                          "approved".tr,
+                          "it is approved".tr,
                           style: primary708,
                         ),
                       ],
@@ -86,7 +86,7 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.type ?? "",
+                    homePageModel.horse!.type.toString(),
                     style: homePageValue,
                   ),
                   gapH10,
@@ -96,7 +96,7 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.color ?? "",
+                    homePageModel.horse!.color.toString(),
                     style: homePageValue,
                   ),
                   gapH10,
@@ -106,7 +106,7 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.age.toString(),
+                    homePageModel.horse!.age.toString(),
                     style: homePageValue,
                   ),
                 ],
@@ -121,7 +121,7 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.originality ?? "",
+                    homePageModel.horse!.originality.toString(),
                     style: homePageValue,
                   ),
                   gapH10,
@@ -131,7 +131,7 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.height.toString(),
+                    homePageModel.horse!.height.toString(),
                     style: homePageValue,
                   ),
                   gapH10,
@@ -161,7 +161,7 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                   ),
                   child: CachedNetworkImage(
                     imageUrl:
-                        "${AppUrls.ImagebaseUrl}${homePageModel.horseFrontView ?? ""}",
+                        "${AppUrls.ImagebaseUrl}${homePageModel.horse!.horseFrontView}",
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
@@ -205,7 +205,7 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                     style: romanSilver408,
                   ),
                   ReUsableText(
-                      text: homePageModel.price.toString(),
+                      text: homePageModel.horse!.totalPrice.toString(),
                       textStyle: homePagePrice)
                 ],
               ),
@@ -219,25 +219,26 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                       child: OutlinedButton(
                         onPressed: () {
                           Navigator.pushNamed(context, modifyHorse, arguments: {
-                            "image": homePageModel.horseFrontView,
-                            "horseId": homePageModel.id,
-                            "nameOfHorse": homePageModel.nameOfHorse,
-                            "type": homePageModel.type,
-                            "fathersName": homePageModel.fathersName,
-                            "mothersName": homePageModel.mothersName,
-                            "monthOfBirth": homePageModel.monthOfBirth,
-                            "yearOfBirth": homePageModel.yearOfBirth,
-                            "age": homePageModel.age,
-                            "color": homePageModel.color,
-                            "casuality": homePageModel.casuality,
-                            "originality": homePageModel.originality,
-                            "region": homePageModel.region,
-                            "city": homePageModel.city,
-                            "siteCommision": homePageModel.siteCommision,
-                            "expertOpinionPrice": homePageModel.expertOpinion,
-                            "totalPrice": homePageModel.totalPrice,
-                            "ibanNumber": homePageModel.ibanNumber,
-                            "safety": homePageModel.casuality,
+                            "image": homePageModel.horse!.horseFrontView,
+                            "horseId": int.parse(homePageModel.horseId!),
+                            "nameOfHorse": homePageModel.horse!.nameOfHorse,
+                            "type": homePageModel.horse!.type,
+                            "fathersName": homePageModel.horse!.fathersName,
+                            "mothersName": homePageModel.horse!.mothersName,
+                            "monthOfBirth": homePageModel.horse!.monthOfBirth,
+                            "yearOfBirth": homePageModel.horse!.yearOfBirth,
+                            "age": homePageModel.horse!.age,
+                            "color": homePageModel.horse!.color,
+                            "casuality": homePageModel.horse!.casuality,
+                            "originality": homePageModel.horse!.originality,
+                            "region": homePageModel.horse!.region,
+                            "city": homePageModel.horse!.city,
+                            "siteCommision": homePageModel.horse!.siteCommision,
+                            "expertOpinionPrice":
+                                homePageModel.horse!.expertOpinion,
+                            "totalPrice": homePageModel.horse!.totalPrice,
+                            "ibanNumber": homePageModel.horse!.ibanNumber,
+                            "safety": homePageModel.horse!.casuality,
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -302,8 +303,8 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                     Obx(() => Expanded(
                             child: OutlinedButton(
                           onPressed: () {
-                            myHorsesStableController2
-                                .deleteStableHorse(homePageModel.id!);
+                            myHorsesStableController2.deleteStableHorse(
+                                int.parse(homePageModel.horseId!));
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
@@ -331,7 +332,7 @@ class MyHorsesStableListViewInfoCard extends StatelessWidget {
                             child: OutlinedButton(
                           onPressed: () {
                             myHorsesStableController
-                                .addToSale(homePageModel.id!);
+                                .addToSale(int.parse(homePageModel.horseId!));
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
@@ -385,10 +386,10 @@ class MyHorsesStableGridViewInfoCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            homePageModel.nameOfHorse ?? "",
+            homePageModel.horse!.nameOfHorse.toString(),
             style: primary717,
           ),
-          homePageModel.status != "Pending"
+          homePageModel.status == "null"
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -399,7 +400,7 @@ class MyHorsesStableGridViewInfoCard extends StatelessWidget {
                     ),
                     gapW5,
                     Text(
-                      "approved".tr,
+                      "it is approved".tr,
                       style: primary708,
                     ),
                   ],
@@ -427,7 +428,7 @@ class MyHorsesStableGridViewInfoCard extends StatelessWidget {
                 ),
                 child: CachedNetworkImage(
                   imageUrl:
-                      "${AppUrls.ImagebaseUrl}${homePageModel.horseFrontView ?? ""}",
+                      "${AppUrls.ImagebaseUrl}${homePageModel.horse!.horseFrontView}",
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -472,7 +473,7 @@ class MyHorsesStableGridViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.age.toString(),
+                    homePageModel.horse!.age.toString(),
                     style: homePageGridValue,
                   ),
                 ],
@@ -487,7 +488,7 @@ class MyHorsesStableGridViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.nameOfHorse ?? "",
+                    homePageModel.horse!.nameOfHorse ?? "",
                     style: homePageGridValue,
                   ),
                 ],
@@ -502,7 +503,7 @@ class MyHorsesStableGridViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.height.toString(),
+                    homePageModel.horse!.height.toString(),
                     style: homePageGridValue,
                   ),
                 ],
@@ -511,10 +512,32 @@ class MyHorsesStableGridViewInfoCard extends StatelessWidget {
           ),
           gapH10,
           ReUsableText(
-              text: homePageModel.price.toString(),
+              text: homePageModel.horse!.totalPrice.toString(),
               textStyle: homePageGridPrice),
           OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, modifyHorse, arguments: {
+                "image": homePageModel.horse!.horseFrontView,
+                "horseId": int.parse(homePageModel.horseId!),
+                "nameOfHorse": homePageModel.horse!.nameOfHorse,
+                "type": homePageModel.horse!.type,
+                "fathersName": homePageModel.horse!.fathersName,
+                "mothersName": homePageModel.horse!.mothersName,
+                "monthOfBirth": homePageModel.horse!.monthOfBirth,
+                "yearOfBirth": homePageModel.horse!.yearOfBirth,
+                "age": homePageModel.horse!.age,
+                "color": homePageModel.horse!.color,
+                "casuality": homePageModel.horse!.casuality,
+                "originality": homePageModel.horse!.originality,
+                "region": homePageModel.horse!.region,
+                "city": homePageModel.horse!.city,
+                "siteCommision": homePageModel.horse!.siteCommision,
+                "expertOpinionPrice": homePageModel.horse!.expertOpinion,
+                "totalPrice": homePageModel.horse!.totalPrice,
+                "ibanNumber": homePageModel.horse!.ibanNumber,
+                "safety": homePageModel.horse!.casuality,
+              });
+            },
             style: ElevatedButton.styleFrom(
               shadowColor: cPrimaryColor,
               foregroundColor: cPrimaryColor,
@@ -575,8 +598,8 @@ class MyHorsesStableGridViewInfoCard extends StatelessWidget {
                     Obx(() => Expanded(
                             child: OutlinedButton(
                           onPressed: () {
-                            myHorsesStableController2
-                                .deleteStableHorse(homePageModel.id!);
+                            myHorsesStableController2.deleteStableHorse(
+                                int.parse(homePageModel.horseId!));
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
@@ -604,7 +627,7 @@ class MyHorsesStableGridViewInfoCard extends StatelessWidget {
                             child: OutlinedButton(
                           onPressed: () {
                             myHorsesStableController
-                                .addToSale(homePageModel.id!);
+                                .addToSale(int.parse(homePageModel.horseId!));
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(

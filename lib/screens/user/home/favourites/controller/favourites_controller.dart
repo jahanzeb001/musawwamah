@@ -48,14 +48,14 @@ class FavouritesController extends GetxController {
     myFavMOdel.value.data![index].loading?.value = true;
     var res = await GetMyFavouriteService.deleteHorse(horseId, uid);
     myFavMOdel.value.data![index].loading?.value = false;
-    if (res is DeleteHorseResponse) {
-      deletHorseModel = res;
+
+    if (res == 'true') {
       Get.snackbar("notification".tr, "removed from favourites".tr);
-      getMyFavourites(userId!);
+      loadData();
     } else {
       myFavMOdel.value.data![index].loading?.value = false;
       errorDeletinggHorse.value = res.toString();
-      Get.snackbar("notification".tr, errorDeletinggHorse.value);
+      Get.snackbar("notification".tr, 'Error not removed from favourites');
     }
   }
 }

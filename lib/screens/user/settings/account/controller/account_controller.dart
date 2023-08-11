@@ -15,12 +15,12 @@ class AccountController extends GetxController {
   TextEditingController cityProvinceController = TextEditingController();
   TextEditingController bankNameController = TextEditingController();
   TextEditingController ibanNoController = TextEditingController();
-  String idBackBase64 = "";
-  String idFrontBase64 = "";
-  String idFrontextension = "";
-  String idBackextension = "";
-  String frontimage = "";
-  String backimage = "";
+  RxString idBackBase64 = "".obs;
+  RxString idFrontBase64 = "".obs;
+  RxString idFrontextension = "".obs;
+  RxString idBackextension = "".obs;
+  RxString frontimage = "".obs;
+  RxString backimage = "".obs;
 
   RxBool loadingUser = false.obs;
   int uid = 0;
@@ -64,8 +64,8 @@ class AccountController extends GetxController {
           getUserModel.data!.cityOrProvince.toString();
       bankNameController.text = getUserModel.data!.bankName.toString();
       ibanNoController.text = getUserModel.data!.ibanNumber.toString();
-      frontimage = getUserModel.data!.idPhotoFront.toString();
-      backimage = getUserModel.data!.idPhotoBack.toString();
+      frontimage.value = getUserModel.data!.idPhotoFront.toString();
+      backimage.value = getUserModel.data!.idPhotoBack.toString();
     } else {
       loadingUser.value = false;
       errorGettingUser.value = res.toString();
@@ -86,11 +86,11 @@ class AccountController extends GetxController {
       String mobile,
       String bankName,
       String iban,
-      File? idBackIMage,
-      File? idfrontImage) async {
+      File idBackIMage,
+      File idfrontImage) async {
     errorUpdating.value = '';
     updatingUser.value = true;
-    fileToString(idfrontImage!, idBackIMage!);
+    await fileToString(idfrontImage, idBackIMage);
     var res = await UserService.updateUser(
         uid,
         name,
@@ -126,13 +126,13 @@ class AccountController extends GetxController {
     File idBview,
   ) async {
     /////////////////////////////////////////////////////////////
-    idFrontBase64 = base64Encode(await idFview.readAsBytes());
+    idFrontBase64.value = base64Encode(await idFview.readAsBytes());
     String extension = path.extension(idFview.path);
-    idFrontextension = extension.substring(1);
+    idFrontextension.value = extension.substring(1);
     /////////////////////////////////////////////////////////////
-    idBackBase64 = base64Encode(await idBview.readAsBytes());
+    idBackBase64.value = base64Encode(await idBview.readAsBytes());
     String extension2 = path.extension(idBview.path);
-    idBackextension = extension2.substring(1);
+    idBackextension.value = extension2.substring(1);
   }
 
   ///////////////update user from dashboard
@@ -164,6 +164,13 @@ class AccountController extends GetxController {
       cityProvinceController.clear();
       bankNameController.clear();
       ibanNoController.clear();
+      idFrontBase64.value = '';
+
+      idFrontextension.value = '';
+
+      idBackBase64.value = '';
+
+      idBackextension.value = '';
     } else {
       updatingUser.value = false;
       errorUpdating.value = res.toString();

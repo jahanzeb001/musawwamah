@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../utils/colors/colors.dart';
 import '../utils/constants/lists.dart';
 
+// ignore: must_be_immutable
 class ReusableBankDropDownFormField extends StatelessWidget {
   TextEditingController? controller = TextEditingController();
   ReusableBankDropDownFormField({Key? key, this.controller}) : super(key: key);

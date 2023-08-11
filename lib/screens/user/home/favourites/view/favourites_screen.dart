@@ -21,7 +21,6 @@ class _FavoritesScreenViewState extends State<FavoritesScreenView> {
   @override
   void initState() {
     favouritesController.loadData();
-
     super.initState();
   }
 
@@ -99,8 +98,9 @@ class _FavoritesScreenViewState extends State<FavoritesScreenView> {
                                                         .value
                                                         .data![index]
                                                         .isSold ==
-                                                    1
+                                                    '1'
                                                 ? GridViewBlurComponent(
+                                                    index: index,
                                                     homeModel:
                                                         favouritesController
                                                             .myFavMOdel
@@ -133,8 +133,9 @@ class _FavoritesScreenViewState extends State<FavoritesScreenView> {
                                                           .value
                                                           .data![index]
                                                           .isSold ==
-                                                      1
+                                                      '1'
                                                   ? ListViewBlurComponent(
+                                                      index: index,
                                                       homeModel:
                                                           favouritesController
                                                               .myFavMOdel

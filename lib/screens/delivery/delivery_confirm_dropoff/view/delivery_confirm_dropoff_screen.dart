@@ -1224,7 +1224,7 @@ class _DeliveryConfirmDropOffScreenState
                               } else {
                                 deliveryConfirmDropOffController
                                     .confirmDeliveryDropOff(
-                                        hid: widget.homePageModel.data?.id,
+                                        hid: widget.horseId,
                                         horseImageFromLeft: horseLeftView,
                                         horseImageFromRight: horseRightView,
                                         horseBackView: horseBackView,
@@ -1234,7 +1234,8 @@ class _DeliveryConfirmDropOffScreenState
                                         notesText:
                                             deliveryConfirmDropOffController
                                                 .compulsoryNotesController.text,
-                                        signature: signature);
+                                        signature: signature,
+                                        context: context);
                               }
                             },
                             style: ElevatedButton.styleFrom(

@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:obaiah_mobile_app/generated/assets.dart';
 import 'package:obaiah_mobile_app/reusable_widgets/reusable_appbar.dart';
 import 'package:obaiah_mobile_app/reusable_widgets/reusable_button.dart';
@@ -47,7 +46,8 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
   late Timer _timer;
   Duration _remainingTime = Duration();
   //Duration? formattedTime;
-
+  int _secondsmRemaining = 10; // Set the initial countdown time in seconds
+  late Timer _mtimer;
   @override
   void initState() {
     walletPortfolioController.getUserId();
@@ -73,6 +73,22 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
     //_startTimer();
     super.initState();
     _startTimer();
+    //startmTimer();
+  }
+
+  void startmTimer() {
+    _mtimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_secondsmRemaining > 0) {
+          auctionListingController.hideBiding.value = true;
+          _secondsmRemaining--;
+        } else {
+          _mtimer.cancel(); // Stop the timer when countdown reaches 0
+          auctionListingController.hideBiding.value = false;
+          //Get.back();
+        }
+      });
+    });
   }
 
   void _startTimer() {
@@ -80,9 +96,11 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_remainingTime.inSeconds > 0) {
+          auctionListingController.hideBiding.value = true;
           _remainingTime -= Duration(seconds: 1);
         } else {
           _timer.cancel();
+          auctionListingController.hideBiding.value = false;
         }
       });
     });
@@ -175,12 +193,13 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
     // DateTime dateTime = DateTime.parse(inputDate);
     // String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
     return Scaffold(
-        appBar: ReusableAppBar(
-          onPressFunction: () {},
-          titleText: "bid the best",
-          textStyle: onyx520,
-        ),
-        body: Obx(() => auctionListingController.loading2.value
+      appBar: ReusableAppBar(
+        onPressFunction: () {},
+        titleText: "bid the best",
+        textStyle: onyx520,
+      ),
+      body: Obx(
+        () => auctionListingController.loading2.value
             ? Center(
                 child: CircularProgressIndicator(
                 color: cPrimaryColor,
@@ -392,541 +411,521 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                               //   );
                               // }),
                               Obx(
-                                () => auctionListingController
-                                        .isAuctionComingSoon.value
-                                    ? Container(
-                                        padding: padA10,
-                                        width: context.width * 1,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: cGhostWhiteColor),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            gapH10,
-                                            Container(
-                                              color: cGhostWhiteColor,
-                                              height: 70,
-                                              child: Stack(children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.bottomCenter,
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    width: context.width * 1,
-                                                    height: 65,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: Colors.white,
-                                                    ),
-                                                    child: Text(
-                                                      auctionListingController
-                                                          .auctionDate,
-                                                      style: onyx928,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Align(
-                                                    alignment:
-                                                        Alignment.topRight,
-                                                    child: Row(
-                                                      children: [
-                                                        gapW20,
-                                                        Text(
-                                                          "auction starts after:"
-                                                              .tr,
-                                                          style:
-                                                              auctionSmallTextStyle,
-                                                        ),
-                                                      ],
-                                                    )),
-                                              ]),
-                                            ),
-                                            gapH25,
-                                            Container(
-                                              color: cGhostWhiteColor,
-                                              height: 70,
-                                              child: Stack(children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.bottomCenter,
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    height: 65,
-                                                    width: context.width * 1,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: Colors.white,
-                                                    ),
-                                                    child: Text(
-                                                      // "$formattedTime",
-                                                      '${_remainingTime.inHours.toString().padLeft(2, '0')}:${(_remainingTime.inMinutes % 60).toString().padLeft(2, '0')}:${(_remainingTime.inSeconds % 60).toString().padLeft(2, '0')}',
-                                                      style: onyx928,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Align(
-                                                    alignment:
-                                                        Alignment.topRight,
-                                                    child: Row(
-                                                      children: [
-                                                        gapW20,
-                                                        Text(
-                                                          "the remaining time"
-                                                              .tr,
-                                                          style:
-                                                              auctionSmallTextStyle,
-                                                        ),
-                                                      ],
-                                                    )),
-                                              ]),
-                                            ),
-                                            gapH25,
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                var start = startTime;
-                                                var end = endTime;
-                                                var adate = startdate;
-                                                var title = servicetitle;
-
-                                                DateTime sdate =
-                                                    intl.DateFormat.jm()
-                                                        .parse(start);
-                                                DateTime edate =
-                                                    intl.DateFormat.jm()
-                                                        .parse(end);
-                                                final dateFormat =
-                                                    intl.DateFormat.yMd()
-                                                        .parse(adate);
-                                                var actualdate =
-                                                    intl.DateFormat("yyyyddMM")
-                                                        .format(dateFormat);
-                                                var actualstime =
-                                                    intl.DateFormat("HH:mmss")
-                                                        .format(sdate);
-                                                var actual1 = actualstime
-                                                    .toString()
-                                                    .replaceAll(':', '');
-                                                var actualetime =
-                                                    intl.DateFormat("HH:mmss")
-                                                        .format(edate);
-                                                var actual2 = actualetime
-                                                    .toString()
-                                                    .replaceAll(':', '');
-                                                var conformsdate =
-                                                    '${actualdate}T${actual1}0ZUTC+05:00';
-                                                var conformedate =
-                                                    '${actualdate}T${actual2}0ZUTC+05:00';
-
-                                                print(
-                                                    '${actualdate}T${actualstime}0ZUTC+03:00');
-                                                print(
-                                                    '${actualdate}T${actualetime}0ZUTC+03:00');
-                                                CalendarClient().insert(
-                                                  title,
-                                                  conformsdate,
-                                                  conformedate,
-                                                );
-                                                // Get.snackbar(
-                                                //     "notification".tr,
-                                                //     "you will be notified about this auction"
-                                                //         .tr);
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                  fixedSize: Size(
-                                                      context.width * 1, 55),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                  elevation: 0.0,
-                                                  backgroundColor:
-                                                      cPrimaryColor),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  FittedBox(
-                                                    child: Text(
-                                                        "reminds me of an auction"
-                                                            .tr,
-                                                        style:
-                                                            auctionMediumOnyxTextStyle),
-                                                  ),
-                                                  gapW5,
-                                                  const Icon(
-                                                    Icons
-                                                        .notifications_active_rounded,
-                                                    color: cOnyxColor,
-                                                    size: 20,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : Container(
-                                        padding: padA10,
-                                        width: context.width * 1,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: cGhostWhiteColor),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            gapH10,
-                                            Row(
+                                () =>
+                                    auctionListingController
+                                            .isAuctionComingSoon.value
+                                        ? Container(
+                                            padding: padA10,
+                                            width: context.width * 1,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: cGhostWhiteColor),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
-                                                Expanded(
-                                                  child: Container(
-                                                    color: cGhostWhiteColor,
-                                                    height: 70,
-                                                    child: Stack(children: [
-                                                      Align(
-                                                        alignment: Alignment
-                                                            .bottomCenter,
-                                                        child: Container(
-                                                          height: 65,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            color: Colors.white,
-                                                          ),
-                                                          child: auctionListingController
-                                                                      .addBidingHorseModel
-                                                                      .highestbid!
-                                                                      .amount ==
-                                                                  ""
-                                                              ? Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      left: 30,
-                                                                      right:
-                                                                          30),
-                                                                  child: Center(
-                                                                    child: Text(
-                                                                      "No Bid Yet",
-                                                                      style: const TextStyle(
-                                                                          fontFamily:
-                                                                              "Tajawal",
-                                                                          color:
-                                                                              cRomanSilverColor,
-                                                                          fontWeight: FontWeight
-                                                                              .w400,
-                                                                          fontSize:
-                                                                              10),
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              : Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Text(
-                                                                      auctionListingController
-                                                                          .addBidingHorseModel
-                                                                          .highestbid!
-                                                                          .amount
-                                                                          .toString(),
-                                                                      style:
-                                                                          auctionLargeTextStyle,
-                                                                    ),
-                                                                    gapW5,
-                                                                    Text(
-                                                                      "riyal"
-                                                                          .tr,
-                                                                      style:
-                                                                          auctionLargeTextStyle,
-                                                                    ),
-                                                                  ],
-                                                                ),
+                                                gapH10,
+                                                Container(
+                                                  color: cGhostWhiteColor,
+                                                  height: 70,
+                                                  child: Stack(children: [
+                                                    Align(
+                                                      alignment: Alignment
+                                                          .bottomCenter,
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width:
+                                                            context.width * 1,
+                                                        height: 65,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          color: Colors.white,
+                                                        ),
+                                                        child: Text(
+                                                          auctionListingController
+                                                              .auctionDate,
+                                                          style: onyx928,
                                                         ),
                                                       ),
-                                                      Align(
-                                                          alignment: Alignment
-                                                              .topRight,
-                                                          child: Row(
-                                                            children: [
-                                                              gapW20,
-                                                              Text(
-                                                                "highest bid"
-                                                                    .tr,
-                                                                style:
-                                                                    auctionSmallTextStyle,
-                                                              ),
-                                                            ],
-                                                          )),
-                                                    ]),
-                                                  ),
+                                                    ),
+                                                    Align(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        child: Row(
+                                                          children: [
+                                                            gapW20,
+                                                            Text(
+                                                              "auction starts after:"
+                                                                  .tr,
+                                                              style:
+                                                                  auctionSmallTextStyle,
+                                                            ),
+                                                          ],
+                                                        )),
+                                                  ]),
                                                 ),
-                                                gapW10,
-                                                Expanded(
-                                                  child: Container(
-                                                    color: cGhostWhiteColor,
-                                                    height: 70,
-                                                    child: Stack(children: [
-                                                      Align(
-                                                        alignment: Alignment
-                                                            .bottomCenter,
-                                                        child: Container(
-                                                          height: 65,
-                                                          width:
+                                                gapH25,
+                                                Container(
+                                                  color: cGhostWhiteColor,
+                                                  height: 70,
+                                                  child: Stack(children: [
+                                                    Align(
+                                                      alignment: Alignment
+                                                          .bottomCenter,
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        height: 65,
+                                                        width:
+                                                            context.width * 1,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          color: Colors.white,
+                                                        ),
+                                                        child: Text(
+                                                          // "$formattedTime",
+                                                          '${_remainingTime.inHours.toString().padLeft(2, '0')}:${(_remainingTime.inMinutes % 60).toString().padLeft(2, '0')}:${(_remainingTime.inSeconds % 60).toString().padLeft(2, '0')}',
+                                                          style: onyx928,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Align(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        child: Row(
+                                                          children: [
+                                                            gapW20,
+                                                            Text(
+                                                              "the remaining time"
+                                                                  .tr,
+                                                              style:
+                                                                  auctionSmallTextStyle,
+                                                            ),
+                                                          ],
+                                                        )),
+                                                  ]),
+                                                ),
+                                                gapH25,
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    var start =
+                                                        '${auctionListingController.addBidingHorseModel.data!.dateForAution}';
+
+                                                    var end =
+                                                        '${auctionListingController.addBidingHorseModel.data!.auctionEndTime}';
+
+                                                    final inputFormat = DateFormat(
+                                                        'yyyy-MM-dd HH:mm:ss.SSS');
+                                                    final outputFormat =
+                                                        DateFormat(
+                                                            'yyyyMMddTHHmmssZ');
+
+                                                    DateTime dateTime =
+                                                        inputFormat
+                                                            .parseStrict(start);
+                                                    String utcDateTime =
+                                                        outputFormat
+                                                            .format(dateTime);
+                                                    /////////endtime
+
+                                                    DateTime dateTime2 =
+                                                        inputFormat
+                                                            .parseStrict(start);
+                                                    DateTime newDateTime =
+                                                        dateTime.add(Duration(
+                                                            minutes: 10));
+                                                    String utcDateTime2 =
+                                                        outputFormat.format(
+                                                            newDateTime);
+
+                                                    log('$utcDateTime');
+                                                    log('$utcDateTime2');
+                                                    var title =
+                                                        'Biting Time This Horse ${auctionListingController.addBidingHorseModel.data!.nameOfHorse}';
+
+                                                    CalendarClient().insert(
+                                                      title,
+                                                      utcDateTime,
+                                                      utcDateTime2,
+                                                    );
+                                                    // Get.snackbar(
+                                                    //     "notification".tr,
+                                                    //     "you will be notified about this auction"
+                                                    //         .tr);
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          fixedSize: Size(
                                                               context.width * 1,
-                                                          alignment:
-                                                              Alignment.center,
-                                                          decoration:
-                                                              BoxDecoration(
+                                                              55),
+                                                          shape:
+                                                              RoundedRectangleBorder(
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
-                                                                        10),
-                                                            color: Colors.white,
+                                                                        15),
                                                           ),
-                                                          child: Text(
-                                                            // "$formattedTime",
-                                                            '${_remainingTime.inHours.toString().padLeft(2, '0')}:${(_remainingTime.inMinutes % 60).toString().padLeft(2, '0')}:${(_remainingTime.inSeconds % 60).toString().padLeft(2, '0')}',
+                                                          elevation: 0.0,
+                                                          backgroundColor:
+                                                              cPrimaryColor),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      FittedBox(
+                                                        child: Text(
+                                                            "reminds me of an auction"
+                                                                .tr,
                                                             style:
-                                                                auctionLargeTextStyle,
-                                                          ),
-                                                        ),
+                                                                auctionMediumOnyxTextStyle),
                                                       ),
-                                                      Align(
-                                                          alignment: Alignment
-                                                              .topRight,
-                                                          child: Row(
-                                                            children: [
-                                                              gapW20,
-                                                              Text(
-                                                                "the remaining time"
-                                                                    .tr,
-                                                                style:
-                                                                    auctionSmallTextStyle,
-                                                              ),
-                                                            ],
-                                                          )),
-                                                    ]),
+                                                      gapW5,
+                                                      const Icon(
+                                                        Icons
+                                                            .notifications_active_rounded,
+                                                        color: cOnyxColor,
+                                                        size: 20,
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            gapH10,
-                                            OutlinedButton(
-                                              onPressed: () {
-                                                var userbalance = int.parse(
-                                                  walletPortfolioController
-                                                      .myWalletModel
-                                                      .accountBalance
-                                                      .toString(),
-                                                );
-                                                log(userbalance.toString());
-
-                                                userbalance > 500
-                                                    ? showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return AlertDialog(
-                                                            scrollable: true,
-                                                            backgroundColor:
-                                                                cScaffoldBackground,
-                                                            contentPadding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    vertical:
-                                                                        10,
-                                                                    horizontal:
-                                                                        10),
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                            ),
-                                                            content: Container(
-                                                              width: 330,
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                      color:
-                                                                          cScaffoldBackground),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: <
-                                                                    Widget>[
-                                                                  Container(
-                                                                    height: 70,
-                                                                    padding:
-                                                                        padA10,
-                                                                    decoration: const BoxDecoration(
-                                                                        color:
-                                                                            cWhiteColor,
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(10))),
+                                          )
+                                        : auctionListingController.hideBiding !=
+                                                true
+                                            ? Container()
+                                            : Container(
+                                                padding: padA10,
+                                                width: context.width * 1,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    color: cGhostWhiteColor),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    gapH10,
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child: Container(
+                                                            color:
+                                                                cGhostWhiteColor,
+                                                            height: 70,
+                                                            child: Stack(
+                                                                children: [
+                                                                  Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomCenter,
                                                                     child:
-                                                                        TextField(
-                                                                      keyboardType:
-                                                                          TextInputType
-                                                                              .number,
-                                                                      controller:
-                                                                          auctionListingController
-                                                                              .addInsuranceController,
+                                                                        Container(
+                                                                      height:
+                                                                          65,
                                                                       decoration:
-                                                                          InputDecoration(
-                                                                        filled:
-                                                                            true,
-                                                                        fillColor:
-                                                                            Colors.white,
-                                                                        border:
-                                                                            OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(10.0),
-                                                                        ),
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                      child: auctionListingController.addBidingHorseModel.highestbid!.amount ==
+                                                                              ""
+                                                                          ? Padding(
+                                                                              padding: const EdgeInsets.only(left: 30, right: 30),
+                                                                              child: Center(
+                                                                                child: Text(
+                                                                                  "No Bid Yet",
+                                                                                  style: const TextStyle(fontFamily: "Tajawal", color: cRomanSilverColor, fontWeight: FontWeight.w400, fontSize: 10),
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                          : Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                                Text(
+                                                                                  auctionListingController.addBidingHorseModel.highestbid!.amount.toString(),
+                                                                                  style: auctionLargeTextStyle,
+                                                                                ),
+                                                                                gapW5,
+                                                                                Text(
+                                                                                  "riyal".tr,
+                                                                                  style: auctionLargeTextStyle,
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                    ),
+                                                                  ),
+                                                                  Align(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .topRight,
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          gapW20,
+                                                                          Text(
+                                                                            "highest bid".tr,
+                                                                            style:
+                                                                                auctionSmallTextStyle,
+                                                                          ),
+                                                                        ],
+                                                                      )),
+                                                                ]),
+                                                          ),
+                                                        ),
+                                                        gapW10,
+                                                        Expanded(
+                                                          child: Container(
+                                                            color:
+                                                                cGhostWhiteColor,
+                                                            height: 70,
+                                                            child: Stack(
+                                                                children: [
+                                                                  Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomCenter,
+                                                                    child:
+                                                                        Container(
+                                                                      height:
+                                                                          65,
+                                                                      width:
+                                                                          context.width *
+                                                                              1,
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                      child:
+                                                                          Text(
+                                                                        // "$formattedTime",
+                                                                        '${_remainingTime.inHours.toString().padLeft(2, '0')}:${(_remainingTime.inMinutes % 60).toString().padLeft(2, '0')}:${(_remainingTime.inSeconds % 60).toString().padLeft(2, '0')}',
+                                                                        style:
+                                                                            auctionLargeTextStyle,
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  gapH20,
-                                                                  ReusableOutlineUnfixedButton(
-                                                                    width: 200,
-                                                                    height: 50,
-                                                                    stringText:
-                                                                        "add amount",
-                                                                    radius: 10,
+                                                                  Align(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .topRight,
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          gapW20,
+                                                                          Text(
+                                                                            "the remaining time".tr,
+                                                                            style:
+                                                                                auctionSmallTextStyle,
+                                                                          ),
+                                                                        ],
+                                                                      )),
+                                                                ]),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    gapH10,
+                                                    OutlinedButton(
+                                                      onPressed: () {
+                                                        var userbalance =
+                                                            int.parse(
+                                                          walletPortfolioController
+                                                              .myWalletModel
+                                                              .accountBalance
+                                                              .toString(),
+                                                        );
+                                                        log(userbalance
+                                                            .toString());
+
+                                                        userbalance > 500
+                                                            ? showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) {
+                                                                  return AlertDialog(
+                                                                    scrollable:
+                                                                        true,
+                                                                    backgroundColor:
+                                                                        cScaffoldBackground,
+                                                                    contentPadding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        vertical:
+                                                                            10,
+                                                                        horizontal:
+                                                                            10),
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10),
+                                                                    ),
+                                                                    content:
+                                                                        Container(
+                                                                      width:
+                                                                          330,
+                                                                      decoration:
+                                                                          const BoxDecoration(
+                                                                              color: cScaffoldBackground),
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: <
+                                                                            Widget>[
+                                                                          Container(
+                                                                            height:
+                                                                                70,
+                                                                            padding:
+                                                                                padA10,
+                                                                            decoration:
+                                                                                const BoxDecoration(color: cWhiteColor, borderRadius: BorderRadius.all(Radius.circular(10))),
+                                                                            child:
+                                                                                TextField(
+                                                                              keyboardType: TextInputType.number,
+                                                                              controller: auctionListingController.addInsuranceController,
+                                                                              decoration: InputDecoration(
+                                                                                filled: true,
+                                                                                fillColor: Colors.white,
+                                                                                border: OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          gapH20,
+                                                                          ReusableOutlineUnfixedButton(
+                                                                            width:
+                                                                                200,
+                                                                            height:
+                                                                                50,
+                                                                            stringText:
+                                                                                "add amount",
+                                                                            radius:
+                                                                                10,
+                                                                            onPressFunction:
+                                                                                () {
+                                                                              Navigator.pop(context);
+                                                                              var hhid = int.parse(widget.horseId.toString());
+                                                                              var uid = int.parse(auctionListingController.addBidingHorseModel.data!.userId.toString());
+                                                                              var amount = int.parse(auctionListingController.addInsuranceController.text);
+
+                                                                              auctionListingController.addBid(hhid, uid, amount, context);
+                                                                            },
+                                                                          ),
+                                                                          gapH20,
+                                                                          ElevatedButton(
+                                                                              onPressed: () {
+                                                                                Navigator.pop(context);
+                                                                              },
+                                                                              style: ElevatedButton.styleFrom(backgroundColor: cRomanSilverColor, shape: const StadiumBorder()),
+                                                                              child: Text(
+                                                                                "cancel".tr,
+                                                                                style: auctionDescriptionBoldTextStyle,
+                                                                              ))
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                })
+                                                            : showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return InsuranceConfirmationDialog(
                                                                     onPressFunction:
                                                                         () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      var hhid = int.parse(widget
-                                                                          .horseId
-                                                                          .toString());
-                                                                      var uid = int.parse(auctionListingController
-                                                                          .addBidingHorseModel
-                                                                          .data!
-                                                                          .userId
-                                                                          .toString());
-                                                                      var amount = int.parse(auctionListingController
-                                                                          .addInsuranceController
-                                                                          .text);
-
-                                                                      auctionListingController.addBid(
-                                                                          hhid,
-                                                                          uid,
-                                                                          amount,
-                                                                          context);
+                                                                      showDialog(
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (BuildContext context) {
+                                                                            return BidAdditionDialog(
+                                                                              onPressFunction: () {
+                                                                                auctionListingController.addInsurance(auctionListingController.userId ?? 0, int.parse(auctionListingController.addInsuranceController.text));
+                                                                                showDialog(
+                                                                                    context: context,
+                                                                                    builder: (BuildContext context) {
+                                                                                      return BidAmountPaymentDialog(
+                                                                                        onPressFunction: () {},
+                                                                                      );
+                                                                                    });
+                                                                              },
+                                                                            );
+                                                                          });
                                                                     },
-                                                                  ),
-                                                                  gapH20,
-                                                                  ElevatedButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      style: ElevatedButton.styleFrom(
-                                                                          backgroundColor:
-                                                                              cRomanSilverColor,
-                                                                          shape:
-                                                                              const StadiumBorder()),
-                                                                      child:
-                                                                          Text(
-                                                                        "cancel"
-                                                                            .tr,
-                                                                        style:
-                                                                            auctionDescriptionBoldTextStyle,
-                                                                      ))
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          );
-                                                        })
-                                                    : showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return InsuranceConfirmationDialog(
-                                                            onPressFunction:
-                                                                () {
-                                                              showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return BidAdditionDialog(
-                                                                      onPressFunction:
-                                                                          () {
-                                                                        auctionListingController.addInsurance(
-                                                                            auctionListingController.userId ??
-                                                                                0,
-                                                                            int.parse(auctionListingController.addInsuranceController.text));
-                                                                        showDialog(
-                                                                            context:
-                                                                                context,
-                                                                            builder:
-                                                                                (BuildContext context) {
-                                                                              return BidAmountPaymentDialog(
-                                                                                onPressFunction: () {},
-                                                                              );
-                                                                            });
-                                                                      },
-                                                                    );
-                                                                  });
-                                                            },
-                                                          );
-                                                        });
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                shadowColor: cPrimaryColor,
-                                                foregroundColor: cPrimaryColor,
-                                                fixedSize: const Size(200, 35),
-                                                side: const BorderSide(
-                                                    color: cBlackColor),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
+                                                                  );
+                                                                });
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        shadowColor:
+                                                            cPrimaryColor,
+                                                        foregroundColor:
+                                                            cPrimaryColor,
+                                                        fixedSize:
+                                                            const Size(200, 35),
+                                                        side: const BorderSide(
+                                                            color: cBlackColor),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        elevation: 0.0,
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          const Icon(
+                                                            Icons.add,
+                                                            color: cBlackColor,
+                                                            size: 20,
+                                                          ),
+                                                          gapW5,
+                                                          Text("add bid".tr,
+                                                              style:
+                                                                  auctionMediumOnyxTextStyle),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                elevation: 0.0,
                                               ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  const Icon(
-                                                    Icons.add,
-                                                    color: cBlackColor,
-                                                    size: 20,
-                                                  ),
-                                                  gapW5,
-                                                  Text("add bid".tr,
-                                                      style:
-                                                          auctionMediumOnyxTextStyle),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
                               ),
 
                               gapH10,
@@ -1649,115 +1648,112 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                                             ),
                                           ),
                                           Expanded(
-                                              flex: 3,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          Text(
-                                                            "sales".tr,
+                                            flex: 3,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Text(
+                                                          "sales".tr,
+                                                          style:
+                                                              auctionDescriptionTextStyle,
+                                                        ),
+                                                        gapH5,
+                                                        RichText(
+                                                          text: TextSpan(
                                                             style:
-                                                                auctionDescriptionTextStyle,
+                                                                auctionDescriptionBoldTextStyle,
+                                                            children: <
+                                                                TextSpan>[
+                                                              TextSpan(
+                                                                text: auctionListingController
+                                                                    .addBidingHorseModel
+                                                                    .sales
+                                                                    .toString(),
+                                                              ),
+                                                              TextSpan(
+                                                                text: " ",
+                                                              ),
+                                                              TextSpan(
+                                                                  text: 'horses'
+                                                                      .tr),
+                                                            ],
                                                           ),
-                                                          gapH5,
-                                                          RichText(
-                                                            text: TextSpan(
-                                                              style:
-                                                                  auctionDescriptionBoldTextStyle,
-                                                              children: <
-                                                                  TextSpan>[
-                                                                TextSpan(
-                                                                  text: auctionListingController
-                                                                      .addBidingHorseModel
-                                                                      .sales
-                                                                      .toString(),
-                                                                ),
-                                                                TextSpan(
-                                                                  text: " ",
-                                                                ),
-                                                                TextSpan(
-                                                                    text:
-                                                                        'horses'
-                                                                            .tr),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          Text(
-                                                            "ratings".tr,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Text(
+                                                          "ratings".tr,
+                                                          style:
+                                                              auctionDescriptionTextStyle,
+                                                        ),
+                                                        gapH5,
+                                                        RichText(
+                                                          text: TextSpan(
                                                             style:
-                                                                auctionDescriptionTextStyle,
+                                                                auctionDescriptionBoldTextStyle,
+                                                            children: <
+                                                                TextSpan>[
+                                                              TextSpan(
+                                                                text: auctionListingController
+                                                                    .addBidingHorseModel
+                                                                    .ratting
+                                                                    .toString(),
+                                                              ),
+                                                              TextSpan(
+                                                                text: " ",
+                                                              ),
+                                                              TextSpan(
+                                                                  text: 'rating'
+                                                                      .tr),
+                                                            ],
                                                           ),
-                                                          gapH5,
-                                                          RichText(
-                                                            text: TextSpan(
-                                                              style:
-                                                                  auctionDescriptionBoldTextStyle,
-                                                              children: <
-                                                                  TextSpan>[
-                                                                TextSpan(
-                                                                  text: auctionListingController
-                                                                      .addBidingHorseModel
-                                                                      .ratting
-                                                                      .toString(),
-                                                                ),
-                                                                TextSpan(
-                                                                  text: " ",
-                                                                ),
-                                                                TextSpan(
-                                                                    text:
-                                                                        'rating'
-                                                                            .tr),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                RatingBar(
+                                                  initialRating: 3.0,
+                                                  direction: Axis.horizontal,
+                                                  allowHalfRating: true,
+                                                  itemCount: 4,
+                                                  onRatingUpdate: (rating) {
+                                                    log(rating.toString());
+                                                  },
+                                                  itemSize: 45,
+                                                  ratingWidget: RatingWidget(
+                                                    full: const Icon(
+                                                      Icons.star_sharp,
+                                                      color: cPrimaryColor,
+                                                    ),
+                                                    half: const Icon(
+                                                      Icons.star_half_sharp,
+                                                      color: cPrimaryColor,
+                                                    ),
+                                                    empty: const Icon(
+                                                      Icons.star_border_sharp,
+                                                      color: cPrimaryColor,
+                                                    ),
                                                   ),
-                                                  RatingBar(
-                                                      initialRating: 3,
-                                                      direction:
-                                                          Axis.horizontal,
-                                                      allowHalfRating: true,
-                                                      itemCount: 4,
-                                                      onRatingUpdate: (rating) {
-                                                        log(rating.toString());
-                                                      },
-                                                      itemSize: 45,
-                                                      ratingWidget:
-                                                          RatingWidget(
-                                                        full: const Icon(
-                                                          Icons.star_sharp,
-                                                          color: cPrimaryColor,
-                                                        ),
-                                                        half: const Icon(
-                                                          Icons.star_half_sharp,
-                                                          color: cPrimaryColor,
-                                                        ),
-                                                        empty: const Icon(
-                                                          Icons
-                                                              .star_border_sharp,
-                                                          color: cPrimaryColor,
-                                                        ),
-                                                      )),
-                                                ],
-                                              ))
+                                                ),
+                                              ],
+                                            ),
+                                          )
                                         ],
                                       ),
                                     ),
@@ -1779,6 +1775,8 @@ class _AuctionListingScreenViewState extends State<AuctionListingScreenView> {
                             ],
                           ),
                         ),
-                      )));
+                      ),
+      ),
+    );
   }
 }

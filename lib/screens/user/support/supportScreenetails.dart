@@ -21,7 +21,7 @@ class _SupportScreenDetilsState extends State<SupportScreenDetils> {
     return Scaffold(
       appBar: ReusableAppBar(
         onPressFunction: () {},
-        titleText: "Support",
+        titleText: "Help",
         textStyle: onyx520,
       ),
       floatingActionButton: Container(
@@ -40,12 +40,12 @@ class _SupportScreenDetilsState extends State<SupportScreenDetils> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'Support'.tr,
+              'Help'.tr,
               style: TextStyle(
                 color: cWhiteColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Tajawal',
+                fontFamily: "Tajawal",
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),
@@ -73,11 +73,7 @@ class _SupportScreenDetilsState extends State<SupportScreenDetils> {
                   children: [
                     Text(
                       'When will I have my total income transferred to my  bank account?',
-                      style: TextStyle(
-                          color: themeController.isDarkMode ? white : black,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Tajawal',
-                          fontSize: 14),
+                      style: onyx520,
                     ),
                     SizedBox(
                       height: 30,
@@ -88,9 +84,9 @@ class _SupportScreenDetilsState extends State<SupportScreenDetils> {
                           color: themeController.isDarkMode
                               ? white
                               : Color(0XFF545454),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Tajawal'),
+                          fontFamily: "Tajawal",
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400),
                       textAlign: TextAlign.justify,
                     )
                   ],

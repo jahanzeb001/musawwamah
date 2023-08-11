@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import 'CustomSvgView.dart';
-
 typedef OnChangeValue = void Function(String);
 
 /// ignore: must_be_immutable

@@ -19,3 +19,4 @@ const Color cBlackColor = Color(0xFF000000);
 const Color cWhiteColor = Color(0xFFFFFFFF);
 const Color cRedColor = Color(0xFFA72A2A);
 const Color cGreenAccentTwoColor = Color(0xFF99CE86);
+const Color cblueColor24Opacity = Color(0x404044);

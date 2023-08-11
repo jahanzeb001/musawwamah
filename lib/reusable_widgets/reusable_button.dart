@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../utils/colors/colors.dart';
 
+// ignore: must_be_immutable
 class PrimaryColorButton extends StatelessWidget {
   final Function()? onPressFunction;
   final String stringText;

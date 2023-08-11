@@ -3,9 +3,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../user/settings/wallet_portfolio/model/get_my_wallet_response.dart';
-import '../../../user/settings/wallet_portfolio/service/get_my_wallet_service.dart';
-import '../../delivery_home/model/delivery_account_response.dart';
-import '../../delivery_home/services/delivery_account_service.dart';
 import '../services/deivery_wallet_services.dart';
 
 class MyDeliveryWalletController extends GetxController {

@@ -27,9 +27,9 @@ class GetMyFavouriteService {
       var res = await BaseClientClass.post(url, data);
 
       if (res is http.Response) {
-        return deleteHorseResponseFromJson(res.body);
+        return 'true';
       } else {
-        return res;
+        return 'false';
       }
     } catch (e) {
       return e;

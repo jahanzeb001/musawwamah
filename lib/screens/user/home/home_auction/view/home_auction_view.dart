@@ -18,6 +18,7 @@ import '../../../../../utils/constants/constants.dart';
 import '../../../settings/wallet_portfolio/controller/wallet_portfolio_controller.dart';
 import '../components/home_auction_components.dart';
 import '../controller/home_auction_controller.dart';
+import '../notification/view/home_auction_notification.dart';
 
 class HomeAuctionView extends StatefulWidget {
   HomeAuctionView({
@@ -127,7 +128,9 @@ class _HomeAuctionViewState extends State<HomeAuctionView> {
                     ),
                     const Spacer(),
                     InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(() => HomeAuctionNotification());
+                        },
                         child: Container(
                           padding: padA5,
                           color: Colors.transparent,

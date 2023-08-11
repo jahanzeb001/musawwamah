@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:get/get.dart';
 import '../../../../../utils/constants/app_urls.dart';
+import '../models/training_filter_propertise_model.dart';
 import '../models/traning_model.dart';
 import '../services/get_my_services.dart';
 
@@ -23,11 +24,38 @@ class TrainingHomeController extends GetxController {
     super.onInit();
   }
 
-  void getMyTraning() async {
+  // void getMyTraning() async {
+  //   error.value = '';
+  //   loading.value = true;
+
+  //   var res = await GetMyTraningService.getMyTraning();
+  //   loading.value = false;
+
+  //   if (res is GetTraningResponse) {
+  //     myTraningModel = res;
+  //   } else {
+  //     loading.value = false;
+  //     error.value = res.toString();
+  //   }
+  // }
+
+  void getMyTraning(
+      {int? filter,
+      String? servicetype,
+      String? region,
+      String? price,
+      String? sex,
+      String? sortBy}) async {
     error.value = '';
     loading.value = true;
 
-    var res = await GetMyTraningService.getMyTraning();
+    var res = await GetMyTraningService.getMyTraning(
+        filter: filter,
+        servicetype: servicetype,
+        region: region,
+        price: price,
+        sex: sex,
+        sortBy: sortBy);
     loading.value = false;
 
     if (res is GetTraningResponse) {
@@ -35,6 +63,44 @@ class TrainingHomeController extends GetxController {
     } else {
       loading.value = false;
       error.value = res.toString();
+    }
+  }
+
+  RxBool isRegionShow = false.obs;
+  RxBool isPriceShow = false.obs;
+  RxBool isTrainingTypeShow = false.obs;
+  RxBool isSexShow = false.obs;
+
+  String regionSelectedValue = "";
+
+  String priceSelectedValue = "";
+  String trainingTypeSelectedValue = "";
+  String sexSelectedValue = "";
+
+  var loading2 = false.obs;
+  var error2 = "".obs;
+  var propertiseModel = TrainingFilterPropertiseResponse();
+
+  /////////////
+  void getPropertiseList() async {
+    loading2.value = true;
+    error2.value = "";
+    var res = await GetMyTraningService.getMyTraningPropertise();
+
+    loading2.value = false;
+    if (res is TrainingFilterPropertiseResponse) {
+      propertiseModel = res;
+
+      propertiseModel.region = res.region;
+      propertiseModel.type = res.type;
+      propertiseModel.sex = res.sex;
+
+      print("*********${propertiseModel.type}");
+      print("*********${propertiseModel.region}");
+      print("*********${propertiseModel.sex}");
+    } else {
+      loading2.value = false;
+      error2.value = res.toString();
     }
   }
 }

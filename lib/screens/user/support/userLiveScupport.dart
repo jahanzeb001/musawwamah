@@ -80,7 +80,7 @@ class _UserliveSupportState extends State<UserliveSupport> {
     return Scaffold(
       appBar: ReusableAppBar(
         onPressFunction: () {},
-        titleText: "Customer Services",
+        titleText: "Help",
         textStyle: onyx520,
       ),
       body: SafeArea(
@@ -92,6 +92,13 @@ class _UserliveSupportState extends State<UserliveSupport> {
                   child: ListView.builder(
                       itemCount: data.length,
                       itemBuilder: (context, index) {
+                        final DateTime dateTime =
+                            DateTime.parse('${data[index]['time']}');
+                        String formattedTime =
+                            DateFormat("yyyy-MM-dd hh:mm:ss a")
+                                .format(dateTime);
+                        // log('${data[index]['time']}');
+                        // log(formattedTime);
                         return Container(
                           margin: EdgeInsets.only(bottom: 8),
                           padding: EdgeInsets.only(top: 30),
@@ -110,24 +117,12 @@ class _UserliveSupportState extends State<UserliveSupport> {
                                         alignment: Alignment.centerLeft,
                                         child: Text(
                                           data[index]['message'],
-                                          style: TextStyle(
-                                              fontFamily: 'Tajawal',
-                                              color: cBlackColor,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
+                                          style: black413,
                                         ),
                                       ),
                                     ),
                                     Row(
                                       children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child:
-                                              data[index]['isChecked'] == true
-                                                  ? Icon(MdiIcons.checkAll,
-                                                      color: Colors.red)
-                                                  : Icon(MdiIcons.checkAll),
-                                        ),
                                         Expanded(
                                           flex: 1,
                                           child: Text(''),
@@ -136,7 +131,10 @@ class _UserliveSupportState extends State<UserliveSupport> {
                                           flex: 4,
                                           child: Align(
                                               alignment: Alignment.centerRight,
-                                              child: Text(data[index]['time'])),
+                                              child: Text(
+                                                '$formattedTime',
+                                                style: black413,
+                                              )),
                                         ),
                                       ],
                                     )
@@ -156,11 +154,7 @@ class _UserliveSupportState extends State<UserliveSupport> {
                                         alignment: Alignment.centerRight,
                                         child: Text(
                                           data[index]['message'],
-                                          style: TextStyle(
-                                              fontFamily: 'Tajawal',
-                                              color: cBlackColor,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
+                                          style: black413,
                                         ),
                                       ),
                                     ),
@@ -170,16 +164,17 @@ class _UserliveSupportState extends State<UserliveSupport> {
                                           flex: 4,
                                           child: Align(
                                               alignment: Alignment.centerLeft,
-                                              child: Text(data[index]['time'])),
+                                              child: Text('$formattedTime',
+                                                  style: black413)),
                                         ),
-                                        Expanded(
-                                          flex: 1,
-                                          child:
-                                              data[index]['isChecked'] == true
-                                                  ? Icon(MdiIcons.checkAll,
-                                                      color: Colors.red)
-                                                  : Icon(MdiIcons.checkAll),
-                                        )
+                                        // Expanded(
+                                        //   flex: 1,
+                                        //   child:
+                                        //       data[index]['isChecked'] == true
+                                        //           ? Icon(MdiIcons.checkAll,
+                                        //               color: Colors.red)
+                                        //           : Icon(MdiIcons.checkAll),
+                                        // )
                                       ],
                                     )
                                   ],

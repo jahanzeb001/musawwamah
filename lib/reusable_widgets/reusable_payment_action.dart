@@ -58,7 +58,7 @@ class _ReusablePaymentActionWidgetState
                       userid: widget.userid,
                       horseid: widget.horseid,
                       sellerid: widget.sellerid,
-                      totalprice: int.parse('${widget.totalprice}'),
+                      totalprice: widget.totalprice,
                       role: widget.role,
                     ));
               },

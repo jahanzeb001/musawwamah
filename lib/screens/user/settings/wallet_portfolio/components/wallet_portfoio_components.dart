@@ -14,14 +14,15 @@ import '../controller/wallet_portfolio_controller.dart';
 import '../service/refund_balance.dart';
 
 class OperationHistoryTile extends StatelessWidget {
-  final String entryType, date, amount, method;
+  final String entryType, date, amount, method, invoceid;
 
   const OperationHistoryTile(
       {Key? key,
       required this.entryType,
       required this.date,
       required this.amount,
-      required this.method})
+      required this.method,
+      required this.invoceid})
       : super(key: key);
 
   @override
@@ -30,7 +31,7 @@ class OperationHistoryTile extends StatelessWidget {
       width: context.width * 1,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-        color: entryType == "credit"
+        color: entryType != "Credit"
             ? cOnyxColor24Opacity
             : cPrimaryColor24Opacity,
         borderRadius: BorderRadius.circular(15),
@@ -58,11 +59,11 @@ class OperationHistoryTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                entryType == "credit" ? "order number #".tr : "via".tr,
+                entryType != "Credit" ? "order number #".tr : "via".tr,
                 style: black410,
               ),
               Text(
-                method,
+                entryType != "Credit" ? " $invoceid".tr : method,
                 style: black410,
               ),
             ],

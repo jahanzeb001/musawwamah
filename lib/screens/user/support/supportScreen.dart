@@ -16,7 +16,7 @@ class UserSupportScreen extends StatelessWidget {
     return Scaffold(
       appBar: ReusableAppBar(
         onPressFunction: () {},
-        titleText: "Support",
+        titleText: "Help",
         textStyle: onyx520,
       ),
       floatingActionButton: Container(
@@ -35,13 +35,12 @@ class UserSupportScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'Support'.tr,
+              'help'.tr,
               style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Tajawal',
-              ),
+                  fontFamily: "Tajawal",
+                  color: cWhiteColor,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400),
             ),
           ),
         ),
@@ -94,9 +93,10 @@ class SupportContainer extends StatelessWidget {
             child: Text(
               containerdata,
               style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Tajawal'),
+                  fontFamily: "Tajawal",
+                  color: cBlackColor,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400),
               maxLines: 2,
               textAlign: TextAlign.justify,
             ),

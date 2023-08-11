@@ -77,7 +77,7 @@ class _PinputExampleState extends State<PinputExample> {
     Get.snackbar(
       'success'.tr,
       'successfullyloggedin'.tr,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: SnackPosition.TOP,
     );
     await FirebaseAuth.instance
         .signInWithCredential(credential)
@@ -94,7 +94,6 @@ class _PinputExampleState extends State<PinputExample> {
   Widget build(BuildContext context) {
     const focusedBorderColor = Colors.white;
     const fillColor = Color.fromRGBO(243, 246, 249, 0);
-    const borderColor = Colors.white;
 
     final defaultPinTheme = PinTheme(
       height: 50,

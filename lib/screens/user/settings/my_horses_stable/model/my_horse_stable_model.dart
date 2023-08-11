@@ -41,6 +41,54 @@ class MyHorseStableResponse {
 
 class Datum {
   int? id;
+  String? userId;
+  String? horseId;
+  String? status;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  User? user;
+  Horse? horse;
+
+  Datum({
+    this.id,
+    this.userId,
+    this.horseId,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.user,
+    this.horse,
+  });
+
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        id: json["id"],
+        userId: json["userId"],
+        horseId: json["horseId"],
+        status: json["status"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
+        horse: json["horse"] == null ? null : Horse.fromJson(json["horse"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "userId": userId,
+        "horseId": horseId,
+        "status": status,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "user": user?.toJson(),
+        "horse": horse?.toJson(),
+      };
+}
+
+class Horse {
+  int? id;
   String? horseSellingType;
   String? horseBackView;
   String? horseFrontView;
@@ -75,15 +123,20 @@ class Datum {
   String? haveEvidence;
   String? isSold;
   String? status;
-  String? timeForAuction;
-  DateTime? dateForAution;
+  dynamic timeForAuction;
+  dynamic dateForAution;
+  dynamic auctionEndTime;
   DateTime? createdAt;
   DateTime? updatedAt;
   String? userId;
   String? height;
-  User? user;
+  String? weight;
+  String? didHeComplete;
+  String? safety;
+  String? rejectedByCustomer;
+  String? horseNotMatch;
 
-  Datum({
+  Horse({
     this.id,
     this.horseSellingType,
     this.horseBackView,
@@ -121,14 +174,19 @@ class Datum {
     this.status,
     this.timeForAuction,
     this.dateForAution,
+    this.auctionEndTime,
     this.createdAt,
     this.updatedAt,
     this.userId,
     this.height,
-    this.user,
+    this.weight,
+    this.didHeComplete,
+    this.safety,
+    this.rejectedByCustomer,
+    this.horseNotMatch,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory Horse.fromJson(Map<String, dynamic> json) => Horse(
         id: json["id"],
         horseSellingType: json["horseSellingType"],
         horseBackView: json["horseBackView"],
@@ -165,9 +223,8 @@ class Datum {
         isSold: json["isSold"],
         status: json["status"],
         timeForAuction: json["timeForAuction"],
-        dateForAution: json["dateForAution"] == null
-            ? null
-            : DateTime.parse(json["dateForAution"]),
+        dateForAution: json["dateForAution"],
+        auctionEndTime: json["auctionEndTime"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -176,7 +233,11 @@ class Datum {
             : DateTime.parse(json["updated_at"]),
         userId: json["userId"],
         height: json["height"],
-        user: json["user"] == null ? null : User.fromJson(json["user"]),
+        weight: json["weight"],
+        didHeComplete: json["did_he_complete"],
+        safety: json["safety"],
+        rejectedByCustomer: json["rejected_by_customer"],
+        horseNotMatch: json["horse_not_match"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -216,20 +277,26 @@ class Datum {
         "isSold": isSold,
         "status": status,
         "timeForAuction": timeForAuction,
-        "dateForAution": dateForAution?.toIso8601String(),
+        "dateForAution": dateForAution,
+        "auctionEndTime": auctionEndTime,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "userId": userId,
         "height": height,
-        "user": user?.toJson(),
+        "weight": weight,
+        "did_he_complete": didHeComplete,
+        "safety": safety,
+        "rejected_by_customer": rejectedByCustomer,
+        "horse_not_match": horseNotMatch,
       };
 }
 
 class User {
   int? id;
   String? fullname;
+  dynamic role;
   String? region;
-  dynamic cityOrProvince;
+  String? cityOrProvince;
   dynamic languagePreference;
   String? detectLocation;
   String? getAlerts;
@@ -245,14 +312,15 @@ class User {
   String? ibanNumber;
   String? accountBalance;
   dynamic userType;
-  String? profileImage;
   dynamic userRole;
   DateTime? createdAt;
   DateTime? updatedAt;
+  dynamic profileImage;
 
   User({
     this.id,
     this.fullname,
+    this.role,
     this.region,
     this.cityOrProvince,
     this.languagePreference,
@@ -270,15 +338,16 @@ class User {
     this.ibanNumber,
     this.accountBalance,
     this.userType,
-    this.profileImage,
     this.userRole,
     this.createdAt,
     this.updatedAt,
+    this.profileImage,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         fullname: json["fullname"],
+        role: json["role"],
         region: json["region"],
         cityOrProvince: json["city_or_province"],
         languagePreference: json["language_preference"],
@@ -296,7 +365,6 @@ class User {
         ibanNumber: json["iban_number"],
         accountBalance: json["account_balance"],
         userType: json["user_type"],
-        profileImage: json["profile_image"],
         userRole: json["user_role"],
         createdAt: json["created_at"] == null
             ? null
@@ -304,11 +372,13 @@ class User {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
+        profileImage: json["profile_image"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "fullname": fullname,
+        "role": role,
         "region": region,
         "city_or_province": cityOrProvince,
         "language_preference": languagePreference,
@@ -326,9 +396,9 @@ class User {
         "iban_number": ibanNumber,
         "account_balance": accountBalance,
         "user_type": userType,
-        "profile_image": profileImage,
         "user_role": userRole,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+        "profile_image": profileImage,
       };
 }

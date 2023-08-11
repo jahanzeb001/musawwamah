@@ -3,9 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:obaiah_mobile_app/models/home_model.dart';
-
 import '../../../../../reusable_widgets/reusable_appbar.dart';
 import '../../../../../utils/colors/colors.dart';
 import '../../../../../utils/constants/app_urls.dart';
@@ -38,13 +35,6 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
   TextEditingController numberofShareController = TextEditingController();
 
   CarouselSliderController sliderController = CarouselSliderController();
-  List sliderimg = [];
-  var horseRidingsTime;
-  var horseRidingeTime;
-  var horseRidingDays;
-  var jumpObjesticsTime;
-  var jumpObjesticeTime;
-  var jumpObjesticDays;
 
   @override
   void initState() {
@@ -52,21 +42,6 @@ class _TrainingListingScreenState extends State<TrainingListingScreen> {
     hoesebackController.text = '1';
     numberofShareController.text = '1';
     super.initState();
-  }
-
-  setTimeDays() {
-    // log('${widget.hoeseridingstime}');
-    // horseRidingsTime = DateFormat('hh:mm:ss a')
-    //     .format(DateFormat("HH:mm:ss").parse(widget.hoeseridingstime));
-    // log('${horseRidingsTime}');
-    // horseRidingeTime = DateFormat('hh:mm:ss a')
-    //     .format(DateFormat("HH:mm:ss").parse(widget.hoeseridingetime));
-    // horseRidingDays = widget.horseridingdays.replaceAll(',', '-');
-    // jumpObjesticDays = widget.jumpdays.replaceAll(',', '-');
-    // jumpObjesticsTime = DateFormat('hh:mm:ss a')
-    //     .format(DateFormat("HH:mm:ss").parse(widget.jumpstime));
-    // jumpObjesticeTime = DateFormat('hh:mm:ss a')
-    //     .format(DateFormat("HH:mm:ss").parse(widget.jumpetime));
   }
 
   @override

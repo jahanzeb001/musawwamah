@@ -11,6 +11,7 @@ import 'package:obaiah_mobile_app/screens/user/add_stable_horse/model/delete_hor
 import 'package:obaiah_mobile_app/screens/user/add_stable_horse/services/stable_horse_service.dart';
 import 'package:obaiah_mobile_app/screens/user/settings/my_horses_stable/view/my_horses_stable_screeen.dart';
 import '../../../../utils/constants/lists.dart';
+import '../../settings/my_horses_stable/controller/my_horses_stable_controller.dart';
 
 class AddStableHorseController extends GetxController {
   final GlobalKey<FormState> addNewHorseFormKey = GlobalKey<FormState>();
@@ -263,6 +264,7 @@ class AddStableHorseController extends GetxController {
             horsePrice!.value;
   }
 
+  final myHorsesStableController = Get.find<MyHorsesStableController>();
   var deleteHorseModel = DeleteStableHorseResponse();
   void deleteStableHorse(int horseId) async {
     loading2.value = true;
@@ -272,7 +274,8 @@ class AddStableHorseController extends GetxController {
 
     if (res is DeleteStableHorseResponse) {
       deleteHorseModel = res;
-      Get.snackbar("notification".tr, "removed from favourites".tr);
+      Get.snackbar("notification".tr, "removed from stable".tr);
+      myHorsesStableController.loadData();
     } else {
       loading2.value = false;
       error2.value = res.toString();

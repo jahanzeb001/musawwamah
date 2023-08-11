@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -9,19 +11,27 @@ import 'package:obaiah_mobile_app/utils/constants/app_urls.dart';
 import 'package:obaiah_mobile_app/utils/spacing/gaps.dart';
 import 'package:obaiah_mobile_app/utils/spacing/padding.dart';
 import '../../../../../Payments/fatoorah_Custom.dart';
+import '../../../../../Payments/thanku_controller.dart';
 import '../../../../../reusable_widgets/reusable_payment_action.dart';
 import '../../../../../utils/text_styles/textstyles.dart';
 import '../../../home/checkout/controller/checkout_controller.dart';
+import '../../../home/checkout/receipts/purchase_receipts.dart';
 import '../../../live_auction/controller/add_rating.dart';
 import '../../wallet_portfolio/components/wallet_portfoio_components.dart';
 import '../view/rating_screen.dart';
 
-class MyOrderListViewInfoCard extends StatelessWidget {
+class MyOrderListViewInfoCard extends StatefulWidget {
   final Datum homePageModel;
 
-  const MyOrderListViewInfoCard({Key? key, required this.homePageModel})
+  MyOrderListViewInfoCard({Key? key, required this.homePageModel})
       : super(key: key);
 
+  @override
+  State<MyOrderListViewInfoCard> createState() =>
+      _MyOrderListViewInfoCardState();
+}
+
+class _MyOrderListViewInfoCardState extends State<MyOrderListViewInfoCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,14 +49,14 @@ class MyOrderListViewInfoCard extends StatelessWidget {
             children: [
               const Spacer(),
               Text(
-                homePageModel.nameOfHorse ?? "",
+                widget.homePageModel.nameOfHorse ?? "",
                 style: primary717,
               ),
               const Spacer(
                 flex: 2,
               ),
               Text(
-                homePageModel.horseNumber ?? "".tr,
+                widget.homePageModel.horseNumber ?? "".tr,
                 style: onyx718,
               ),
               const Spacer(),
@@ -71,7 +81,7 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                       ),
                       gapH5,
                       Text(
-                        homePageModel.type ?? "",
+                        widget.homePageModel.type ?? "",
                         style: homePageValue,
                       ),
                       gapH10,
@@ -81,7 +91,7 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                       ),
                       gapH5,
                       Text(
-                        homePageModel.color ?? "",
+                        widget.homePageModel.color ?? "",
                         style: homePageValue,
                       ),
                       gapH10,
@@ -91,7 +101,7 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                       ),
                       gapH5,
                       Text(
-                        homePageModel.age.toString(),
+                        widget.homePageModel.age.toString(),
                         style: homePageValue,
                       ),
                     ],
@@ -106,7 +116,7 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                       ),
                       gapH5,
                       Text(
-                        homePageModel.originality ?? "",
+                        widget.homePageModel.originality ?? "",
                         style: homePageValue,
                       ),
                       gapH10,
@@ -116,7 +126,7 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                       ),
                       gapH5,
                       Text(
-                        homePageModel.height.toString(),
+                        widget.homePageModel.height.toString(),
                         style: homePageValue,
                       ),
                       gapH10,
@@ -176,44 +186,110 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                       //   //show no iamge availalbe image on error laoding
                       // )
                       Image.network(
-                          "${AppUrls.ImagebaseUrl}${homePageModel.horseFrontView ?? ""}",
+                          "${AppUrls.ImagebaseUrl}${widget.homePageModel.horseFrontView ?? ""}",
                           fit: BoxFit.cover),
                 ),
               )),
             ],
           ),
-          gapH5,
+          widget.homePageModel.isReviewed == '0' ? Text('') : gapH5,
           Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: widget.homePageModel.isReviewed == '1'
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       "price".tr,
                       style: romanSilver408,
                     ),
                     ReUsableText(
-                        text: homePageModel.totalPrice.toString(),
+                        text: widget.homePageModel.totalPrice.toString(),
                         textStyle: homePagePrice),
-                    homePageModel.isDelivered == '1'
-                        ? OutlinedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              shadowColor: cPrimaryColor,
-                              foregroundColor: cPrimaryColor,
-                              side: const BorderSide(color: cBlackColor),
-                              fixedSize: const Size(133, 24),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                    widget.homePageModel.isDelivered == '1'
+                        ? Column(
+                            children: [
+                              OutlinedButton(
+                                onPressed: () {
+                                  Get.to(() => PurchaserReceipts(
+                                        aliganceno:
+                                            '${widget.homePageModel.horseNumber}',
+                                        purchasername:
+                                            '${widget.homePageModel.sellername}',
+                                        address:
+                                            '${widget.homePageModel.pickupAddress}',
+                                        sellername:
+                                            '${widget.homePageModel.sellername}',
+                                        customerphone:
+                                            '${widget.homePageModel.mobileNumber}',
+                                        horsepprice:
+                                            '${widget.homePageModel.price}',
+                                        dileverycharges: '10',
+                                        total:
+                                            '${widget.homePageModel.totalPrice}',
+                                      ));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shadowColor: cPrimaryColor,
+                                  foregroundColor: cPrimaryColor,
+                                  side: const BorderSide(color: cBlackColor),
+                                  fixedSize: const Size(133, 24),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  elevation: 0.0,
+                                ),
+                                child: FittedBox(
+                                  child: Text("bill".tr, style: black512),
+                                ),
                               ),
-                              elevation: 0.0,
-                            ),
-                            child: FittedBox(
-                              child: Text("bill".tr, style: black512),
-                            ),
+                              widget.homePageModel.isReviewed == '1'
+                                  ? Container()
+                                  : OutlinedButton(
+                                      onPressed: () {
+                                        var sellername =
+                                            widget.homePageModel.sellername ??
+                                                "";
+
+                                        var deliveryname = widget.homePageModel
+                                                .deliveryboyname ??
+                                            "";
+                                        var sellerid =
+                                            widget.homePageModel.sellerId ?? "";
+                                        var horseid =
+                                            widget.homePageModel.horseId ?? "";
+                                        var imgurl =
+                                            widget.homePageModel.profileImage;
+                                        showRatingDialog(
+                                            context,
+                                            sellerid,
+                                            horseid,
+                                            sellername,
+                                            deliveryname,
+                                            imgurl);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        shadowColor: cPrimaryColor,
+                                        foregroundColor: cPrimaryColor,
+                                        side: const BorderSide(
+                                            color: cBlackColor),
+                                        fixedSize: const Size(133, 24),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        elevation: 0.0,
+                                      ),
+                                      child: FittedBox(
+                                        child:
+                                            Text("Review".tr, style: black512),
+                                      ),
+                                    ),
+                            ],
                           )
                         : const SizedBox.shrink(),
                   ],
@@ -233,13 +309,13 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                         padding: padA10,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: homePageModel.isPaid == '1'
+                            color: widget.homePageModel.isPaid == '1'
                                 ? cPrimaryColor
                                 : cRomanSilverColor,
                             borderRadius: BorderRadius.circular(6)),
                         child: FittedBox(
                           child: Text(
-                            homePageModel.isDelivered == '1'
+                            widget.homePageModel.isDelivered == '1'
                                 ? "delivered successfully".tr
                                 : "awaiting delivery".tr,
                             style: onyx810,
@@ -247,7 +323,7 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    homePageModel.isDelivered == '1'
+                    widget.homePageModel.isDelivered == '1'
                         ? gapH7
                         : const SizedBox.shrink()
                   ],
@@ -255,20 +331,28 @@ class MyOrderListViewInfoCard extends StatelessWidget {
               )
             ],
           ),
-          homePageModel.isPaid == '1'
+          widget.homePageModel.isPaid == '1'
               ? const SizedBox.shrink()
               : OutlinedButton(
                   onPressed: () {
+                    var aligance = widget.homePageModel.horseNumber;
+                    var name = widget.homePageModel.nameOfHorse;
+                    var totalprice = widget.homePageModel.totalPrice.toString();
+                    var location = widget.homePageModel.city;
+                    var imgurl = widget.homePageModel.horseFrontView;
+                    setthanku(aligance, name, totalprice, location, imgurl);
                     showDialog(
                         context: context,
                         builder: (context) => MyOrderAddAmountDialog(
-                              orderNo: homePageModel.horseNumber.toString(),
-                              currentbalance:
-                                  homePageModel.accountBalance.toString(),
-                              paid: homePageModel.price.toString(),
-                              userid: homePageModel.userId,
-                              horseid: homePageModel.horseId,
-                              salerid: homePageModel.sellerId,
+                              orderNo:
+                                  widget.homePageModel.horseNumber.toString(),
+                              currentbalance: widget
+                                  .homePageModel.accountBalance
+                                  .toString(),
+                              paid: widget.homePageModel.totalPrice.toString(),
+                              userid: widget.homePageModel.userId,
+                              horseid: widget.homePageModel.horseId,
+                              salerid: widget.homePageModel.sellerId,
                             ));
                   },
                   style: ElevatedButton.styleFrom(
@@ -287,6 +371,197 @@ class MyOrderListViewInfoCard extends StatelessWidget {
                 ),
         ],
       ),
+    );
+  }
+
+  ThankuScreenController userThankuController =
+      Get.find<ThankuScreenController>();
+
+  void setthanku(aligance, name, totalprice, location, imgurl) {
+    userThankuController.setThankuData(
+        aligance, name, totalprice, location, imgurl);
+    log('aligance ${userThankuController.aliganceno}');
+  }
+
+  showRatingDialog(BuildContext context, sellerid, horseid, sellername,
+      deliveryboyname, dimgurl) {
+    TextEditingController seller = TextEditingController();
+    TextEditingController dilaverboy = TextEditingController();
+    double rating1 = 0.0;
+    double rating2 = 0.0;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            // title: Text('Obeiah App'),
+
+            content: Container(
+          padding: EdgeInsets.all(5),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        flex: 2,
+                        child: Text('$sellername',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold))),
+                    Expanded(
+                      flex: 3,
+                      child: Image.asset(
+                        'assets/images/auction_images/person_image.png',
+                        width: 100,
+                        height: 100,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10.0),
+                RatingBar.builder(
+                  initialRating: rating1,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemSize: 40.0,
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: cPrimaryColor,
+                  ),
+                  onRatingUpdate: (newRating) {
+                    setState(() {
+                      rating1 = newRating;
+                    });
+                  },
+                ),
+                SizedBox(height: 10.0),
+                //Text('Rating 1: $rating1'),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: cWhiteColor),
+                  child: TextField(
+                    controller: seller,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: cPrimaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: cPrimaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      hintText: "Write Text...",
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Row(
+                  children: [
+                    Expanded(
+                        flex: 2,
+                        child: Text('$deliveryboyname',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold))),
+                    Expanded(
+                        flex: 3,
+                        child: Image.network(
+                          "${AppUrls.ImagebaseUrl}${dimgurl}",
+                          fit: BoxFit.cover,
+                          height: 100,
+                          width: 100,
+                        ))
+                  ],
+                ),
+                RatingBar.builder(
+                  initialRating: rating2,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemSize: 40.0,
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: cPrimaryColor,
+                  ),
+                  onRatingUpdate: (newRating) {
+                    setState(() {
+                      rating2 = newRating;
+                    });
+                  },
+                ),
+                SizedBox(height: 10.0),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: cWhiteColor),
+                  child: TextField(
+                    controller: dilaverboy,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: cPrimaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: cPrimaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      hintText: "Write Text...",
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15.0),
+                SizedBox(
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      log("${rating1} --${rating2}--${seller.text}} ");
+
+                      AddRattingRecord.addrating(
+                          userId: int.tryParse(sellerid),
+                          horseid: int.tryParse(horseid),
+                          sellerating: rating1,
+                          deliverrating: rating2,
+                          sellercomment: seller.text,
+                          deleveryboycomment: dilaverboy.text,
+                          context: context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shadowColor: cPrimaryColor,
+                      foregroundColor: cPrimaryColor,
+                      fixedSize: const Size(200, 35),
+                      side: const BorderSide(color: cBlackColor),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 0.0,
+                    ),
+                    child: FittedBox(
+                      child: Text('submit', style: homePageGridValue),
+                    ),
+                  ),
+                ),
+                //Text('Rating 2: $rating2'),
+              ],
+            ),
+          ),
+        ));
+      },
     );
   }
 }
@@ -359,8 +634,10 @@ class _MyOrdersGridViewInfoCardState extends State<MyOrdersGridViewInfoCard> {
                     //   //show no iamge availalbe image on error laoding
                     // )
                     Image.network(
-                        "${AppUrls.ImagebaseUrl}${widget.homePageModel.horseFrontView ?? ""}",
-                        fit: BoxFit.cover),
+                  "${AppUrls.ImagebaseUrl}${widget.homePageModel.horseFrontView ?? ""}",
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
               ),
             ),
           ),
@@ -441,27 +718,80 @@ class _MyOrdersGridViewInfoCardState extends State<MyOrdersGridViewInfoCard> {
           ),
           gapH10,
           widget.homePageModel.isDelivered == '1'
-              ? OutlinedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    shadowColor: cPrimaryColor,
-                    foregroundColor: cPrimaryColor,
-                    side: const BorderSide(color: cBlackColor),
-                    fixedSize: const Size(133, 24),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              ? Column(
+                  children: [
+                    OutlinedButton(
+                      onPressed: () {
+                        Get.to(() => PurchaserReceipts(
+                              aliganceno: '${widget.homePageModel.horseNumber}',
+                              purchasername:
+                                  '${widget.homePageModel.sellername}',
+                              address: '${widget.homePageModel.pickupAddress}',
+                              sellername: '${widget.homePageModel.sellername}',
+                              customerphone:
+                                  '${widget.homePageModel.mobileNumber}',
+                              horsepprice: '${widget.homePageModel.price}',
+                              dileverycharges: '10',
+                              total: '${widget.homePageModel.totalPrice}',
+                            ));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shadowColor: cPrimaryColor,
+                        foregroundColor: cPrimaryColor,
+                        side: const BorderSide(color: cBlackColor),
+                        fixedSize: const Size(133, 24),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0.0,
+                      ),
+                      child: FittedBox(
+                        child: Text("bill".tr, style: black512),
+                      ),
                     ),
-                    elevation: 0.0,
-                  ),
-                  child: FittedBox(
-                    child: Text("bill".tr, style: black512),
-                  ),
+                    widget.homePageModel.isReviewed == '1'
+                        ? Container()
+                        : OutlinedButton(
+                            onPressed: () {
+                              var sellername =
+                                  widget.homePageModel.sellername ?? "";
+
+                              var deliveryname =
+                                  widget.homePageModel.deliveryboyname ?? "";
+                              var sellerid =
+                                  widget.homePageModel.sellerId ?? "";
+                              var horseid = widget.homePageModel.horseId ?? "";
+                              var imgurl = widget.homePageModel.profileImage;
+                              showRatingDialog(context, sellerid, horseid,
+                                  sellername, deliveryname, imgurl);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shadowColor: cPrimaryColor,
+                              foregroundColor: cPrimaryColor,
+                              side: const BorderSide(color: cBlackColor),
+                              fixedSize: const Size(133, 24),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 0.0,
+                            ),
+                            child: FittedBox(
+                              child: Text("Review".tr, style: black512),
+                            ),
+                          ),
+                  ],
                 )
               : const SizedBox.shrink(),
           widget.homePageModel.isPaid == '1'
               ? const SizedBox.shrink()
               : OutlinedButton(
                   onPressed: () {
+                    var aligance = widget.homePageModel.horseNumber;
+                    var name = widget.homePageModel.nameOfHorse;
+                    var totalprice = widget.homePageModel.totalPrice.toString();
+                    var location = widget.homePageModel.city;
+                    var imgurl = widget.homePageModel.horseFrontView;
+                    setthanku(aligance, name, totalprice, location, imgurl);
                     showDialog(
                         context: context,
                         builder: (context) => MyOrderAddAmountDialog(
@@ -469,7 +799,7 @@ class _MyOrdersGridViewInfoCardState extends State<MyOrdersGridViewInfoCard> {
                                 widget.homePageModel.horseNumber.toString(),
                             currentbalance:
                                 widget.homePageModel.accountBalance.toString(),
-                            paid: widget.homePageModel.price.toString(),
+                            paid: widget.homePageModel.totalPrice.toString(),
                             userid: widget.homePageModel.userId,
                             horseid: widget.homePageModel.horseId,
                             salerid: widget.homePageModel.sellerId));
@@ -490,6 +820,196 @@ class _MyOrdersGridViewInfoCardState extends State<MyOrdersGridViewInfoCard> {
                 ),
         ],
       ),
+    );
+  }
+
+  ThankuScreenController userThankuController =
+      Get.find<ThankuScreenController>();
+  void setthanku(aligance, name, totalprice, location, imgurl) {
+    userThankuController.setThankuData(
+        aligance, name, totalprice, location, imgurl);
+    log('aligance ${userThankuController.aliganceno}');
+  }
+
+  showRatingDialog(BuildContext context, sellerid, horseid, sellername,
+      deliveryboyname, dimgurl) {
+    TextEditingController seller = TextEditingController();
+    TextEditingController dilaverboy = TextEditingController();
+    double rating1 = 0.0;
+    double rating2 = 0.0;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            // title: Text('Obeiah App'),
+
+            content: Container(
+          padding: EdgeInsets.all(5),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        flex: 2,
+                        child: Text('$sellername',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold))),
+                    Expanded(
+                      flex: 3,
+                      child: Image.asset(
+                        'assets/images/auction_images/person_image.png',
+                        width: 100,
+                        height: 100,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10.0),
+                RatingBar.builder(
+                  initialRating: rating1,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemSize: 40.0,
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: cPrimaryColor,
+                  ),
+                  onRatingUpdate: (newRating) {
+                    setState(() {
+                      rating1 = newRating;
+                    });
+                  },
+                ),
+                SizedBox(height: 10.0),
+                //Text('Rating 1: $rating1'),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: cWhiteColor),
+                  child: TextField(
+                    controller: seller,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: cPrimaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: cPrimaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      hintText: "Write Text...",
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Row(
+                  children: [
+                    Expanded(
+                        flex: 2,
+                        child: Text('$deliveryboyname',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold))),
+                    Expanded(
+                        flex: 3,
+                        child: Image.network(
+                          "${AppUrls.ImagebaseUrl}${dimgurl}",
+                          fit: BoxFit.cover,
+                          height: 100,
+                          width: 100,
+                        ))
+                  ],
+                ),
+                RatingBar.builder(
+                  initialRating: rating2,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemSize: 40.0,
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: cPrimaryColor,
+                  ),
+                  onRatingUpdate: (newRating) {
+                    setState(() {
+                      rating2 = newRating;
+                    });
+                  },
+                ),
+                SizedBox(height: 10.0),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: cWhiteColor),
+                  child: TextField(
+                    controller: dilaverboy,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: cPrimaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: cPrimaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      hintText: "Write Text...",
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15.0),
+                SizedBox(
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      log("${rating1} --${rating2}--${seller.text}} ");
+
+                      AddRattingRecord.addrating(
+                          userId: int.tryParse(sellerid),
+                          horseid: int.tryParse(horseid),
+                          sellerating: rating1,
+                          deliverrating: rating2,
+                          sellercomment: seller.text,
+                          deleveryboycomment: dilaverboy.text,
+                          context: context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shadowColor: cPrimaryColor,
+                      foregroundColor: cPrimaryColor,
+                      fixedSize: const Size(200, 35),
+                      side: const BorderSide(color: cBlackColor),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 0.0,
+                    ),
+                    child: FittedBox(
+                      child: Text('submit', style: homePageGridValue),
+                    ),
+                  ),
+                ),
+                //Text('Rating 2: $rating2'),
+              ],
+            ),
+          ),
+        ));
+      },
     );
   }
 }
@@ -594,7 +1114,7 @@ class _MyOrderAddAmountDialogState extends State<MyOrderAddAmountDialog> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10))),
                           child: ReUsableText(
-                            text: "$totalpay",
+                            text: "${widget.paid}",
                             textStyle: textStyle913,
                           )),
                     ),
@@ -612,7 +1132,7 @@ class _MyOrderAddAmountDialogState extends State<MyOrderAddAmountDialog> {
                 visaMasterCardPaymentFunction: () {
                   Navigator.pop(context);
                   Get.to(() => FatoorahCustom(
-                        userid: widget.userid,
+                        userid: int.parse('${widget.userid}'),
                         horseid: widget.horseid,
                         sellerid: widget.salerid,
                         totalprice: totalpay,
@@ -622,7 +1142,7 @@ class _MyOrderAddAmountDialogState extends State<MyOrderAddAmountDialog> {
                 madaPaymentFunction: () {
                   Navigator.pop(context);
                   Get.to(() => FatoorahCustom(
-                        userid: widget.userid,
+                        userid: int.parse('${widget.userid}'),
                         horseid: widget.horseid,
                         sellerid: widget.salerid,
                         totalprice: totalpay,
@@ -631,7 +1151,7 @@ class _MyOrderAddAmountDialogState extends State<MyOrderAddAmountDialog> {
                 },
                 applePaymentFunction: () {},
                 width: context.width * 0.5,
-                userid: widget.userid,
+                userid: int.parse('${widget.userid}'),
                 horseid: widget.horseid,
                 sellerid: widget.salerid,
                 totalprice: totalpay,
@@ -654,3 +1174,190 @@ class _MyOrderAddAmountDialogState extends State<MyOrderAddAmountDialog> {
         ));
   }
 }
+
+// class RatingDialog extends StatefulWidget {
+//   const RatingDialog({super.key});
+
+//   @override
+//   State<RatingDialog> createState() => _RatingDialogState();
+// }
+
+// class _RatingDialogState extends State<RatingDialog> {
+//   TextEditingController seller = TextEditingController();
+//   TextEditingController dilaverboy = TextEditingController();
+//   double rating1 = 0.0;
+//   double rating2 = 0.0;
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+//         // title: Text('Obeiah App'),
+
+//         content: Container(
+//       padding: EdgeInsets.all(5),
+//       child: SingleChildScrollView(
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             Row(
+//               children: [
+//                 // $sellername
+//                 Expanded(
+//                     flex: 2,
+//                     child: Text('Ahmed',
+//                         style: TextStyle(
+//                             fontSize: 20, fontWeight: FontWeight.bold))),
+//                 Expanded(
+//                   flex: 3,
+//                   child: Image.asset(
+//                     'assets/images/auction_images/person_image.png',
+//                     width: 100,
+//                     height: 100,
+//                   ),
+//                 )
+//               ],
+//             ),
+//             SizedBox(height: 10.0),
+//             RatingBar.builder(
+//               initialRating: rating1,
+//               minRating: 0,
+//               direction: Axis.horizontal,
+//               allowHalfRating: true,
+//               itemCount: 5,
+//               itemSize: 40.0,
+//               itemBuilder: (context, _) => Icon(
+//                 Icons.star,
+//                 color: Colors.amber,
+//               ),
+//               onRatingUpdate: (newRating) {
+//                 // setState(() {
+//                 //   rating1 = newRating;
+//                 // });
+//               },
+//             ),
+//             SizedBox(height: 10.0),
+//             //Text('Rating 1: $rating1'),
+//             Container(
+//               padding: EdgeInsets.all(5),
+//               decoration: BoxDecoration(
+//                   borderRadius: BorderRadius.circular(10), color: cWhiteColor),
+//               child: TextField(
+//                 controller: seller,
+//                 decoration: InputDecoration(
+//                   enabledBorder: OutlineInputBorder(
+//                     borderSide: BorderSide(
+//                       color: cPrimaryColor,
+//                     ),
+//                     borderRadius: BorderRadius.circular(10.0),
+//                   ),
+//                   focusedBorder: OutlineInputBorder(
+//                     borderSide: BorderSide(
+//                       color: cPrimaryColor,
+//                     ),
+//                     borderRadius: BorderRadius.circular(10.0),
+//                   ),
+//                   hintText: "Write Text...",
+//                 ),
+//               ),
+//             ),
+//             SizedBox(height: 20.0),
+//             Row(
+//               children: [
+//                 // $deliveryboyname
+//                 Expanded(
+//                     flex: 2,
+//                     child: Text('delevery',
+//                         style: TextStyle(
+//                             fontSize: 20, fontWeight: FontWeight.bold))),
+//                 Expanded(
+//                   flex: 3,
+//                   child: Image.asset(
+//                     'assets/images/auction_images/person_image.png',
+//                     width: 100,
+//                     height: 100,
+//                   ),
+//                 )
+//               ],
+//             ),
+//             RatingBar.builder(
+//               initialRating: rating2,
+//               minRating: 0,
+//               direction: Axis.horizontal,
+//               allowHalfRating: true,
+//               itemCount: 5,
+//               itemSize: 40.0,
+//               itemBuilder: (context, _) => Icon(
+//                 Icons.star,
+//                 color: Colors.amber,
+//               ),
+//               onRatingUpdate: (newRating) {
+//                 // setState(() {
+//                 //   rating2 = newRating;
+//                 // });
+//               },
+//             ),
+//             SizedBox(height: 10.0),
+//             Container(
+//               padding: EdgeInsets.all(5),
+//               decoration: BoxDecoration(
+//                   borderRadius: BorderRadius.circular(10), color: cWhiteColor),
+//               child: TextField(
+//                 controller: dilaverboy,
+//                 decoration: InputDecoration(
+//                   enabledBorder: OutlineInputBorder(
+//                     borderSide: BorderSide(
+//                       color: cPrimaryColor,
+//                     ),
+//                     borderRadius: BorderRadius.circular(10.0),
+//                   ),
+//                   focusedBorder: OutlineInputBorder(
+//                     borderSide: BorderSide(
+//                       color: cPrimaryColor,
+//                     ),
+//                     borderRadius: BorderRadius.circular(10.0),
+//                   ),
+//                   hintText: "Write Text...",
+//                 ),
+//               ),
+//             ),
+//             SizedBox(height: 15.0),
+//             SizedBox(
+//               height: 50,
+//               child: OutlinedButton(
+//                 onPressed: () {
+//                   print("${rating1} --${rating2}--${seller.text}} ");
+//                   // int.tryParse(sellerid)
+//                   // int.tryParse(horseid)
+//                   AddRattingRecord.addrating(
+//                       userId: 1,
+//                       horseid: 4,
+//                       sellerating: rating1,
+//                       deliverrating: rating2,
+//                       sellercomment: seller.text,
+//                       deleveryboycomment: dilaverboy.text,
+//                       context: context);
+//                   // deliverycomment: dilaverboy.text
+//                 },
+//                 style: ElevatedButton.styleFrom(
+//                   shadowColor: cPrimaryColor,
+//                   foregroundColor: cPrimaryColor,
+//                   fixedSize: const Size(200, 35),
+//                   side: const BorderSide(color: cBlackColor),
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(10),
+//                   ),
+//                   elevation: 0.0,
+//                 ),
+//                 child: FittedBox(
+//                   child: Text('submit', style: homePageGridValue),
+//                 ),
+//               ),
+//             ),
+//             //Text('Rating 2: $rating2'),
+//           ],
+//         ),
+//       ),
+//     ));
+//   }
+// }

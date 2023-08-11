@@ -39,7 +39,7 @@ class _WalletPortfolioScreenState extends State<WalletPortfolioScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: ReusableAppBar(
-            titleText: "portfolio",
+            titleText: "portfolio1",
             textStyle: black718,
             onPressFunction: () {
               Navigator.pop(context);
@@ -141,6 +141,11 @@ class _WalletPortfolioScreenState extends State<WalletPortfolioScreen> {
                                                 .myWalletModel
                                                 .data![index]
                                                 .transactionType ??
+                                            "",
+                                        invoceid: walletPortfolioController
+                                                .myWalletModel
+                                                .data![index]
+                                                .invoiceId ??
                                             "");
                                   },
                                 )),
@@ -228,6 +233,7 @@ class _AddAmountDialoggState extends State<AddAmountDialogg> {
   @override
   Widget build(BuildContext context) {
     final walletPortfolioController = Get.find<WalletPortfolioController>();
+    final _key = GlobalKey();
 
     var totalBalance = '';
     return AlertDialog(
@@ -238,181 +244,207 @@ class _AddAmountDialoggState extends State<AddAmountDialogg> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        content: Container(
-          // height: 170,
-          width: 330,
-          decoration: const BoxDecoration(color: cScaffoldBackground),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "add creditss".tr,
-                style: homePageOnyxGridPrice,
-              ),
-              gapH20,
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _balanceController,
-                      onChanged: (value) {
-                        totalBalance = value;
-                        log('$totalBalance');
-                      },
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontFamily: "Tajawal",
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14),
-                      decoration: InputDecoration(
-                        filled: true,
-                        labelStyle: const TextStyle(
-                          fontFamily: "Tajawal",
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                          color: cOnyxColor,
+        content: Form(
+          key: _key,
+          child: Container(
+            // height: 170,
+            width: 330,
+            decoration: const BoxDecoration(color: cScaffoldBackground),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "add creditss".tr,
+                  style: homePageOnyxGridPrice,
+                ),
+                gapH20,
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _balanceController,
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          totalBalance = value;
+                          log('$totalBalance');
+                        },
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontFamily: "Tajawal",
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14),
+                        decoration: InputDecoration(
+                          filled: true,
+                          labelStyle: const TextStyle(
+                            fontFamily: "Tajawal",
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                            color: cOnyxColor,
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          label: Center(child: Text('enter balance'.tr)),
+                          fillColor: cWhiteColor,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: BorderSide.none),
                         ),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        label: Center(child: Text('enter balance'.tr)),
-                        fillColor: cWhiteColor,
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            borderSide: BorderSide.none),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter Balance  ';
-                        }
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter Balance  ';
+                          }
 
-                        return null;
-                      },
+                          return null;
+                        },
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: AmountAdditionBoxComponent(
-                        text: walletPortfolioController
-                            .myWalletModel.accountBalance
-                            .toString(),
-                        headerText: "your new balance amount",
-                        color: Colors.grey),
-                  ),
-                ],
-              ),
-              gapH10,
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconsDisplayCardWidget(
-                        onTapFunction: () {
+                    Expanded(
+                      child: AmountAdditionBoxComponent(
+                          text: walletPortfolioController
+                              .myWalletModel.accountBalance
+                              .toString(),
+                          headerText: "your new balance amount",
+                          color: Colors.grey),
+                    ),
+                  ],
+                ),
+                gapH10,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconsDisplayCardWidget(
+                          onTapFunction: () {
+                            if (_balanceController.text == '') {
+                              Get.snackbar(
+                                'error'.tr,
+                                'Please Enter Balance'.tr,
+                                snackPosition: SnackPosition.TOP,
+                              );
+                            } else {
+                              Navigator.pop(context);
+                              Get.to(() => FatoorahCustom(
+                                    userid: int.parse(
+                                        '${walletPortfolioController.userId}'),
+                                    horseid: '',
+                                    sellerid: '',
+                                    totalprice: _balanceController.text,
+                                    role: 'addwalet',
+                                  ));
+                            }
+                          },
+                          beforeLogoAssetString: Assets.paymentImagesMadaLogo,
+                          afterLogoAssetString:
+                              Assets.paymentImagesMadaTextIcon,
+                        ),
+                        IconsDisplayCardWidget(
+                          onTapFunction: () {
+                            if (_balanceController.text == '') {
+                              Get.snackbar(
+                                'error'.tr,
+                                'Please Enter Balance'.tr,
+                                snackPosition: SnackPosition.TOP,
+                              );
+                            } else {
+                              Navigator.pop(context);
+                              Get.to(() => FatoorahCustom(
+                                    userid: int.parse(
+                                        '${walletPortfolioController.userId}'),
+                                    horseid: '',
+                                    sellerid: '',
+                                    totalprice: _balanceController.text,
+                                    role: 'addwalet',
+                                  ));
+                            }
+                          },
+                          beforeLogoAssetString: Assets.paymentImagesVisaIcon,
+                          afterLogoAssetString:
+                              Assets.paymentImagesMasterCardLogo,
+                        ),
+                      ],
+                    ),
+                    gapH15,
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_balanceController.text == '') {
+                          Get.snackbar(
+                            'error'.tr,
+                            'Please Enter Balance'.tr,
+                            snackPosition: SnackPosition.TOP,
+                          );
+                        } else {
                           Navigator.pop(context);
+                          Get.to(() => FatoorahCustom(
+                                userid: int.parse(
+                                    '${walletPortfolioController.userId}'),
+                                horseid: '',
+                                sellerid: '',
+                                totalprice: _balanceController.text,
+                                role: 'addwalet',
+                              ));
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: cBlackColor,
+                          fixedSize: Size(200, 40),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(
+                              "assets/images/apple_icon/apple_icon.png",
+                              //Assets.appleIconAppleIcon,
 
-                          Get.to(() => FatoorahCustom(
-                                userid: int.parse(
-                                    '${walletPortfolioController.userId}'),
-                                horseid: '',
-                                sellerid: '',
-                                totalprice: _balanceController.text,
-                                role: 'addwalet',
-                              ));
-                        },
-                        beforeLogoAssetString: Assets.paymentImagesMadaLogo,
-                        afterLogoAssetString: Assets.paymentImagesMadaTextIcon,
+                              alignment: Alignment.center,
+                            ),
+                            gapW5,
+                            Text(
+                              "Pay",
+                              style: TextStyle(
+                                  fontFamily: "Tajawal",
+                                  color: cWhiteColor,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 27),
+                            ),
+                          ],
+                        ),
                       ),
-                      IconsDisplayCardWidget(
-                        onTapFunction: () {
-                          Navigator.pop(context);
-                          //Get.to(() => PaymentScreen());
-                          Get.to(() => FatoorahCustom(
-                                userid: int.parse(
-                                    '${walletPortfolioController.userId}'),
-                                horseid: '',
-                                sellerid: '',
-                                totalprice: _balanceController.text,
-                                role: 'addwalet',
-                              ));
-                        },
-                        beforeLogoAssetString: Assets.paymentImagesVisaIcon,
-                        afterLogoAssetString:
-                            Assets.paymentImagesMasterCardLogo,
-                      ),
-                    ],
-                  ),
-                  gapH15,
-                  ElevatedButton(
+                    ),
+                  ],
+                ),
+                // ReusablePaymentActionWidget(
+                //     visaMasterCardPaymentFunction: () {},
+                //     madaPaymentFunction: () {},
+                //     applePaymentFunction: () {},
+                //     width: context.width * 0.5,
+                //     userid: walletPortfolioController.userId,
+                //     horseid: '',
+                //     sellerid: '',
+                //     totalprice:
+                //         walletPortfolioController.amountNoController.text,
+                //     role: 'addwalet'),
+                gapH15,
+                ElevatedButton(
                     onPressed: () {
+                      print(_balanceController.text);
                       Navigator.pop(context);
-
-                      Get.to(() => FatoorahCustom(
-                            userid: int.parse(
-                                '${walletPortfolioController.userId}'),
-                            horseid: '',
-                            sellerid: '',
-                            totalprice: _balanceController.text,
-                            role: 'addwalet',
-                          ));
                     },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: cBlackColor,
-                        fixedSize: Size(200, 40),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset(
-                            "assets/images/apple_icon/apple_icon.png",
-                            //Assets.appleIconAppleIcon,
-
-                            alignment: Alignment.center,
-                          ),
-                          gapW5,
-                          Text(
-                            "Pay",
-                            style: TextStyle(
-                                fontFamily: "Tajawal",
-                                color: cWhiteColor,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 27),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              // ReusablePaymentActionWidget(
-              //     visaMasterCardPaymentFunction: () {},
-              //     madaPaymentFunction: () {},
-              //     applePaymentFunction: () {},
-              //     width: context.width * 0.5,
-              //     userid: walletPortfolioController.userId,
-              //     horseid: '',
-              //     sellerid: '',
-              //     totalprice:
-              //         walletPortfolioController.amountNoController.text,
-              //     role: 'addwalet'),
-              gapH15,
-              ElevatedButton(
-                  onPressed: () {
-                    print(_balanceController.text);
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: cRomanSilverColor,
-                      shape: const StadiumBorder()),
-                  child: Text(
-                    "cancel".tr,
-                    style: auctionDescriptionBoldTextStyle,
-                  ))
-            ],
+                        backgroundColor: cRomanSilverColor,
+                        shape: const StadiumBorder()),
+                    child: Text(
+                      "cancel".tr,
+                      style: auctionDescriptionBoldTextStyle,
+                    ))
+              ],
+            ),
           ),
         ));
   }

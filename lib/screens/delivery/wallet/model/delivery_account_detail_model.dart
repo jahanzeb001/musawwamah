@@ -15,7 +15,7 @@ String deliveryAccountDetailResponseToJson(
 class DeliveryAccountDetailResponse {
   bool? success;
   String? message;
-  Data? data;
+  List<Datum>? data;
 
   DeliveryAccountDetailResponse({
     this.success,
@@ -27,31 +27,35 @@ class DeliveryAccountDetailResponse {
       DeliveryAccountDetailResponse(
         success: json["success"],
         message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null
+            ? []
+            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
         "message": message,
-        "data": data?.toJson(),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
-class Data {
+class Datum {
   String? accountBalance;
   int? id;
   String? deliveryPersonId;
   String? horseId;
-  String? via;
+  Via? via;
   dynamic invoiceId;
   String? amount;
   String? transactionType;
-  DateTime? date;
-  String? status;
+  String? date;
+  Status? status;
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  Data({
+  Datum({
     this.accountBalance,
     this.id,
     this.deliveryPersonId,
@@ -66,17 +70,17 @@ class Data {
     this.updatedAt,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         accountBalance: json["account_balance"],
         id: json["id"],
         deliveryPersonId: json["deliveryPersonId"],
         horseId: json["horseId"],
-        via: json["via"],
+        via: viaValues.map[json["via"]]!,
         invoiceId: json["invoiceId"],
         amount: json["amount"],
-        transactionType: json["transactionType"],
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
-        status: json["status"],
+        transactionType: json["transactionType"]!,
+        date: json["date"],
+        status: statusValues.map[json["status"]]!,
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -90,14 +94,40 @@ class Data {
         "id": id,
         "deliveryPersonId": deliveryPersonId,
         "horseId": horseId,
-        "via": via,
+        "via": viaValues.reverse[via],
         "invoiceId": invoiceId,
         "amount": amount,
         "transactionType": transactionType,
-        "date":
-            "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
-        "status": status,
+        "date": date,
+        "status": statusValues.reverse[status],
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
+}
+
+enum Status { SUCCESSFUL }
+
+final statusValues = EnumValues({"Successful": Status.SUCCESSFUL});
+
+enum TransactionType { CREDIT, TRANSACTION_TYPE_CREDIT }
+
+final transactionTypeValues = EnumValues({
+  "credit": TransactionType.CREDIT,
+  "Credit": TransactionType.TRANSACTION_TYPE_CREDIT
+});
+
+enum Via { HORSE_DELIVERY }
+
+final viaValues = EnumValues({"Horse Delivery": Via.HORSE_DELIVERY});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }

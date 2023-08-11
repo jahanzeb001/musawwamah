@@ -1047,7 +1047,7 @@ class _DeliveryConfirmPickupScreenState
                             onPressed: () {
                               deliveryConfirmPickUpController
                                   .confirmDeliveryPickup(
-                                      hid: widget.homeModel?.data?.id,
+                                      hid: widget.horseId,
                                       horseImageFromRight: horseRightView,
                                       horseImageFromLeft: horseLeftView,
                                       horseFrontView: horseFrontView,

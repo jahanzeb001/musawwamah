@@ -13,6 +13,7 @@ import '../../../../../utils/text_styles/textstyles.dart';
 import '../../../home/home/components/home_screen_components.dart';
 import '../../../home/home/controller/home_screen_controller.dart';
 import '../components/hospitality_home_components.dart';
+import '../components/hospitality_sorting_dialogue.dart';
 import '../controller/hospitality_home_controller.dart';
 
 class HospitalityHomeScreen extends StatefulWidget {
@@ -94,10 +95,28 @@ class _HospitalityHomeScreenState extends State<HospitalityHomeScreen> {
                             ],
                           ),
                         ),
+                        // ResultSortingComponent(filterDialogFunction: () {
+                        //   showDialog(
+                        //       context: context,
+                        //       builder: (context) => FilterDialog(
+                        //             filterCheckBoxValueList:
+                        //                 Get.find<HomeScreenController>()
+                        //                     .filterCheckBoxValueList,
+                        //             selectedValueList:
+                        //                 Get.find<HomeScreenController>()
+                        //                     .filterValuesList,
+                        //           ));
+                        // },
+                        //  sortingDialogFunction: () {
+                        //   showDialog(
+                        //       context: context,
+                        //       builder: (context) => const SortingDialog());
+                        // }),
                         ResultSortingComponent(filterDialogFunction: () {
+                          hospitalityHomeController.getPropertiseList();
                           showDialog(
                               context: context,
-                              builder: (context) => FilterDialog(
+                              builder: (context) => FilterDialogBox2(
                                     filterCheckBoxValueList:
                                         Get.find<HomeScreenController>()
                                             .filterCheckBoxValueList,
@@ -108,7 +127,7 @@ class _HospitalityHomeScreenState extends State<HospitalityHomeScreen> {
                         }, sortingDialogFunction: () {
                           showDialog(
                               context: context,
-                              builder: (context) => const SortingDialog());
+                              builder: (context) => const SortingDialogBox2());
                         }),
                       ],
                     ),

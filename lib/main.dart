@@ -95,10 +95,10 @@ class _ObaiahAppState extends State<ObaiahApp> {
             ? languiges == 'US'
                 ? Locale('en', 'US')
                 : Locale('ar', 'SA')
-            : Locale('en', 'US'),
+            : Locale('ar', 'SA'),
         //To Get Device Locale Get.deviceLocale
         // locale: Get.deviceLocale,
-        fallbackLocale: Locale("en", "US"),
+        fallbackLocale: Locale("ar", "SA"),
         title: 'Obaiah Mobile App',
         initialBinding: InitializingDependency(),
         debugShowCheckedModeBanner: false,

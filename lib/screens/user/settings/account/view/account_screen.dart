@@ -279,31 +279,38 @@ class _AccountScreenState extends State<AccountScreen> {
                                                     .updatingUser.value,
                                                 backGroundColor: cPrimaryColor,
                                                 onPressedFunction: () {
-                                                  accountController.UpdateUser(
-                                                      accountController.uid,
-                                                      accountController
-                                                          .fullNameController
-                                                          .text,
-                                                      accountController
-                                                          .idNumberController
-                                                          .text,
-                                                      accountController
-                                                          .regionController
-                                                          .text,
-                                                      accountController
-                                                          .cityProvinceController
-                                                          .text,
-                                                      accountController
-                                                          .mobileNumberController
-                                                          .text,
-                                                      accountController
-                                                          .bankNameController
-                                                          .text,
-                                                      accountController
-                                                          .ibanNoController
-                                                          .text,
-                                                      idBackView!,
-                                                      idFrontView!);
+                                                  if (idFrontView == null ||
+                                                      idBackView == null) {
+                                                    Get.snackbar(
+                                                        "notification".tr,
+                                                        "Please select all images");
+                                                  } else {
+                                                    accountController.UpdateUser(
+                                                        accountController.uid,
+                                                        accountController
+                                                            .fullNameController
+                                                            .text,
+                                                        accountController
+                                                            .idNumberController
+                                                            .text,
+                                                        accountController
+                                                            .regionController
+                                                            .text,
+                                                        accountController
+                                                            .cityProvinceController
+                                                            .text,
+                                                        accountController
+                                                            .mobileNumberController
+                                                            .text,
+                                                        accountController
+                                                            .bankNameController
+                                                            .text,
+                                                        accountController
+                                                            .ibanNoController
+                                                            .text,
+                                                        idBackView!,
+                                                        idFrontView!);
+                                                  }
                                                 },
                                               )),
                                         ),

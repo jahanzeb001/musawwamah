@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:obaiah_mobile_app/utils/constants/app_urls.dart';
 import 'package:obaiah_mobile_app/utils/constants/custom_error.dart';
 import 'package:obaiah_mobile_app/utils/constants/no_data_message.dart';
+import '../../../../../Payments/thanku_controller.dart';
 import '../../../../../reusable_widgets/reusable_dropdown_formfield.dart';
 import '../../../../../reusable_widgets/reusable_payment_action.dart';
 import '../../../../../reusable_widgets/reusable_appbar.dart';
@@ -34,12 +35,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     log(int.parse(price).toString());
 
     totalPaid =
-        (int.parse(price) + int.parse(commission) + int.parse(opnion) + 500)
+        (int.parse(price) + int.parse(commission) + int.parse(opnion) + 10)
             .toString();
 
     setState(() {
       totalPaid = totalPaid;
-      transfervaluy = 500;
+      transfervaluy = 10;
     });
   }
 
@@ -62,13 +63,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   final checkoutController = Get.find<CheckoutController>();
+  ThankuScreenController userThankuController =
+      Get.find<ThankuScreenController>();
 
   @override
   void initState() {
     mintialvalue();
     checkoutController.checkNeedTransportServices(value: false);
     // TODO: implement initState
-
+    setthanku();
     super.initState();
   }
 
@@ -429,7 +432,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                   widget.homeModel.data!.price;
                                               var commission = widget.homeModel
                                                   .data!.siteCommision;
-                                              var transport = '500';
+                                              var transport = '10';
                                               var opnion = widget.homeModel
                                                   .data!.expertOpinionPrice;
                                               addTransport(price, commission,
@@ -439,13 +442,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                   widget.homeModel.data!.price;
                                               var commission = widget.homeModel
                                                   .data!.siteCommision;
-                                              var transport = '500';
+                                              var transport = '10';
                                               var opnion = widget.homeModel
                                                   .data!.expertOpinionPrice;
                                               removeTransport(price, commission,
                                                   transport, opnion);
                                             }
                                             log('$val');
+                                            setthanku();
                                           });
                                     }),
                                   ),
@@ -666,7 +670,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
         ));
   }
-}
-/*
 
- */
+  void setthanku() {
+    var aligance = widget.homeModel.data!.horseId;
+    var name = widget.homeModel.data!.nameOfHorse;
+    var totalprice = totalPaid;
+    var location = widget.homeModel.data!.city;
+    var imgurl = widget.homeModel.data!.horseFrontView;
+    userThankuController.setThankuData(
+        aligance, name, totalprice, location, imgurl);
+    log('aligance ${userThankuController.aliganceno}');
+  }
+}

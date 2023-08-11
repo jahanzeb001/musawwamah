@@ -33,7 +33,12 @@ class DeliveryAccountController extends GetxController {
     false,
     false,
   ].obs;
-
+  RxString idBackBase64 = "".obs;
+  RxString idFrontBase64 = "".obs;
+  RxString idFrontextension = "".obs;
+  RxString idBackextension = "".obs;
+  RxString frontimage = "".obs;
+  RxString backimage = "".obs;
   changeChoseValue({required bool value, required int index}) {
     chosenCountryValuesList.removeAt(index);
     chosenCountryValuesList.insert(index, value);
@@ -43,11 +48,6 @@ class DeliveryAccountController extends GetxController {
   var loading = false.obs;
   var error = "".obs;
   var deliveryAccountModel = DeliveryAccountResponse();
-
-  RxString idBackBase64 = "".obs;
-  RxString idFrontBase64 = "".obs;
-  RxString idFrontextension = "".obs;
-  RxString idBackextension = "".obs;
 
   @override
   void onInit() {
@@ -104,23 +104,23 @@ class DeliveryAccountController extends GetxController {
       String? region,
       dynamic cityOrProvince,
       String? idNumber,
-      File? idPhotoFront,
-      File? idPhotoBack,
+      File idPhotoFront,
+      File idPhotoBack,
       String? mobileNumber,
       String? bankName,
       String? ibanNumber,
       List<String>? ordersAcceptanceRegionList) async {
     error2.value = "";
     updatingAccount.value = true;
-    await fileToString(idPhotoFront!, idPhotoBack!);
+    await fileToString(idPhotoFront, idPhotoBack);
     var res = await UpdateDeliveryAccountService.updateUser2(
         userId: userId,
         fullname: fullname,
         region: region,
         cityOrProvince: cityOrProvince,
         idNumber: idNumber,
-        idPhotoFront: idFrontBase64.value,
-        idPhotoBack: idBackBase64.value,
+        idPhotoFront: "data:image/$idFrontextension;base64,${idFrontBase64}",
+        idPhotoBack: "data:image/$idBackextension;base64,${idBackBase64}",
         mobileNumber: mobileNumber,
         bankName: bankName,
         ibanNumber: ibanNumber,
@@ -132,6 +132,7 @@ class DeliveryAccountController extends GetxController {
       updateAccountModel = res;
 
       Get.snackbar("notification".tr, "Account updated successfull");
+      loadData();
     } else {
       updatingAccount.value = false;
       error2.value = res.toString();

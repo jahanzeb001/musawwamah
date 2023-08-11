@@ -18,7 +18,8 @@ class FavoritesViewInfoCard extends StatelessWidget {
 
   int index;
 
-  FavoritesViewInfoCard({Key? key, required this.homePageModel, this.index = 0})
+  FavoritesViewInfoCard(
+      {Key? key, required this.homePageModel, required this.index})
       : super(key: key);
 
   @override
@@ -190,22 +191,26 @@ class FavoritesViewInfoCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "price".tr,
-                      style: romanSilver408,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          homePageModel.totalPrice.toString(),
-                          style: homePagePrice,
-                        ),
-                        Text(
-                          "riyal".tr,
-                          style: homePagePrice,
-                        ),
-                      ],
-                    ),
+                    homePageModel.isSold == '1'
+                        ? Text('')
+                        : Text(
+                            "price".tr,
+                            style: romanSilver408,
+                          ),
+                    homePageModel.isSold == '1'
+                        ? Text('')
+                        : Row(
+                            children: [
+                              Text(
+                                homePageModel.totalPrice.toString(),
+                                style: homePagePrice,
+                              ),
+                              Text(
+                                "riyal".tr,
+                                style: homePagePrice,
+                              ),
+                            ],
+                          ),
                   ],
                 ),
                 const Spacer(),
@@ -214,37 +219,42 @@ class FavoritesViewInfoCard extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, listingScreen,
-                                arguments: {"horseId": homePageModel.id});
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shadowColor: cPrimaryColor,
-                            foregroundColor: cPrimaryColor,
-                            side: const BorderSide(color: cBlackColor),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                      homePageModel.isSold == '1'
+                          ? Expanded(
+                              child: Container(),
+                            )
+                          : Expanded(
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, listingScreen,
+                                      arguments: {"horseId": homePageModel.id});
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shadowColor: cPrimaryColor,
+                                  foregroundColor: cPrimaryColor,
+                                  side: const BorderSide(color: cBlackColor),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  elevation: 0.0,
+                                ),
+                                child: FittedBox(
+                                  child: Text("details".tr,
+                                      style: const TextStyle(
+                                          fontFamily: "Tajawal",
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 10,
+                                          color: cBlackColor)),
+                                ),
+                              ),
                             ),
-                            elevation: 0.0,
-                          ),
-                          child: FittedBox(
-                            child: Text("details".tr,
-                                style: const TextStyle(
-                                    fontFamily: "Tajawal",
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 10,
-                                    color: cBlackColor)),
-                          ),
-                        ),
-                      ),
                       gapW10,
                       Expanded(
                         child: OutlinedButton(
                             onPressed: () {
-                              favouritesController.deletHorse(homePageModel.id!,
-                                  index, favouritesController.userId!);
+                              int hid = int.parse(homePageModel.id.toString());
+                              favouritesController.deletHorse(
+                                  hid, index, favouritesController.userId!);
                             },
                             style: ElevatedButton.styleFrom(
                               shadowColor: cPrimaryColor,
@@ -289,31 +299,33 @@ class FavoritesViewInfoCard extends StatelessWidget {
 
 class ListViewBlurComponent extends StatelessWidget {
   final Datum homeModel;
+  int index;
 
-  const ListViewBlurComponent({Key? key, required this.homeModel})
+  ListViewBlurComponent(
+      {Key? key, required this.homeModel, required this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       children: <Widget>[
         AbsorbPointer(
-          absorbing: true,
-          child: FavoritesViewInfoCard(homePageModel: homeModel),
+          absorbing: false,
+          child: FavoritesViewInfoCard(homePageModel: homeModel, index: index),
         ),
         ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: BackdropFilter(
             filter: ImageFilter.blur(
-              tileMode: TileMode.clamp,
+              tileMode: TileMode.mirror,
               sigmaX: 2,
               sigmaY: 2,
             ),
             child: Container(
               alignment: Alignment.center,
               color: Colors.black.withOpacity(0),
-              height: 285,
+              height: 222,
               child: FittedBox(
                 child: Text(
                   "sold".tr,
@@ -490,32 +502,35 @@ class FavouritesGridViewInfoCard extends StatelessWidget {
                 ),
               ],
             ),
-            OutlinedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, listingScreen,
-                    arguments: {"homePageModel": homePageModel});
-              },
-              style: ElevatedButton.styleFrom(
-                shadowColor: cPrimaryColor,
-                foregroundColor: cPrimaryColor,
-                side: const BorderSide(color: cBlackColor),
-                fixedSize: const Size(100, 35),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                elevation: 0.0,
-              ),
-              child: Text("details".tr,
-                  style: const TextStyle(
-                      fontFamily: "Tajawal",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12,
-                      color: cBlackColor)),
-            ),
+            homePageModel.isSold == '1'
+                ? Container()
+                : OutlinedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, listingScreen,
+                          arguments: {"homePageModel": homePageModel});
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shadowColor: cPrimaryColor,
+                      foregroundColor: cPrimaryColor,
+                      side: const BorderSide(color: cBlackColor),
+                      fixedSize: const Size(100, 35),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      elevation: 0.0,
+                    ),
+                    child: Text("details".tr,
+                        style: const TextStyle(
+                            fontFamily: "Tajawal",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: cBlackColor)),
+                  ),
             OutlinedButton(
                 onPressed: () {
+                  int hid = int.parse(homePageModel.id.toString());
                   favouritesController.deletHorse(
-                      homePageModel.id!, index, favouritesController.userId!);
+                      hid, index, favouritesController.userId!);
                 },
                 style: ElevatedButton.styleFrom(
                   shadowColor: cPrimaryColor,
@@ -553,18 +568,21 @@ class FavouritesGridViewInfoCard extends StatelessWidget {
 
 class GridViewBlurComponent extends StatelessWidget {
   final Datum homeModel;
+  int index;
 
-  const GridViewBlurComponent({Key? key, required this.homeModel})
+  GridViewBlurComponent(
+      {Key? key, required this.homeModel, required this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       children: <Widget>[
         AbsorbPointer(
-          absorbing: true,
-          child: FavouritesGridViewInfoCard(homePageModel: homeModel),
+          absorbing: false,
+          child: FavouritesGridViewInfoCard(
+              homePageModel: homeModel, index: index),
         ),
         ClipRRect(
           borderRadius: BorderRadius.circular(10),
@@ -577,7 +595,7 @@ class GridViewBlurComponent extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               color: Colors.black.withOpacity(0),
-              height: 300,
+              height: 240,
               child: Text(
                 "sold".tr,
                 style: primary852,

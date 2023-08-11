@@ -11,6 +11,7 @@ import '../../../../../utils/spacing/gaps.dart';
 import '../../../../../utils/spacing/padding.dart';
 import '../../../../../utils/text_styles/textstyles.dart';
 import '../../../home/home/components/home_screen_components.dart';
+import '../components/sorting_dialogue.dart';
 import '../components/training_home_components.dart';
 import '../controller/training_home_controller.dart';
 
@@ -95,9 +96,10 @@ class _TrainingHomeScreenState extends State<TrainingHomeScreen> {
                           ),
                         ),
                         ResultSortingComponent(filterDialogFunction: () {
+                          traningController.getPropertiseList();
                           showDialog(
                               context: context,
-                              builder: (context) => FilterDialog(
+                              builder: (context) => FilterDialogBox(
                                     filterCheckBoxValueList:
                                         Get.find<HomeScreenController>()
                                             .filterCheckBoxValueList,
@@ -108,8 +110,24 @@ class _TrainingHomeScreenState extends State<TrainingHomeScreen> {
                         }, sortingDialogFunction: () {
                           showDialog(
                               context: context,
-                              builder: (context) => const SortingDialog());
+                              builder: (context) => const SortingDialogBox());
                         }),
+                        // ResultSortingComponent(filterDialogFunction: () {
+                        //   showDialog(
+                        //       context: context,
+                        //       builder: (context) => FilterDialog(
+                        //             filterCheckBoxValueList:
+                        //                 Get.find<HomeScreenController>()
+                        //                     .filterCheckBoxValueList,
+                        //             selectedValueList:
+                        //                 Get.find<HomeScreenController>()
+                        //                     .filterValuesList,
+                        //           ));
+                        // }, sortingDialogFunction: () {
+                        //   showDialog(
+                        //       context: context,
+                        //       builder: (context) => const SortingDialog());
+                        // }),
                       ],
                     ),
                   ),

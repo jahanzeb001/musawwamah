@@ -32,7 +32,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   final homeScreenController = Get.find<HomeScreenController>();
   final getStorageController = Get.find<GetStorageController>();
   final addNewHorseController = Get.find<AddNewHorseController>();
-  final walletPortfolioController = Get.put(WalletPortfolioController());
+  final walletPortfolioController = Get.find<WalletPortfolioController>();
 
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final List sliderimages = ['banner', 'banner_2'];

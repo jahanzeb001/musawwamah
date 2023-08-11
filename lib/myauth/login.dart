@@ -53,7 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
           'success'.tr,
           'completed'.tr,
           snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
         );
         credentials = credential;
         await FirebaseAuth.instance.signInWithCredential(credential);
@@ -63,9 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Get.snackbar(
           'Error',
           'failed!',
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.indigo,
+          snackPosition: SnackPosition.TOP,
         );
         if (ex.code == 'invalid-phone-number') {
           log('invalid phone number');
@@ -73,7 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
             'Error',
             'invalid phone number',
             snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.white,
           );
         }
         log(ex.code.toString());
@@ -459,8 +455,7 @@ class _LoginScreenState extends State<LoginScreen> {
             'errorwrongotp'.tr,
             'pleaseentercorrectotp'.tr,
             colorText: Colors.white,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.indigo,
+            snackPosition: SnackPosition.TOP,
           );
           // OTP verification failed
           return false;
@@ -519,7 +514,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     const focusedBorderColor = Colors.white;
     const fillColor = Color.fromRGBO(243, 246, 249, 0);
-    const borderColor = Colors.white;
     return Get.defaultDialog(
         content: Column(children: [
       FittedBox(

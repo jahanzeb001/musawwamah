@@ -343,6 +343,8 @@ class _MyDeliveriesListViewInfoCardState
                                               .horseId;
 
                                           log('$sellermobileNumber');
+                                          log('$horseid');
+
                                           //log('$purchasermobileNumber');
 
                                           Navigator.pushNamed(context,

@@ -190,7 +190,8 @@ class AuthenticationController extends GetxController {
 
     // box.write('logincount', '0');
 
-    print("*****************************$userId");
+    log("*****************************$userId");
+    log("*****************************$deliveryPersonId");
   }
 
   saveLogin(bool val) {
@@ -300,7 +301,6 @@ class AuthenticationController extends GetxController {
           Get.snackbar(
             'errorwrongotp'.tr,
             'pleaseentercorrectotp'.tr,
-            colorText: Colors.white,
             snackPosition: SnackPosition.TOP,
           );
           // OTP verification failed

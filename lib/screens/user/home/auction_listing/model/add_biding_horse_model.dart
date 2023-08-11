@@ -18,7 +18,7 @@ class AddBidingHorseResponse {
   Opinion? opinion;
   Data? data;
   int? sales;
-  int? ratting;
+  double? ratting;
 
   AddBidingHorseResponse({
     this.success,
@@ -121,13 +121,14 @@ class Data {
   dynamic totalPrice;
   String? additionalDescription;
   dynamic bankName;
-  String? ibanNumber;
+  dynamic ibanNumber;
   String? isVaccinated;
   String? haveEvidence;
   String? isSold;
   String? status;
   String? timeForAuction;
   DateTime? dateForAution;
+  DateTime? auctionEndTime;
   DateTime? createdAt;
   DateTime? updatedAt;
   String? userId;
@@ -135,6 +136,8 @@ class Data {
   String? weight;
   String? didHeComplete;
   String? safety;
+  String? rejectedByCustomer;
+  String? horseNotMatch;
   User? user;
 
   Data({
@@ -175,6 +178,7 @@ class Data {
     this.status,
     this.timeForAuction,
     this.dateForAution,
+    this.auctionEndTime,
     this.createdAt,
     this.updatedAt,
     this.userId,
@@ -182,6 +186,8 @@ class Data {
     this.weight,
     this.didHeComplete,
     this.safety,
+    this.rejectedByCustomer,
+    this.horseNotMatch,
     this.user,
   });
 
@@ -227,6 +233,9 @@ class Data {
         dateForAution: json["dateForAution"] == null
             ? null
             : DateTime.parse(json["dateForAution"]),
+        auctionEndTime: json["auctionEndTime"] == null
+            ? null
+            : DateTime.parse(json["auctionEndTime"]),
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -238,6 +247,8 @@ class Data {
         weight: json["weight"],
         didHeComplete: json["did_he_complete"],
         safety: json["safety"],
+        rejectedByCustomer: json["rejected_by_customer"],
+        horseNotMatch: json["horse_not_match"],
         user: json["user"] == null ? null : User.fromJson(json["user"]),
       );
 
@@ -281,6 +292,7 @@ class Data {
         "status": status,
         "timeForAuction": timeForAuction,
         "dateForAution": dateForAution?.toIso8601String(),
+        "auctionEndTime": auctionEndTime?.toIso8601String(),
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "userId": userId,
@@ -288,28 +300,31 @@ class Data {
         "weight": weight,
         "did_he_complete": didHeComplete,
         "safety": safety,
+        "rejected_by_customer": rejectedByCustomer,
+        "horse_not_match": horseNotMatch,
         "user": user?.toJson(),
       };
 }
 
 class User {
   int? id;
-  dynamic fullname;
-  dynamic region;
-  dynamic cityOrProvince;
+  String? fullname;
+  dynamic role;
+  String? region;
+  String? cityOrProvince;
   dynamic languagePreference;
   String? detectLocation;
   String? getAlerts;
   String? darkModeEnabled;
   String? getPromotionalMessages;
   dynamic firebaseMessagingToken;
-  dynamic favourites;
-  dynamic idNumber;
-  dynamic idPhotoFront;
-  dynamic idPhotoBack;
+  String? favourites;
+  String? idNumber;
+  String? idPhotoFront;
+  String? idPhotoBack;
   String? mobileNumber;
-  dynamic bankName;
-  dynamic ibanNumber;
+  String? bankName;
+  String? ibanNumber;
   String? accountBalance;
   dynamic userType;
   dynamic userRole;
@@ -320,6 +335,7 @@ class User {
   User({
     this.id,
     this.fullname,
+    this.role,
     this.region,
     this.cityOrProvince,
     this.languagePreference,
@@ -346,6 +362,7 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         fullname: json["fullname"],
+        role: json["role"],
         region: json["region"],
         cityOrProvince: json["city_or_province"],
         languagePreference: json["language_preference"],
@@ -376,6 +393,7 @@ class User {
   Map<String, dynamic> toJson() => {
         "id": id,
         "fullname": fullname,
+        "role": role,
         "region": region,
         "city_or_province": cityOrProvince,
         "language_preference": languagePreference,

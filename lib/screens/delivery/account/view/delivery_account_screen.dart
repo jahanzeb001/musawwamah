@@ -47,7 +47,7 @@ class _DeliveryAccountScreenState extends State<DeliveryAccountScreen> {
     final deliveryAccountController = Get.find<DeliveryAccountController>();
     return Scaffold(
         appBar: ReusableAppBar(
-            titleText: "accounts",
+            titleText: "account",
             textStyle: black718,
             onPressFunction: () {
               Navigator.pop(context);
@@ -350,8 +350,8 @@ class _DeliveryAccountScreenState extends State<DeliveryAccountScreen> {
                                                         deliveryAccountController
                                                             .idNumberController
                                                             .text,
-                                                        idFrontView,
-                                                        idBackView,
+                                                        idFrontView!,
+                                                        idBackView!,
                                                         deliveryAccountController
                                                             .mobileNumberController
                                                             .text,

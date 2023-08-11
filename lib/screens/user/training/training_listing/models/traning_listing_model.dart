@@ -40,7 +40,7 @@ class Data {
   String? image;
   String? trainerUserId;
   String? regionId;
-  dynamic rating;
+  String? rating;
   DateTime? createdAt;
   DateTime? updatedAt;
   List<TrainingImage>? trainingImages;
@@ -185,7 +185,7 @@ class Pivot {
   String? startTime;
   String? endTime;
   String? price;
-  String? days;
+  List<String>? days;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -208,7 +208,9 @@ class Pivot {
         startTime: json["start_time"],
         endTime: json["end_time"],
         price: json["price"],
-        days: json["days"],
+        days: json["days"] == null
+            ? []
+            : List<String>.from(json["days"]!.map((x) => x)),
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -224,7 +226,7 @@ class Pivot {
         "start_time": startTime,
         "end_time": endTime,
         "price": price,
-        "days": days,
+        "days": days == null ? [] : List<dynamic>.from(days!.map((x) => x)),
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };

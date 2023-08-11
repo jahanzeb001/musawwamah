@@ -17,14 +17,16 @@ import 'package:myfatoorah_flutter/utils/MFEnvironment.dart';
 import 'package:obaiah_mobile_app/utils/colors/colors.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../screens/user/home/checkout/controller/checkout_controller.dart';
-import '../screens/user/settings/my_orders/view/my_orders_screen.dart';
 import '../utils/constants/constants.dart';
+import 'UserThankyouScreen.dart';
 import 'add_payment.dart';
 import 'color_manager.dart';
+import 'thanku_controller.dart';
 
 final String mAPIKey =
     "rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7FGZ5Th_WD53Oq8Ebz6A53njUoo1w3pjU1D4vs_ZMqFiz_j0urb_BH9Oq9VZoKFoJEDAbRZepGcQanImyYrry7Kt6MnMdgfG5jn4HngWoRdKduNNyP4kzcp3mRv7x00ahkm9LAK7ZRieg7k1PDAnBIOG3EyVSJ5kK4WLMvYr7sCwHbHcu4A5WwelxYK0GMJy37bNAarSJDFQsJ2ZvJjvMDmfWwDVFEVe_5tOomfVNt6bOg9mexbGjMrnHBnKnZR1vQbBtQieDlQepzTZMuQrSuKn-t5XZM7V6fCW7oP-uXGX-sMOajeX65JOf6XVpk29DP6ro8WTAflCDANC193yof8-f5_EYY-3hXhJj7RBXmizDpneEQDSaSz5sFk0sV5qPcARJ9zGG73vuGFyenjPPmtDtXtpx35A-BVcOSBYVIWe9kndG3nclfefjKEuZ3m4jL9Gg1h2JBvmXSMYiZtp9MR5I6pvbvylU_PP5xJFSjVTIz7IQSjcVGO41npnwIxRXNRxFOdIUHn0tjQ-7LwvEcTXyPsHXcMD8WtgBh-wxR8aKX7WPSsT1O8d8reb2aR7K3rkV3K82K_0OgawImEpwSvp9MNKynEAJQS6ZHe_J_l77652xwPNxMRTMASk1ZsJL";
 
+// ignore: must_be_immutable
 class FatoorahCustom extends StatefulWidget {
   int userid;
   var horseid;
@@ -352,7 +354,7 @@ class _FatoorahCustomState extends State<FatoorahCustom> {
               errorcode: errorcode,
               suplier: suplier,
               delivertome: 'Makkah',
-              dropoff: 'riyadh',
+              dropoff: 'Rayadh',
               deliveryfee: '1',
               transport:
                   checkoutController.needTransportServices == true ? '1' : '0');
@@ -514,34 +516,49 @@ class _FatoorahCustomState extends State<FatoorahCustom> {
           var bal = int.parse(widget.totalprice).toDouble();
           setBalance(bal, dddd);
         }
+        void goToThanku() {
+          ThankuScreenController userThankuController =
+              Get.find<ThankuScreenController>();
 
-        Alert(
-          context: context,
-          type: AlertType.success,
-          title: "success".tr,
-          desc: "thankyoupaymentsuccessful".tr,
-          buttons: [
-            DialogButton(
-              color: cPrimaryColor,
-              child: Text(
-                "Okay",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () {
-                setState(() {
-                  //Get.toNamed('/myOrdersScreen');
-                  //Get.off(MyOrdersScreen());
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UserThankyouScreen(
+                      aliganceno: userThankuController.aliganceno,
+                      horsename: userThankuController.horsename,
+                      totalamount: userThankuController.price,
+                      location: userThankuController.location,
+                      imgurl: userThankuController.imgurl,
+                    )),
+            (route) =>
+                false, // This will remove all previous routes from the stack
+          );
+        }
 
-                  //Get.off('/myOrdersScreen');
-
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      profileUser, (Route<dynamic> route) => false);
-                });
-              },
-              width: 120,
-            )
-          ],
-        ).show();
+        widget.role == 'payment'
+            ? goToThanku()
+            : Alert(
+                context: context,
+                type: AlertType.success,
+                title: "success".tr,
+                desc: "thankyoupaymentsuccessful".tr,
+                buttons: [
+                  DialogButton(
+                    color: cPrimaryColor,
+                    child: Text(
+                      "Okay",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            homeScreen, (Route<dynamic> route) => false);
+                      });
+                    },
+                    width: 120,
+                  )
+                ],
+              ).show();
       } else {
         print("you are unsuccessfull");
         Alert(
@@ -988,6 +1005,7 @@ class _FatoorahCustomState extends State<FatoorahCustom> {
     );
   }
 
+  // ignore: unused_element
   void _onValidate() {
     if (formKey.currentState!.validate()) {
       print('valid!');

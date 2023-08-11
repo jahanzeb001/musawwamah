@@ -15,6 +15,7 @@ class AuctionController extends GetxController {
   RxBool isAuctionComingSoon = RxBool(false);
   var amountController = TextEditingController();
   var loading2 = false.obs;
+  var hideBiding = false.obs;
   var error2 = "".obs;
   String? horsesId;
   Rx remeaningTimeforAction = ''.obs;

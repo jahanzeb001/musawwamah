@@ -13,11 +13,13 @@ String deliveryAccountResponseToJson(DeliveryAccountResponse data) =>
 class DeliveryAccountResponse {
   bool? success;
   String? message;
+  double? ratting;
   Data? data;
 
   DeliveryAccountResponse({
     this.success,
     this.message,
+    this.ratting,
     this.data,
   });
 
@@ -25,12 +27,14 @@ class DeliveryAccountResponse {
       DeliveryAccountResponse(
         success: json["success"],
         message: json["message"],
+        ratting: json["ratting"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
         "message": message,
+        "ratting": ratting,
         "data": data?.toJson(),
       };
 }
@@ -64,7 +68,7 @@ class DeliveryAccount {
   String? userId;
   String? fullname;
   String? region;
-  dynamic cityOrProvince;
+  String? cityOrProvince;
   dynamic deliveryPersonId;
   dynamic languagePreference;
   String? detectLocation;
@@ -84,7 +88,8 @@ class DeliveryAccount {
   dynamic userRole;
   DateTime? createdAt;
   DateTime? updatedAt;
-  dynamic profileImage;
+  String? profileImage;
+  dynamic role;
   String? favourites;
 
   DeliveryAccount({
@@ -113,6 +118,7 @@ class DeliveryAccount {
     this.createdAt,
     this.updatedAt,
     this.profileImage,
+    this.role,
     this.favourites,
   });
 
@@ -150,6 +156,7 @@ class DeliveryAccount {
             ? null
             : DateTime.parse(json["updated_at"]),
         profileImage: json["profile_image"],
+        role: json["role"],
         favourites: json["favourites"],
       );
 
@@ -181,6 +188,7 @@ class DeliveryAccount {
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "profile_image": profileImage,
+        "role": role,
         "favourites": favourites,
       };
 }

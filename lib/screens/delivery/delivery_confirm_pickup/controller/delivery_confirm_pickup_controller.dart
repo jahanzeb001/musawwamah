@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:obaiah_mobile_app/screens/delivery/delivery_confirm_pickup/models/delivery_confirm_pickup_model.dart';
-import 'package:obaiah_mobile_app/screens/delivery/my_deliveries/view/my_delivery_screen.dart';
 import 'package:otp_text_field/otp_field.dart';
 
 import '../../my_deliveries/controller/my_deliveries_controller.dart';
@@ -145,6 +144,7 @@ class DeliveryConfirmPickUpController extends GetxController {
     if (res is ConfirmPickupResponse) {
       confirmPickupModel1 = res;
       Get.snackbar("notification", "Saved Successfully");
+      getconnection.loadData();
       gotoback(context);
     } else {
       deliveryConfirmPickupLoading.value = false;

@@ -13,6 +13,7 @@ import '../../../../../utils/constants/constants.dart';
 import '../../../../../utils/spacing/padding.dart';
 import '../../../../../utils/text_styles/textstyles.dart';
 import '../../../../delivery/delivery_home/view/delivery_home_screen.dart';
+import '../../../profile/view/user_profile_screen.dart';
 import '../../../support/supportScreen.dart';
 import '../../wallet_portfolio/controller/wallet_portfolio_controller.dart';
 import '../components/profile_components.dart';
@@ -47,7 +48,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("settings".tr),
+        title: Text("settingsss".tr),
         titleTextStyle: black718,
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -168,12 +169,29 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ],
               ),
               gapH30,
-              ProfileOptionWidget(
-                onTapFunction: () {
-                  Navigator.pushNamed(context, favoritesScreen);
-                },
-                needIcon: true,
-                text: "favourites",
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: ProfileOptionWidget(
+                      onTapFunction: () {
+                        Navigator.pushNamed(context, favoritesScreen);
+                      },
+                      needIcon: true,
+                      text: "favourites",
+                    ),
+                  ),
+                  gapW30,
+                  Expanded(
+                    child: ProfileOptionWidget(
+                      onTapFunction: () {
+                        Navigator.pushNamed(context, profileHorsesScreen);
+                      },
+                      assetName: Assets.profileImagesMySales,
+                      text: "My Profile",
+                    ),
+                  ),
+                ],
               ),
               gapH30,
               Obx(() => profileController.isDeliveryBoyMode.value

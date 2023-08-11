@@ -144,6 +144,11 @@ class _WalletPortfolioScreenState extends State<WalletPortfolioScreen> {
                                                     .myWalletModel
                                                     .data![index]
                                                     .transactionType ??
+                                                "",
+                                            invoceid: walletPortfolioController
+                                                    .myWalletModel
+                                                    .data![index]
+                                                    .invoiceId ??
                                                 "");
                                       },
                                     )),

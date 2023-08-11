@@ -1,13 +1,16 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:obaiah_mobile_app/screens/user/settings/my_horses_stable/model/my_horse_stable_model.dart';
 
 import '../../../../generated/assets.dart';
 import '../../../../models/home_model.dart';
 import '../../../../reusable_widgets/reusable_alertDialog.dart';
 import '../../../../utils/colors/colors.dart';
+import '../../../../utils/constants/app_urls.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/spacing/gaps.dart';
 import '../../../../utils/spacing/padding.dart';
@@ -45,7 +48,7 @@ class SelectContainerComponent extends StatelessWidget {
 }
 
 class ProfileGridViewInfoCard extends StatelessWidget {
-  final HomeModel homePageModel;
+  final Datum homePageModel;
 
   const ProfileGridViewInfoCard({Key? key, required this.homePageModel})
       : super(key: key);
@@ -72,7 +75,32 @@ class ProfileGridViewInfoCard extends StatelessWidget {
                     bottom: BorderSide(width: 3.0, color: cPrimaryColor),
                   ),
                 ),
-                child: Image.asset(homePageModel.horseImage, fit: BoxFit.cover),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "${AppUrls.ImagebaseUrl}${homePageModel.horse!.horseFrontView}",
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        //image size fill
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  placeholder: (context, url) => Container(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(
+                      color: cPrimaryColor,
+                    ), // you can add pre loader iamge as well to show loading.
+                  ), //show progress  while loading image
+                  errorWidget: (context, url, error) => Container(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(
+                      color: cPrimaryColor,
+                    ), // you can add pre loader iamge as well to show loading.
+                  ), //s
+                  //show no iamge availalbe image on error laoding
+                ),
               ),
             ),
           ),
@@ -90,7 +118,7 @@ class ProfileGridViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.age,
+                    homePageModel.horse!.age.toString(),
                     style: homePageGridValue,
                   ),
                 ],
@@ -105,7 +133,7 @@ class ProfileGridViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.name,
+                    homePageModel.horse!.nameOfHorse.toString(),
                     style: homePageGridValue,
                   ),
                 ],
@@ -120,7 +148,7 @@ class ProfileGridViewInfoCard extends StatelessWidget {
                   ),
                   gapH5,
                   Text(
-                    homePageModel.site,
+                    homePageModel.horse!.region.toString(),
                     style: homePageGridValue,
                   ),
                 ],
@@ -132,7 +160,7 @@ class ProfileGridViewInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                homePageModel.price,
+                homePageModel.horse!.totalPrice.toString(),
                 style: homePageGridPrice,
               ),
               Text(
@@ -143,8 +171,12 @@ class ProfileGridViewInfoCard extends StatelessWidget {
           ),
           OutlinedButton(
             onPressed: () {
-              Navigator.pushNamed(context, listingScreen,
-                  arguments: {"homePageModel": homePageModel});
+              Navigator.pushNamed(context, listingScreen, arguments: {
+                "horseId": int.parse(homePageModel.horseId!),
+                "nameOfHorse": homePageModel.horse!.nameOfHorse,
+              });
+              // Navigator.pushNamed(context, listingScreen,
+              //     arguments: {"homePageModel": homePageModel});
             },
             style: ElevatedButton.styleFrom(
               shadowColor: cPrimaryColor,
@@ -169,7 +201,7 @@ class ProfileGridViewInfoCard extends StatelessWidget {
 }
 
 class ProfileRatingComponent extends StatelessWidget {
-  final HomeModel homeModel;
+  final homeModel;
 
   const ProfileRatingComponent({Key? key, required this.homeModel})
       : super(key: key);
@@ -207,8 +239,35 @@ class ProfileRatingComponent extends StatelessWidget {
                                 BorderSide(width: 2.0, color: cPrimaryColor),
                           ),
                         ),
-                        child: Image.asset(Assets.auctionImagesPersonImage,
-                            fit: BoxFit.cover),
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              "${AppUrls.ImagebaseUrl}${homeModel.user.profileImage}",
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                //image size fill
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) => Container(
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(
+                              color: cPrimaryColor,
+                            ), // you can add pre loader iamge as well to show loading.
+                          ), //show progress  while loading image
+                          errorWidget: (context, url, error) => Container(
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(
+                              color: cPrimaryColor,
+                            ), // you can add pre loader iamge as well to show loading.
+                          ), //s
+                          //show no iamge availalbe image on error laoding
+                        ),
+
+                        // Image.asset(Assets.auctionImagesPersonImage,
+                        //     fit: BoxFit.cover),
                       ),
                     ),
                   ),
@@ -219,23 +278,21 @@ class ProfileRatingComponent extends StatelessWidget {
                       onTap: () {
                         showDialog(
                             context: context,
-                            builder: (context) => const ShowDescriptionDialog(
-                                  titleText: "expert opinion",
-                                  descriptionText:
-                                      "Lorem Ipsum is a virtual model that is placed in the designs to be presented to the client to visualize the method of placing texts in the designs, whether they are printed designs. Brochure or flyer, for example. or website templates. Upon the client's initial approval of the design, this text is removed from the design and the final texts are placed",
+                            builder: (context) => ShowDescriptionDialog(
+                                  titleText: "${homeModel.user.fullname}",
+                                  descriptionText: "${homeModel.review}",
                                 ));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            homeModel.owner,
+                            homeModel.user.fullname,
                             style: black911,
                           ),
                           gapH5,
                           Text(
-                            "Lorem Ipsum is a virtual model that is placed in the designs to be presented to the client to visualize the method of placing texts in the designs, whether they are printed designs. Brochure or flyer, for example. or website templates. Upon the client's initial approval of the design, this text is removed from the design and the final texts are placed"
-                                .tr,
+                            "${homeModel.review}".tr,
                             maxLines: 4,
                             softWrap: true,
                             overflow: TextOverflow.ellipsis,
@@ -255,7 +312,7 @@ class ProfileRatingComponent extends StatelessWidget {
             child: Directionality(
               textDirection: TextDirection.ltr,
               child: RatingBar(
-                  initialRating: 3,
+                  initialRating: double.parse(homeModel.ratting),
                   direction: Axis.horizontal,
                   allowHalfRating: true,
                   itemCount: 5,
